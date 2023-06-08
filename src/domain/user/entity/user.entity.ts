@@ -7,7 +7,8 @@ import {
 } from 'typeorm';
 import { Avatar } from './avatar.entity';
 
-export abstract class BaseUser {
+@Entity()
+export class User {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;
 
@@ -23,6 +24,3 @@ export abstract class BaseUser {
     @OneToOne(() => Avatar, (avatar) => avatar.user)
     avatar: Avatar;
 }
-
-@Entity()
-export class User extends BaseUser {}
