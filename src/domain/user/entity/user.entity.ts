@@ -21,6 +21,9 @@ export class User {
     @Column()
     password: string;
 
-    @OneToOne(() => Avatar, (avatar) => avatar.user)
+    @OneToOne(() => Avatar, (avatar) => avatar.user, {
+        cascade: true,
+        lazy: true,
+    })
     avatar: Avatar;
 }
