@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseConfig, DatabaseValidationScheme } from './global/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './domain/user/user.module';
 import Joi from 'joi';
 
 @Module({
@@ -23,8 +24,9 @@ import Joi from 'joi';
                 config.get(DatabaseConfig.KEY),
             inject: [ConfigService],
         }),
+
+        // app modules
+        UserModule,
     ],
-    controllers: [],
-    providers: [],
 })
 export class AppModule {}
