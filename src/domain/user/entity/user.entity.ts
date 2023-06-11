@@ -15,7 +15,7 @@ export class User {
     @CreateDateColumn()
     joinedAt: Date;
 
-    @Column()
+    @Column({ unique: true })
     email: string;
 
     @Column()
