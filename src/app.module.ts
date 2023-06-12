@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DatabaseConfig, DatabaseValidationScheme } from './global/config';
+import {
+    DatabaseConfig,
+    DatabaseValidationScheme,
+    JwtConfig,
+    JwtValidationScheme,
+} from './global/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './domain/user/user.module';
 import Joi from 'joi';
+import { StrategyModule } from './global/strategies/strategy.module';
 
 @Module({
     imports: [
@@ -12,8 +18,10 @@ import Joi from 'joi';
             envFilePath: [
                 `${__dirname}/global/config/env/.${process.env.NODE_ENV}.env`,
             ],
-            validationSchema: Joi.object().append(DatabaseValidationScheme),
-            load: [DatabaseConfig],
+            validationSchema: Joi.object()
+                .append(DatabaseValidationScheme)
+                .append(JwtValidationScheme),
+            load: [DatabaseConfig, JwtConfig],
             isGlobal: true,
         }),
 
@@ -24,6 +32,9 @@ import Joi from 'joi';
                 config.get(DatabaseConfig.KEY),
             inject: [ConfigService],
         }),
+
+        // strategy
+        StrategyModule,
 
         // app modules
         UserModule,
