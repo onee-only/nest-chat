@@ -4,7 +4,7 @@ import { EmailComfirmation } from '../entity/email-confirmation.entity';
 
 @Injectable()
 export class EmailComfirmationRepository extends Repository<EmailComfirmation> {
-    constructor(private dataSource: DataSource) {
+    constructor(private readonly dataSource: DataSource) {
         super(EmailComfirmation, dataSource.createEntityManager());
     }
 }
