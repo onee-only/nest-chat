@@ -1,10 +1,15 @@
 import {
+    AfterInsert,
+    AfterUpdate,
+    BeforeInsert,
+    BeforeUpdate,
     Column,
     CreateDateColumn,
     Entity,
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { Avatar } from './avatar.entity';
 
 @Entity()
@@ -20,6 +25,9 @@ export class User {
 
     @Column()
     password: string;
+
+    @Column()
+    isVerified: boolean;
 
     @OneToOne(() => Avatar, (avatar) => avatar.user, {
         cascade: true,
