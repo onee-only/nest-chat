@@ -34,4 +34,18 @@ export class User {
         lazy: true,
     })
     avatar: Avatar;
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword(): Promise<void> {
+        if (this.password != null) {
+            this.password = await bcrypt.hash(this.password, 10);
+        }
+    }
+
+    @AfterInsert()
+    @AfterUpdate()
+    hidePassword(): void {
+        this.password &&= null;
+    }
 }
