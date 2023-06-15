@@ -3,13 +3,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
     DatabaseConfig,
     DatabaseValidationScheme,
+    EmailConfig,
+    EmailValidationScheme,
+    IEmailConfig,
     JwtConfig,
     JwtValidationScheme,
 } from './global/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { StrategyModule } from './global/strategies/strategy.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { AuthModule } from './domain/auth/auth.module';
 import { UserModule } from './domain/user/user.module';
 import Joi from 'joi';
-import { StrategyModule } from './global/strategies/strategy.module';
 
 @Module({
     imports: [
@@ -20,23 +25,33 @@ import { StrategyModule } from './global/strategies/strategy.module';
             ],
             validationSchema: Joi.object()
                 .append(DatabaseValidationScheme)
-                .append(JwtValidationScheme),
-            load: [DatabaseConfig, JwtConfig],
+                .append(JwtValidationScheme)
+                .append(EmailValidationScheme),
+            load: [DatabaseConfig, JwtConfig, EmailConfig],
             isGlobal: true,
         }),
 
         // typeorm
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
+            inject: [ConfigService],
             useFactory: (config: ConfigService) =>
                 config.get(DatabaseConfig.KEY),
+        }),
+
+        // nodemailer
+        MailerModule.forRootAsync({
+            imports: [ConfigModule],
             inject: [ConfigService],
+            useFactory: (config: ConfigService) =>
+                config.get<IEmailConfig>(EmailConfig.KEY).moduleOptions,
         }),
 
         // strategy
         StrategyModule,
 
         // app modules
+        AuthModule,
         UserModule,
     ],
 })
