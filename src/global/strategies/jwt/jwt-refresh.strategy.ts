@@ -6,6 +6,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { IJwtConfig, JwtConfig } from 'src/global/config';
 import { TokenPayload } from './payloads/token.payload';
 import { UserRepository } from 'src/domain/user/repository/user.repository';
+import { User } from 'src/domain/user/entity';
 
 function extractFromCookie(req: Request): string {
     const token = req.cookies['refreshToken'] as string;
@@ -25,7 +26,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
             ignoreExpiration: false,
         });
     }
-    async validate(payload: TokenPayload) {
-        return this.userRepository.findBy({ id: payload.userID });
+    async validate(payload: TokenPayload): Promise<User> {
+        return await this.userRepository.findOneBy({ id: payload.userID });
     }
 }

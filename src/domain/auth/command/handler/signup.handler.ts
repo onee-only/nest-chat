@@ -20,8 +20,8 @@ export class SignupHandler implements ICommandHandler<SignupCommand> {
             throw new DuplicateEmailException(email);
         }
 
-        const user = await this.userRepository.create({ email, password });
-        user.avatar = await this.avatarRepository.create({ user, nickname });
+        const user = this.userRepository.create({ email, password });
+        user.avatar = this.avatarRepository.create({ user, nickname });
 
         await this.userRepository.save(user);
 

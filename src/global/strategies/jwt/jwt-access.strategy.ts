@@ -5,6 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { IJwtConfig, JwtConfig } from 'src/global/config';
 import { TokenPayload } from './payloads/token.payload';
 import { UserRepository } from 'src/domain/user/repository/user.repository';
+import { User } from 'src/domain/user/entity';
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
@@ -19,7 +20,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
             ignoreExpiration: false,
         });
     }
-    async validate(payload: TokenPayload) {
-        return this.userRepository.findBy({ id: payload.userID });
+    async validate(payload: TokenPayload): Promise<User> {
+        return await this.userRepository.findOneBy({ id: payload.userID });
     }
 }
