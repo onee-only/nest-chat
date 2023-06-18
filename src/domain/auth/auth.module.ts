@@ -7,6 +7,7 @@ import { EmailComfirmation } from './entity/email-confirmation.entity';
 import { EmailComfirmationRepository } from './repository/email-confirmation.repository';
 import { AuthSaga } from './saga';
 import { CommandHandlers } from './command/handler';
+import { PasswordManager } from './util';
 
 @Module({
     imports: [
@@ -21,6 +22,9 @@ import { CommandHandlers } from './command/handler';
 
         // handlers
         ...CommandHandlers,
+
+        // utils
+        PasswordManager,
 
         // repositories
         EmailComfirmationRepository,
