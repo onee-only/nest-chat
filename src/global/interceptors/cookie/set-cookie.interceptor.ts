@@ -7,6 +7,7 @@ import {
 import { Response } from 'express';
 import { Observable, map } from 'rxjs';
 import { CookieDto } from './cookie.dto';
+import { InvalidDtoException } from 'src/global/exceptions';
 
 /**
  * response에 넘겨진 cookies를 httpOnly 쿠키로 만든 후 omit해준다.
@@ -27,10 +28,11 @@ export class SetCookieInterceptor implements NestInterceptor {
                     value.cookies.forEach((value, key) => {
                         res.cookie(key, value, { httpOnly: true });
                     });
-
                     delete value.cookies;
+
+                    return value;
                 }
-                return value;
+                throw new InvalidDtoException(CookieDto, value);
             }),
         );
     }
