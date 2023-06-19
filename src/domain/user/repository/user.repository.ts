@@ -11,4 +11,15 @@ export class UserRepository extends Repository<User> {
     async existsByEmail(email: string): Promise<boolean> {
         return await this.exist({ where: { email } });
     }
+
+    async findIdByEmailAndPassword(
+        email: string,
+        password: string,
+    ): Promise<number> {
+        const user = await this.findOne({
+            where: { email, password },
+            select: { id: true },
+        });
+        return user.id;
+    }
 }
