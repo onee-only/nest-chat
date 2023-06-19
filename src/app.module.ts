@@ -8,6 +8,8 @@ import {
     IEmailConfig,
     JwtConfig,
     JwtValidationScheme,
+    ServerConfig,
+    ServerValidationScheme,
 } from './global/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StrategyModule } from './global/strategies/strategy.module';
@@ -24,10 +26,11 @@ import Joi from 'joi';
                 `${__dirname}/global/config/env/.${process.env.NODE_ENV}.env`,
             ],
             validationSchema: Joi.object()
+                .append(ServerValidationScheme)
                 .append(DatabaseValidationScheme)
                 .append(JwtValidationScheme)
                 .append(EmailValidationScheme),
-            load: [DatabaseConfig, JwtConfig, EmailConfig],
+            load: [ServerConfig, DatabaseConfig, JwtConfig, EmailConfig],
             isGlobal: true,
         }),
 
