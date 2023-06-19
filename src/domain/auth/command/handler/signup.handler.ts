@@ -5,12 +5,14 @@ import { DuplicateEmailException } from '../../exception';
 import { UserCreatedEvent } from '../../event';
 import { AvatarRepository, UserRepository } from 'src/domain/user/repository';
 import { DuplicateNicknameException } from 'src/domain/user/exception';
+import { PasswordManager } from '../../util';
 
 @CommandHandler(SignupCommand)
 export class SignupHandler implements ICommandHandler<SignupCommand> {
     constructor(
         private readonly userRepository: UserRepository,
         private readonly avatarRepository: AvatarRepository,
+        private readonly passwordManager: PasswordManager,
         private readonly eventBus: EventBus,
     ) {}
 
@@ -25,8 +27,9 @@ export class SignupHandler implements ICommandHandler<SignupCommand> {
             throw new DuplicateNicknameException(nickname);
         }
 
-        const user = this.userRepository.create({ email, password });
+        const user = this.userRepository.create({ email });
         user.avatar = this.avatarRepository.create({ user, nickname });
+        user.password = await this.passwordManager.hash(password);
 
         await this.userRepository.save(user);
 
