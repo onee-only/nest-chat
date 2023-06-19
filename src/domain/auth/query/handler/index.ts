@@ -1,6 +1,6 @@
 import { LoginHandler } from './login.handler';
-import {} from './refresh.handler'
+import { RefreshHandler } from './refresh.handler';
 
-export const QueryHandlers = [LoginHandler];
+export const QueryHandlers = [LoginHandler, RefreshHandler];
 
 export { LoginHandler };
