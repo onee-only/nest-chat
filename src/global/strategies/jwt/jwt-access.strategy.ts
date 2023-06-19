@@ -20,7 +20,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
             ignoreExpiration: false,
         });
     }
-    async validate(payload: TokenPayload): Promise<User> {
-        return await this.userRepository.findOneBy({ id: payload.userID });
+    async validate({ userID }: TokenPayload): Promise<User> {
+        return await this.userRepository.findOneBy({ id: userID });
     }
 }

@@ -18,10 +18,8 @@ import { IJwtConfig, JwtConfig } from '../config';
                 secret: configService.get<IJwtConfig>(JwtConfig.KEY).access
                     .secret,
                 signOptions: {
-                    expiresIn: `${
-                        configService.get<IJwtConfig>(JwtConfig.KEY).access
-                            .expiration
-                    }s`,
+                    expiresIn: configService.get<IJwtConfig>(JwtConfig.KEY)
+                        .access.expiration,
                 },
             }),
         }),
