@@ -9,6 +9,7 @@ import { AuthSaga } from './saga';
 import { CommandHandlers } from './command/handler';
 import { PasswordManager } from './util';
 import { SetCookieInterceptor } from 'src/global/interceptors/cookie';
+import { QueryHandlers } from './query/handler';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { SetCookieInterceptor } from 'src/global/interceptors/cookie';
 
         // handlers
         ...CommandHandlers,
+        ...QueryHandlers,
 
         // repositories
         EmailComfirmationRepository,
