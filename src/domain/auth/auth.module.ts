@@ -7,7 +7,7 @@ import { EmailComfirmation } from './entity/email-confirmation.entity';
 import { EmailComfirmationRepository } from './repository/email-confirmation.repository';
 import { AuthSaga } from './saga';
 import { CommandHandlers } from './command/handler';
-import { PasswordManager } from './util';
+import { JwtProvider, PasswordManager } from './util';
 import { SetCookieInterceptor } from 'src/global/interceptors/cookie';
 import { QueryHandlers } from './query/handler';
 
@@ -31,6 +31,7 @@ import { QueryHandlers } from './query/handler';
 
         // utils
         PasswordManager,
+        JwtProvider,
 
         // interceptors
         SetCookieInterceptor,
