@@ -21,6 +21,9 @@ export class User {
     @Column()
     password: string;
 
+    @Column()
+    isVerified: boolean;
+
     @OneToOne(() => Avatar, (avatar) => avatar.user, {
         cascade: true,
         lazy: true,
