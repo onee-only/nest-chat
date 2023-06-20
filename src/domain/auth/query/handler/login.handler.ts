@@ -1,4 +1,4 @@
-import { ICommandHandler, QueryHandler } from '@nestjs/cqrs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { LoginQuery } from '../login.query';
 import { UserRepository } from 'src/domain/user/repository';
 import { AccessTokenResponseDto } from '../../presentation/dto/response';
@@ -7,13 +7,13 @@ import { JwtProvider } from '../../util';
 import { InvalidCredentialsException } from '../../exception';
 
 @QueryHandler(LoginQuery)
-export class LoginHandler implements ICommandHandler<LoginQuery> {
+export class LoginHandler implements IQueryHandler<LoginQuery> {
     constructor(
         private readonly jwtProvider: JwtProvider,
         private readonly userRepository: UserRepository,
     ) {}
-    async execute(command: LoginQuery): Promise<AccessTokenResponseDto> {
-        const { email, password } = command;
+    async execute(query: LoginQuery): Promise<AccessTokenResponseDto> {
+        const { email, password } = query;
 
         const userID = await this.userRepository.findIdByEmailAndPassword(
             email,

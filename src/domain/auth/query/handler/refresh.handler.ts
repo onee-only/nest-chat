@@ -1,14 +1,14 @@
-import { ICommandHandler, QueryHandler } from '@nestjs/cqrs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { AccessTokenResponseDto } from '../../presentation/dto/response';
 import { TokenPayload } from 'src/global/strategies/jwt/payloads/token.payload';
 import { RefreshQuery } from '../refresh.query';
 import { JwtProvider } from '../../util';
 
 @QueryHandler(RefreshQuery)
-export class RefreshHandler implements ICommandHandler<RefreshQuery> {
+export class RefreshHandler implements IQueryHandler<RefreshQuery> {
     constructor(private readonly jwtProvider: JwtProvider) {}
-    async execute(command: RefreshQuery): Promise<AccessTokenResponseDto> {
-        const { user } = command;
+    async execute(query: RefreshQuery): Promise<AccessTokenResponseDto> {
+        const { user } = query;
 
         const payload: TokenPayload = { userID: user.id };
 
