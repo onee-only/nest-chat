@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { EmailComfirmation } from '../entity/email-confirmation.entity';
+import { EmailConfirmation } from '../entity/email-confirmation.entity';
 
 @Injectable()
-export class EmailComfirmationRepository extends Repository<EmailComfirmation> {
+export class EmailConfirmationRepository extends Repository<EmailConfirmation> {
     constructor(private readonly dataSource: DataSource) {
-        super(EmailComfirmation, dataSource.createEntityManager());
+        super(EmailConfirmation, dataSource.createEntityManager());
     }
 }
