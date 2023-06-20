@@ -8,7 +8,6 @@ import { EmailConfirmationRepository } from './repository/email-confirmation.rep
 import { AuthSaga } from './saga';
 import { CommandHandlers } from './command/handler';
 import { JwtProvider, PasswordManager } from './util';
-import { SetCookieInterceptor } from 'src/global/interceptors/cookie';
 import { QueryHandlers } from './query/handler';
 
 @Module({
@@ -32,9 +31,6 @@ import { QueryHandlers } from './query/handler';
         // utils
         PasswordManager,
         JwtProvider,
-
-        // interceptors
-        SetCookieInterceptor,
     ],
 })
 export class AuthModule {}
