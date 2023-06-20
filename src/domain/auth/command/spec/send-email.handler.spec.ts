@@ -69,6 +69,7 @@ describe('SendEmailHandler', () => {
     });
 
     it('should send an email', () => {
+        // given
         const avatar = new Avatar();
         avatar.nickname = 'hi';
 
@@ -76,6 +77,7 @@ describe('SendEmailHandler', () => {
         user.avatar = avatar;
         user.email = 'hi';
 
+        // when & then
         expect(
             sendEmailHandler.execute(new SendEmailCommand(user)),
         ).resolves.not.toThrow();

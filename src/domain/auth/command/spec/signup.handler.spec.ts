@@ -73,6 +73,7 @@ describe('SignupHandler', () => {
         // when
         const { userID } = await signupHandler.execute(command);
 
+        // then
         expect(userID).toBeDefined();
     });
 
