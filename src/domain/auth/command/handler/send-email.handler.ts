@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { EmailComfirmationRepository } from '../../repository/email-confirmation.repository';
+import { EmailConfirmationRepository } from '../../repository/email-confirmation.repository';
 import { SendEmailCommand } from '../send-email.command';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -14,7 +14,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 @CommandHandler(SendEmailCommand)
 export class SendEmailHandler implements ICommandHandler<SendEmailCommand> {
     constructor(
-        private readonly emailConfirmationRepository: EmailComfirmationRepository,
+        private readonly emailConfirmationRepository: EmailConfirmationRepository,
         private readonly configService: ConfigService,
         private readonly mailService: MailerService,
     ) {}

@@ -2,7 +2,7 @@ import { User } from 'src/domain/user/entity';
 import { Column, Entity, OneToOne } from 'typeorm';
 
 @Entity()
-export class EmailComfirmation {
+export class EmailConfirmation {
     @OneToOne(() => User)
     user: User;
 

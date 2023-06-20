@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { MailerOptions } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
-import Joi from 'joi';
+import * as Joi from 'joi';
 
 export type IEmailConfig = {
     duration: number;

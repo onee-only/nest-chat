@@ -20,6 +20,6 @@ export class UserRepository extends Repository<User> {
             where: { email, password },
             select: { id: true },
         });
-        return user.id;
+        return user?.id;
     }
 }
