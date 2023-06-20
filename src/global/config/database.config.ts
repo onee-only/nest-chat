@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import Joi from 'joi';
+import * as Joi from 'joi';
 
 export const DatabaseValidationScheme = Joi.object({
     DB: Joi.string().required(),
