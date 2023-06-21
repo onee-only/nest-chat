@@ -6,8 +6,6 @@ import { GetMyProfileResponseDto } from '../../presentation/dto/response';
 export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
     async execute(query: GetProfileQuery): Promise<GetMyProfileResponseDto> {
         const { user } = query;
-        const avatar = await user.avatar;
-
-        return GetMyProfileResponseDto.from(user, avatar);
+        return GetMyProfileResponseDto.from(user);
     }
 }

@@ -1,4 +1,4 @@
-import { Avatar, User } from 'src/domain/user/entity';
+import { User } from 'src/domain/user/entity';
 
 type DtoUser = {
     readonly id: number;
@@ -18,7 +18,7 @@ export class GetMyProfileResponseDto {
         public readonly profile: DtoProfile,
     ) {}
 
-    public static from(user: User, avatar: Avatar): GetMyProfileResponseDto {
-        return new GetMyProfileResponseDto({ ...user }, { ...avatar });
+    public static from(user: User): GetMyProfileResponseDto {
+        return new GetMyProfileResponseDto({ ...user }, { ...user.avatar });
     }
 }

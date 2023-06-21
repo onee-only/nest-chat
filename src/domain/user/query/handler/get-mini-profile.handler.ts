@@ -8,8 +8,6 @@ export class GetMiniProfileHandler
 {
     async execute(query: GetMiniProfileQuery): Promise<GetMeResponseDto> {
         const { user } = query;
-        const avatar = await user.avatar;
-
-        return await GetMeResponseDto.from(user, avatar);
+        return await GetMeResponseDto.from(user);
     }
 }

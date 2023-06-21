@@ -1,4 +1,4 @@
-import { Avatar, User } from 'src/domain/user/entity';
+import { User } from 'src/domain/user/entity';
 
 export class GetMeResponseDto {
     constructor(
@@ -7,12 +7,11 @@ export class GetMeResponseDto {
         public readonly profileURL: string,
     ) {}
 
-    public static async from(
-        user: User,
-        avatar: Avatar,
-    ): Promise<GetMeResponseDto> {
-        const { id } = user;
-        const { nickname, profileURL } = avatar;
+    public static async from(user: User): Promise<GetMeResponseDto> {
+        const {
+            id,
+            avatar: { nickname, profileURL },
+        } = user;
         return new GetMeResponseDto(id, nickname, profileURL);
     }
 }
