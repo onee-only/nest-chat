@@ -1,23 +1,24 @@
 import { Avatar, User } from 'src/domain/user/entity';
 
-export class GetMyProfileResponseDto {
-    user: {
-        id: number;
-        email: string;
-        joinedAt: Date;
-    };
+type DtoUser = {
+    readonly id: number;
+    readonly email: string;
+    readonly joinedAt: Date;
+};
 
-    profile: {
-        nickname: string;
-        profileURL: string;
-        bio: string;
-    };
+type DtoProfile = {
+    readonly nickname: string;
+    readonly profileURL: string;
+    readonly bio: string;
+};
+
+export class GetMyProfileResponseDto {
+    constructor(
+        public readonly user: DtoUser,
+        public readonly profile: DtoProfile,
+    ) {}
 
     public static from(user: User, avatar: Avatar): GetMyProfileResponseDto {
-        const dto = new GetMyProfileResponseDto();
-        dto.user = { ...user };
-        dto.profile = { ...avatar };
-
-        return dto;
+        return new GetMyProfileResponseDto({ ...user }, { ...avatar });
     }
 }
