@@ -6,7 +6,6 @@ import {
     ConfigModule,
     DatabaseModule,
     MailerModule,
-    ObjectUtilModule,
     StrategyModule,
 } from './global/modules';
 
@@ -18,9 +17,6 @@ import {
         DatabaseModule,
         StrategyModule,
         CaacheModule,
-
-        // util modules
-        ObjectUtilModule,
 
         // app modules
         AuthModule,
