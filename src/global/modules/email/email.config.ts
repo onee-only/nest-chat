@@ -18,7 +18,7 @@ export const EmailValidationScheme = () =>
 export const EmailConfig = registerAs(
     'email',
     (): IEmailConfig => ({
-        duration: +process.env.EMAIL_EXPIRE_DURATION_MS,
+        duration: parseInt(process.env.EMAIL_EXPIRE_DURATION_MS),
         moduleOptions: {
             transport: {
                 host: 'smtp.gmail.com',
