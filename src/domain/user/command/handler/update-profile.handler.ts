@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateProfileCommand } from '../update-profile.command';
 import { UserRepository } from '../../repository';
 import { GetMyProfileResponseDto } from '../../presentation/dto/response';
-import { ObjectManager } from 'src/global/modules/utils/object/object.manager';
+import { ObjectManager } from 'src/global/modules/utils';
 
 @CommandHandler(UpdateProfileCommand)
 export class UpdateProfileHandler
