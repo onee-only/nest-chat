@@ -20,10 +20,10 @@ export class NullishFilter {
                         return null;
                     }
                     if (this.validator.isObject(value)) {
+                        value = this.filterObject(value);
                         if (this.validator.isEmpty(value)) {
                             return null;
                         }
-                        value = this.filterObject(value);
                     }
                     return [key, value];
                 })
