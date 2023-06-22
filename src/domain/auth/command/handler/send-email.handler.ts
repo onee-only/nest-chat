@@ -2,14 +2,10 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { EmailConfirmationRepository } from '../../repository/email-confirmation.repository';
 import { SendEmailCommand } from '../send-email.command';
 import { ConfigService } from '@nestjs/config';
-import {
-    EmailConfig,
-    IEmailConfig,
-    IServerConfig,
-    ServerConfig,
-} from 'src/global/config';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from '@nestjs-modules/mailer';
+import { IServerConfig, ServerConfig } from 'src/global/modules/config/server';
+import { EmailConfig, IEmailConfig } from 'src/global/modules/email';
 
 @CommandHandler(SendEmailCommand)
 export class SendEmailHandler implements ICommandHandler<SendEmailCommand> {

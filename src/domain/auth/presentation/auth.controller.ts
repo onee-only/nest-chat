@@ -18,11 +18,11 @@ import { LoginRequestDto, SignupRequestDto } from './dto/request';
 import { AccessTokenResponseDto, SignupResponseDto } from './dto/response';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SignupCommand } from '../command';
-import { SetCookieInterceptor } from 'src/global/interceptors/cookie';
 import { LoginQuery, RefreshQuery } from '../query';
 import { RefreshAuthGuard } from 'src/global/guards';
 import { GetUser } from 'src/global/decorators';
 import { User } from 'src/domain/user/entity';
+import { SetCookieInterceptor } from 'src/global/interceptors/cookie';
 
 @ApiTags('auth')
 @Controller('auth')

@@ -8,11 +8,12 @@ export type IEmailConfig = {
     moduleOptions: MailerOptions;
 };
 
-export const EmailValidationScheme = Joi.object({
-    MAIL_EXPIRE_DURATION_MS: Joi.number().required(),
-    MAIL_USER: Joi.string().email().required(),
-    MAIL_PASS: Joi.string().required(),
-});
+export const EmailValidationScheme = () =>
+    Joi.object({
+        MAIL_EXPIRE_DURATION_MS: Joi.number().required(),
+        MAIL_USER: Joi.string().email().required(),
+        MAIL_PASS: Joi.string().required(),
+    });
 
 export const EmailConfig = registerAs(
     'email',

@@ -2,9 +2,9 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { LoginQuery } from '../login.query';
 import { UserRepository } from 'src/domain/user/repository';
 import { AccessTokenResponseDto } from '../../presentation/dto/response';
-import { TokenPayload } from 'src/global/strategies/jwt/payloads/token.payload';
 import { JwtProvider } from '../../util';
 import { InvalidCredentialsException } from '../../exception';
+import { TokenPayload } from 'src/global/modules/strategy/jwt/payloads';
 
 @QueryHandler(LoginQuery)
 export class LoginHandler implements IQueryHandler<LoginQuery> {

@@ -3,14 +3,10 @@ import { SendEmailHandler } from '../handler/send-email.handler';
 import { EmailConfirmationRepository } from '../../repository/email-confirmation.repository';
 import { ConfigService } from '@nestjs/config';
 import { MailerService } from '@nestjs-modules/mailer';
-import {
-    EmailConfig,
-    IEmailConfig,
-    IServerConfig,
-    ServerConfig,
-} from 'src/global/config';
 import { Avatar, User } from 'src/domain/user/entity';
 import { SendEmailCommand } from '../send-email.command';
+import { IServerConfig, ServerConfig } from 'src/global/modules/config/server';
+import { EmailConfig, IEmailConfig } from 'src/global/modules/email';
 
 describe('SendEmailHandler', () => {
     let sendEmailHandler: SendEmailHandler;

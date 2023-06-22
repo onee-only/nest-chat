@@ -1,8 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { AccessTokenResponseDto } from '../../presentation/dto/response';
-import { TokenPayload } from 'src/global/strategies/jwt/payloads/token.payload';
 import { RefreshQuery } from '../refresh.query';
 import { JwtProvider } from '../../util';
+import { TokenPayload } from 'src/global/modules/strategy/jwt/payloads';
 
 @QueryHandler(RefreshQuery)
 export class RefreshHandler implements IQueryHandler<RefreshQuery> {

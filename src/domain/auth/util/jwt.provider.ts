@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { IJwtConfig, JwtConfig } from 'src/global/config';
-import { TokenPayload } from 'src/global/strategies/jwt/payloads/token.payload';
+import { IJwtConfig, JwtConfig } from 'src/global/modules/strategy/jwt';
+import { TokenPayload } from 'src/global/modules/strategy/jwt/payloads';
 
 export class JwtProvider {
     constructor(
