@@ -23,7 +23,7 @@ export class MeController {
         description: 'Provides minified information of the current user',
     })
     @ApiOkResponse({ type: GetMeResponseDto })
-    @Get('/mini')
+    @Get('mini')
     async getMe(@GetUser() user: User): Promise<GetMeResponseDto> {
         return await this.queryBus.execute(new GetMiniProfileQuery(user));
     }
