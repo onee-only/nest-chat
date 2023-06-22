@@ -26,7 +26,7 @@ export class User {
 
     @OneToOne(() => Avatar, (avatar) => avatar.user, {
         cascade: true,
-        lazy: true,
+        eager: true,
     })
     avatar: Avatar;
 }
