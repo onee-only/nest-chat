@@ -1,5 +1,5 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserController } from './presentation/user.controller';
+import { MeController } from './presentation/me.controller';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { Avatar, User } from './entity';
@@ -9,7 +9,7 @@ import { QueryHandlers } from './query/handler';
 
 @Module({
     imports: [CqrsModule, TypeOrmModule.forFeature([User, Avatar])],
-    controllers: [UserController],
+    controllers: [MeController],
     providers: [
         // handlers
         ...CommandHandlers,

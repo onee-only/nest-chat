@@ -9,10 +9,10 @@ import { GetMeResponseDto, GetMyProfileResponseDto } from './dto/response';
 import { UpdateProfileRequestDto } from './dto/request';
 import { UpdateProfileCommand } from '../command';
 
-@ApiTags('users')
-@Controller('users')
+@ApiTags('users/me')
+@Controller('users/me')
 @UseGuards(JwtAuthGuard)
-export class UserController {
+export class MeController {
     constructor(
         private readonly commandBus: CommandBus,
         private readonly queryBus: QueryBus,
@@ -23,7 +23,7 @@ export class UserController {
         description: 'Provides minified information of the current user',
     })
     @ApiOkResponse({ type: GetMeResponseDto })
-    @Get('me')
+    @Get('/mini')
     async getMe(@GetUser() user: User): Promise<GetMeResponseDto> {
         return await this.queryBus.execute(new GetMiniProfileQuery(user));
     }
@@ -33,7 +33,7 @@ export class UserController {
         description: 'Provides profile information of the current user',
     })
     @ApiOkResponse({ type: GetMyProfileResponseDto })
-    @Get('me/profile')
+    @Get('')
     async getMyProfile(
         @GetUser() user: User,
     ): Promise<GetMyProfileResponseDto> {
@@ -45,7 +45,7 @@ export class UserController {
         description: 'Updates profile information of the current user',
     })
     @ApiOkResponse({ type: GetMyProfileResponseDto })
-    @Patch('me/profile')
+    @Patch('')
     async updateProfile(
         @GetUser() user: User,
         @Body() request: UpdateProfileRequestDto,
