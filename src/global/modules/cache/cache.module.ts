@@ -16,4 +16,4 @@ import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
     providers: [CacheService],
     exports: [CacheService],
 })
-export class CaacheModule {}
+export class CacheModule {}
