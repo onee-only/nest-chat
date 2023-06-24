@@ -19,4 +19,8 @@ export class CacheService {
     async del(...keys: string[]): Promise<void> {
         await this.client.del([...keys]);
     }
+
+    async exists(key: string): Promise<boolean> {
+        return Boolean(await this.client.exists(key));
+    }
 }
