@@ -1,3 +1,7 @@
-export { CacheModule } from './cache.module';
-export { CacheService } from './cache.service';
-export { CacheValidationScheme, CacheConfig } from './cache.config';
+export { BlackListService, BlackListModule } from './blacklist';
+export {
+    CacheConfig,
+    CacheService,
+    CacheModule,
+    CacheValidationScheme,
+} from './redis';
