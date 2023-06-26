@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { User } from '../entity';
+import { EmailConfirmation } from 'src/domain/auth/entity/email-confirmation.entity';
 
 @Injectable()
 export class UserRepository extends Repository<User> {
@@ -21,5 +22,19 @@ export class UserRepository extends Repository<User> {
             select: { id: true },
         });
         return user?.id;
+    }
+
+    async verifyEmail(user: User): Promise<void> {
+        await this.dataSource.transaction(
+            'READ COMMITTED',
+            async (entityManager: EntityManager) => {
+                await entityManager.update(User, user, {
+                    isVerified: true,
+                });
+                await entityManager.delete(EmailConfirmation, {
+                    user: user,
+                });
+            },
+        );
     }
 }

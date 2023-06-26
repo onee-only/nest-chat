@@ -3,6 +3,7 @@ import {
     Controller,
     HttpCode,
     HttpStatus,
+    Param,
     Post,
     UseGuards,
     UseInterceptors,
@@ -89,6 +90,16 @@ export class AuthController {
     @UseGuards(RefreshAuthGuard)
     @UseInterceptors(SetCookieInterceptor)
     async logout(@GetRefresh() token: string): Promise<void> {
+        return await this.commandBus.execute(new LogoutCommand(token));
+    }
+
+    @ApiOperation({
+        summary: 'verify email',
+        description: 'verifies the code of this email',
+    })
+    @Post('verify-email')
+    @HttpCode(HttpStatus.OK)
+    async verifyEmail(@Param('token') token: string): Promise<void> {
         return await this.commandBus.execute(new LogoutCommand(token));
     }
 }
