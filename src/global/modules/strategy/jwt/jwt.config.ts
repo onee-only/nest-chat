@@ -25,11 +25,11 @@ export const JwtConfig = registerAs(
     (): IJwtConfig => ({
         access: {
             secret: process.env.JWT_ACCESS_SECRET,
-            expiration: +process.env.JWT_ACCESS_EXPIRATION_TIME,
+            expiration: parseInt(process.env.JWT_ACCESS_EXPIRATION_TIME),
         },
         refresh: {
             secret: process.env.JWT_REFRESH_SECRET,
-            expiration: +process.env.JWT_REFRESH_EXPIRATION_TIME,
+            expiration: parseInt(process.env.JWT_REFRESH_EXPIRATION_TIME),
         },
     }),
 );

@@ -40,6 +40,11 @@ export class JwtProvider {
         return access.expiration;
     }
 
+    getRefreshExpiration(): number {
+        const { access } = this.getJwtConfig();
+        return access.expiration;
+    }
+
     private getJwtConfig(): IJwtConfig {
         return this.configService.get<IJwtConfig>(JwtConfig.KEY);
     }

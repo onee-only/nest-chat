@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -10,6 +10,7 @@ import {
     JwtRefreshStrategy,
 } from './jwt';
 
+@Global()
 @Module({
     imports: [
         ConfigModule,
@@ -29,6 +30,6 @@ import {
         }),
     ],
     providers: [JwtAccessStrategy, JwtRefreshStrategy],
-    exports: [JwtAccessStrategy, JwtRefreshStrategy],
+    exports: [JwtAccessStrategy, JwtRefreshStrategy, JwtModule],
 })
 export class StrategyModule {}
