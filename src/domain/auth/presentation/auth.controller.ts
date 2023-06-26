@@ -17,10 +17,10 @@ import {
 import { LoginRequestDto, SignupRequestDto } from './dto/request';
 import { AccessTokenResponseDto, SignupResponseDto } from './dto/response';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { SignupCommand } from '../command';
+import { LogoutCommand, SignupCommand } from '../command';
 import { LoginQuery, RefreshQuery } from '../query';
 import { RefreshAuthGuard } from 'src/global/guards';
-import { GetUser } from 'src/global/decorators';
+import { GetRefresh, GetUser } from 'src/global/decorators';
 import { User } from 'src/domain/user/entity';
 import { SetCookieInterceptor } from 'src/global/interceptors/cookie';
 
@@ -78,5 +78,17 @@ export class AuthController {
     @UseInterceptors(SetCookieInterceptor)
     async refresh(@GetUser() user: User): Promise<AccessTokenResponseDto> {
         return await this.queryBus.execute(new RefreshQuery(user));
+    }
+
+    @ApiOperation({
+        summary: 'logout',
+        description: 'blacklists the refresh token of the current user',
+    })
+    @Post('logout')
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(RefreshAuthGuard)
+    @UseInterceptors(SetCookieInterceptor)
+    async logout(@GetRefresh() token: string): Promise<void> {
+        return await this.commandBus.execute(new LogoutCommand(token));
     }
 }
