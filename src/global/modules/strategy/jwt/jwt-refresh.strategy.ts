@@ -9,8 +9,7 @@ import { User } from 'src/domain/user/entity';
 import { IJwtConfig, JwtConfig } from './jwt.config';
 
 function extractFromCookie(req: Request): string {
-    const token = req.cookies['refreshToken'] as string;
-    return token;
+    return req.cookies['refreshToken'] as string;
 }
 
 @Injectable()
