@@ -7,11 +7,15 @@ import {
     RoomMemberRepository,
     RoomRepository,
 } from './repository';
+import { RoomController } from './presentation/room.controller';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
     imports: [
+        CqrsModule,
         TypeOrmModule.forFeature([Room, RoomMember, MemberRole, Invitation]),
     ],
+    controllers: [RoomController],
     providers: [
         RoomRepository,
         MemberRoleRepository,
