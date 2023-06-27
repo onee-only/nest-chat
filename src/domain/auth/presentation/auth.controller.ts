@@ -3,8 +3,8 @@ import {
     Controller,
     HttpCode,
     HttpStatus,
-    Param,
     Post,
+    Query,
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
@@ -99,7 +99,7 @@ export class AuthController {
     })
     @Post('verify-email')
     @HttpCode(HttpStatus.OK)
-    async verifyEmail(@Param('token') token: string): Promise<void> {
+    async verifyEmail(@Query('token') token: string): Promise<void> {
         return await this.commandBus.execute(new LogoutCommand(token));
     }
 }
