@@ -58,8 +58,8 @@ export class RoomController {
     }
 
     @ApiOperation({
-        summary: 'delete a room',
-        description: 'Deletes a room',
+        summary: 'update a room',
+        description: 'Updates a room',
     })
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
