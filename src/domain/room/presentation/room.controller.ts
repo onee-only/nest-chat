@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Param,
     ParseIntPipe,
     Patch,
@@ -14,7 +15,11 @@ import { GetUser } from 'src/global/decorators';
 import { CreateRoomRequestDto, UpdateRoomRequestDto } from './dto/request';
 import { CreateRoomResponseDto } from './dto/response';
 import { JwtAuthGuard } from 'src/global/guards';
-import { CreateRoomCommand, UpdateRoomCommand } from '../command';
+import {
+    CreateRoomCommand,
+    DeleteRoomCommand,
+    UpdateRoomCommand,
+} from '../command';
 
 @ApiTags('rooms')
 @Controller('rooms')
@@ -70,6 +75,21 @@ export class RoomController {
     ): Promise<void> {
         return await this.commandBus.execute(
             new UpdateRoomCommand(user, roomID, { ...request }),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'delete a room',
+        description: 'Deletes a room',
+    })
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard)
+    async deleteRoom(
+        @Param('id', ParseIntPipe) roomID: number,
+        @GetUser() user: User,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new DeleteRoomCommand(user, roomID),
         );
     }
 }
