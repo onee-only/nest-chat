@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, DatabaseModule, MailerModule } from './global/modules';
 import { AuthModule } from './domain/auth/auth.module';
 import { UserModule } from './domain/user/user.module';
-import { ConfigModule, DatabaseModule, MailerModule } from './global/modules';
+import { RoomModule } from './domain/room/room.module';
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { ConfigModule, DatabaseModule, MailerModule } from './global/modules';
         // app modules
         AuthModule,
         UserModule,
+        RoomModule,
     ],
 })
 export class AppModule {}
