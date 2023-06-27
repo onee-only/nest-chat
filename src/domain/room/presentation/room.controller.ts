@@ -1,12 +1,20 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    UseGuards,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
-import { CreateRoomRequestDto } from './dto/request';
+import { CreateRoomRequestDto, UpdateRoomRequestDto } from './dto/request';
 import { CreateRoomResponseDto } from './dto/response';
 import { JwtAuthGuard } from 'src/global/guards';
-import { CreateRoomCommand } from '../command';
+import { CreateRoomCommand, UpdateRoomCommand } from '../command';
 
 @ApiTags('rooms')
 @Controller('rooms')
@@ -46,6 +54,22 @@ export class RoomController {
                     description,
                 },
             ),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'delete a room',
+        description: 'Deletes a room',
+    })
+    @Patch(':id')
+    @UseGuards(JwtAuthGuard)
+    async updateRoom(
+        @Param('id', ParseIntPipe) roomID: number,
+        @GetUser() user: User,
+        @Body() request: UpdateRoomRequestDto,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new UpdateRoomCommand(user, roomID, { ...request }),
         );
     }
 }
