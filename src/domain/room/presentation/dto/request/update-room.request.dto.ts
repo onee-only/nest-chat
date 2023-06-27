@@ -5,25 +5,25 @@ export class UpdateRoomRequestDto {
     @ApiProperty()
     @IsOptional()
     @IsString()
-    name: string;
+    name?: string;
 
     @ApiProperty()
     @IsOptional()
     @IsString()
-    description: string;
+    description?: string;
 
     @ApiProperty()
     @IsOptional()
     @IsUrl()
-    profileURL: string;
+    profileURL?: string;
 
     @ApiProperty()
     @IsOptional()
     @IsBoolean()
-    isPublic: boolean;
+    isPublic?: boolean;
 
     @ApiProperty()
     @IsOptional()
     @IsBoolean()
-    defaultRoleID: number;
+    defaultRoleID?: number;
 }
