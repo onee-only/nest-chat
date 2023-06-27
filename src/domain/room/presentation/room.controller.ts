@@ -32,18 +32,19 @@ export class RoomController {
             name,
             description,
             isPublic,
-            defaultRole: { name: roleName, permission },
+            defaultRole: { name: roleName, permission: rolePermission },
         } = request;
 
         return await this.commandBus.execute(
             new CreateRoomCommand(
                 user,
-                profileURL,
-                name,
-                description,
-                isPublic,
-                roleName,
-                permission,
+                { roleName, rolePermission },
+                {
+                    name,
+                    isPublic,
+                    profileURL,
+                    description,
+                },
             ),
         );
     }
