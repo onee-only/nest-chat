@@ -10,6 +10,7 @@ import {
 import { RoomController } from './presentation/room.controller';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CommandHandlers } from './command/handler';
+import { QueryHandlers } from './query/handler';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { CommandHandlers } from './command/handler';
     providers: [
         // handlers
         ...CommandHandlers,
+        ...QueryHandlers,
 
         // repositories
         RoomRepository,
