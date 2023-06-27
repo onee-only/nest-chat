@@ -27,12 +27,20 @@ export class Room {
     @CreateDateColumn()
     createdAt: Date;
 
-    @OneToOne(() => MemberRole, { nullable: true, onDelete: 'SET NULL' })
+    @OneToOne(() => MemberRole, {
+        cascade: true,
+        nullable: true,
+        onDelete: 'SET NULL',
+    })
     defaultRole: MemberRole;
 
-    @OneToMany(() => MemberRole, (role) => role.room)
+    @OneToMany(() => MemberRole, (role) => role.room, {
+        cascade: true,
+    })
     roles: MemberRole[];
 
-    @OneToMany(() => RoomMember, (member) => member.room)
+    @OneToMany(() => RoomMember, (member) => member.room, {
+        cascade: true,
+    })
     members: RoomMember[];
 }
