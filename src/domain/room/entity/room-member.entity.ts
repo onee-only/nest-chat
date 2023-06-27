@@ -1,4 +1,4 @@
-import { ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from 'src/domain/user/entity';
 import { Room } from './room.entity';
 import { MemberRole } from './member-role.entity';
@@ -6,6 +6,9 @@ import { MemberRole } from './member-role.entity';
 export class RoomMember {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;
+
+    @Column()
+    isAdmin: boolean;
 
     @ManyToOne(() => User, {
         cascade: true,
