@@ -4,7 +4,7 @@ import { RoomAdminChecker } from '../../util';
 import { Room } from '../../entity';
 import { User } from 'src/domain/user/entity';
 import {
-    NoAdminPermissionException,
+    NoOwnerPermissionException,
     RoomNotFoundException,
 } from '../../exception';
 import { DeleteRoomHandler } from '../handler/delete-room.handler';
@@ -77,14 +77,14 @@ describe('DeleteRoomHandler', () => {
         );
         jest.spyOn(roomAdminChecker, 'checkOrThrow').mockImplementation(
             async () => {
-                throw new NoAdminPermissionException();
+                throw new NoOwnerPermissionException();
             },
         );
         const command = new DeleteRoomCommand(new User(), 1);
 
         // when & then
         expect(deleteRoomHandler.execute(command)).rejects.toThrow(
-            NoAdminPermissionException,
+            NoOwnerPermissionException,
         );
     });
 });

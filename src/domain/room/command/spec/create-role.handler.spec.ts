@@ -6,7 +6,7 @@ import { MemberRole, Room } from '../../entity';
 import { UpdateRoomCommand } from '../update-room.command';
 import { User } from 'src/domain/user/entity';
 import {
-    NoOwnerPermissionException,
+    NoAdminPermissionException,
     NoMatchingRoleException,
     RoomNotFoundException,
 } from '../../exception';
@@ -96,7 +96,7 @@ describe('UpdateRoomHandler', () => {
         );
         jest.spyOn(roomAdminChecker, 'checkOrThrow').mockImplementation(
             async () => {
-                throw new NoOwnerPermissionException();
+                throw new NoAdminPermissionException();
             },
         );
         jest.spyOn(memberRoleRepository, 'findOneBy').mockImplementation(
@@ -108,7 +108,7 @@ describe('UpdateRoomHandler', () => {
 
         // when & then
         expect(updateRoomHandler.execute(command)).rejects.toThrow(
-            NoOwnerPermissionException,
+            NoAdminPermissionException,
         );
     });
 
