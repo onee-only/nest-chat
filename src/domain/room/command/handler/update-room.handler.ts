@@ -4,16 +4,15 @@ import { MemberRoleRepository, RoomRepository } from '../../repository';
 import { MemberRole, Room } from '../../entity';
 import {
     NoMatchingRoleException,
+    NoOwnerPermissionException,
     RoomNotFoundException,
 } from '../../exception';
-import { RoomAdminChecker } from '../../util';
 
 @CommandHandler(UpdateRoomCommand)
 export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
     constructor(
         private readonly roomRepsitory: RoomRepository,
         private readonly memberRoleRepository: MemberRoleRepository,
-        private readonly roomAdminChecker: RoomAdminChecker,
     ) {}
 
     async execute(command: UpdateRoomCommand): Promise<void> {
@@ -22,12 +21,14 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
         } = command;
         const { user, roomID, data } = command;
 
-        const room = await this.roomRepsitory.findOneBy({ id: roomID });
+        const room = await this.roomRepsitory.findOneWithOwnerById(roomID);
         if (room == null) {
             throw new RoomNotFoundException(roomID);
         }
 
-        await this.roomAdminChecker.checkOrThrow(room, user);
+        if (room.owner != user) {
+            throw new NoOwnerPermissionException();
+        }
 
         if (defaultRoleID != null) {
             room.defaultRole = await this.getMemberRole(defaultRoleID, room);
