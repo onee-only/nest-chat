@@ -2,7 +2,7 @@ import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Room } from './room.entity';
 import { RoomMember } from './room-member.entity';
 
-class Permission {
+export class Permission {
     @Column()
     writeMessage: boolean;
 
@@ -19,7 +19,10 @@ class Permission {
     createThread: boolean;
 
     @Column()
-    changeRole: boolean;
+    manageRole: boolean;
+
+    @Column()
+    manageTag: boolean;
 }
 
 export class MemberRole {

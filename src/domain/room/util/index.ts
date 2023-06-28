@@ -1,1 +1,1 @@
-export { RoomAdminChecker } from './room-admin.checker';
+export { PermissionChecker } from './permission.checker';
