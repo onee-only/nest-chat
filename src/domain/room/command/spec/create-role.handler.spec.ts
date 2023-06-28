@@ -1,135 +1,100 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MemberRoleRepository, RoomRepository } from '../../repository';
-import { RoomAdminChecker } from '../../util';
-import { UpdateRoomHandler } from '../handler/update-room.handler';
 import { MemberRole, Room } from '../../entity';
-import { UpdateRoomCommand } from '../update-room.command';
 import { User } from 'src/domain/user/entity';
-import {
-    NoAdminPermissionException,
-    NoMatchingRoleException,
-    RoomNotFoundException,
-} from '../../exception';
+import { RoomNotFoundException } from '../../exception';
+import { CreateRoleHandler } from '../handler/create-role.handler';
+import { PermissionChecker } from '../../util';
+import { CreateRoleCommand } from '../create-role.command';
 
-describe('UpdateRoomHandler', () => {
-    let updateRoomHandler: UpdateRoomHandler;
-    let roomRepsitory: RoomRepository;
+describe('CreateRoleHandler', () => {
+    let createRoleHandler: CreateRoleHandler;
+    let roomRepository: RoomRepository;
     let memberRoleRepository: MemberRoleRepository;
-    let roomAdminChecker: RoomAdminChecker;
+    let permissionChecker: PermissionChecker;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
-                UpdateRoomHandler,
+                CreateRoleHandler,
                 {
                     provide: RoomRepository,
                     useValue: {
                         findOneBy: jest.fn(),
-                        update: jest.fn(),
                     },
                 },
                 {
                     provide: MemberRoleRepository,
                     useValue: {
-                        findOneBy: jest.fn(),
+                        create: jest.fn(),
+                        save: jest.fn(),
                     },
                 },
                 {
-                    provide: RoomAdminChecker,
+                    provide: PermissionChecker,
                     useValue: {
-                        checkOrThrow: jest.fn(),
+                        checkAvailableOrThrow: jest.fn(),
                     },
                 },
             ],
         }).compile();
 
-        updateRoomHandler = module.get(UpdateRoomHandler);
-        roomRepsitory = module.get(RoomRepository);
+        createRoleHandler = module.get(CreateRoleHandler);
+        roomRepository = module.get(RoomRepository);
         memberRoleRepository = module.get(MemberRoleRepository);
-        roomAdminChecker = module.get(RoomAdminChecker);
+        permissionChecker = module.get(PermissionChecker);
     });
 
     it('should update a room', async () => {
         // given
-        jest.spyOn(roomRepsitory, 'findOneBy').mockImplementation(
+        jest.spyOn(roomRepository, 'findOneBy').mockImplementation(
             async () => new Room(),
         );
-        jest.spyOn(roomAdminChecker, 'checkOrThrow').mockImplementation(
-            async () => undefined,
+        jest.spyOn(
+            permissionChecker,
+            'checkAvailableOrThrow',
+        ).mockImplementation(async () => undefined);
+        jest.spyOn(memberRoleRepository, 'create').mockImplementation(
+            () => new MemberRole(),
         );
-        jest.spyOn(memberRoleRepository, 'findOneBy').mockImplementation(
-            async () => new MemberRole(),
-        );
-        const command = new UpdateRoomCommand(new User(), 1, {
-            isPublic: true,
+
+        const command = new CreateRoleCommand(new User(), 1, 'hi', {
+            changeRole: true,
+            createThread: false,
+            deleteMessage: true,
+            inviteMember: true,
+            kickMember: true,
+            writeMessage: true,
         });
 
         // when & then
-        expect(updateRoomHandler.execute(command)).resolves.not.toThrow();
+        expect(createRoleHandler.execute(command)).resolves.not.toThrow();
     });
 
     it('should throw RoomNotFoundException', async () => {
         // given
-        jest.spyOn(roomRepsitory, 'findOneBy').mockImplementation(
+        jest.spyOn(roomRepository, 'findOneBy').mockImplementation(
             async () => null,
         );
-        jest.spyOn(roomAdminChecker, 'checkOrThrow').mockImplementation(
-            async () => undefined,
+        jest.spyOn(
+            permissionChecker,
+            'checkAvailableOrThrow',
+        ).mockImplementation(async () => undefined);
+        jest.spyOn(memberRoleRepository, 'create').mockImplementation(
+            () => new MemberRole(),
         );
-        jest.spyOn(memberRoleRepository, 'findOneBy').mockImplementation(
-            async () => new MemberRole(),
-        );
-        const command = new UpdateRoomCommand(new User(), 1, {
-            isPublic: true,
+        const command = new CreateRoleCommand(new User(), 1, 'hi', {
+            changeRole: true,
+            createThread: false,
+            deleteMessage: true,
+            inviteMember: true,
+            kickMember: true,
+            writeMessage: true,
         });
 
         // when & then
-        expect(updateRoomHandler.execute(command)).rejects.toThrow(
+        expect(createRoleHandler.execute(command)).rejects.toThrow(
             RoomNotFoundException,
-        );
-    });
-
-    it('should throw NoAdminPermissionException', async () => {
-        // given
-        jest.spyOn(roomRepsitory, 'findOneBy').mockImplementation(
-            async () => new Room(),
-        );
-        jest.spyOn(roomAdminChecker, 'checkOrThrow').mockImplementation(
-            async () => {
-                throw new NoAdminPermissionException();
-            },
-        );
-        jest.spyOn(memberRoleRepository, 'findOneBy').mockImplementation(
-            async () => new MemberRole(),
-        );
-        const command = new UpdateRoomCommand(new User(), 1, {
-            isPublic: true,
-        });
-
-        // when & then
-        expect(updateRoomHandler.execute(command)).rejects.toThrow(
-            NoAdminPermissionException,
-        );
-    });
-
-    it('should throw NoMatchingRoleException', async () => {
-        // given
-        jest.spyOn(roomRepsitory, 'findOneBy').mockImplementation(
-            async () => new Room(),
-        );
-        jest.spyOn(roomAdminChecker, 'checkOrThrow').mockImplementation(
-            async () => undefined,
-        );
-        jest.spyOn(memberRoleRepository, 'findOneBy').mockImplementation(
-            async () => undefined,
-        );
-        const command = new UpdateRoomCommand(new User(), 1, {
-            defaultRoleID: 1,
-        });
-
-        // when & then
-        expect(updateRoomHandler.execute(command)).rejects.toThrow(
-            NoMatchingRoleException,
         );
     });
 });
