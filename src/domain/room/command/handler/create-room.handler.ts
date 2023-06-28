@@ -19,7 +19,6 @@ export class CreateRoomHandler implements ICommandHandler<CreateRoomCommand> {
         const {
             roleInput: { roleName, rolePermission },
             roomInput,
-            user,
         } = command;
 
         const room = this.roomRepository.create({
@@ -32,10 +31,9 @@ export class CreateRoomHandler implements ICommandHandler<CreateRoomCommand> {
         });
 
         const admin = this.roomMemberRepository.create({
-            user,
-            room,
+            room: room,
             role: defaultRole,
-            isAdmin: true,
+            user: roomInput.owner,
         });
 
         room.defaultRole = defaultRole;

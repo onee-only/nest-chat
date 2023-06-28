@@ -2,24 +2,35 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     Param,
+    ParseEnumPipe,
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+} from '@nestjs/swagger';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { CreateRoomRequestDto, UpdateRoomRequestDto } from './dto/request';
-import { CreateRoomResponseDto } from './dto/response';
+import { CreateRoomResponseDto, ListRoomResponseDto } from './dto/response';
 import { JwtAuthGuard } from 'src/global/guards';
 import {
     CreateRoomCommand,
     DeleteRoomCommand,
     UpdateRoomCommand,
 } from '../command';
+import { RoomOrder, RoomOrderDir } from '../enum';
+import { ListRoomQuery } from '../query';
+import { ParseDatePipe } from 'src/global/pipes';
 
 @ApiTags('rooms')
 @Controller('rooms')
@@ -50,15 +61,45 @@ export class RoomController {
 
         return await this.commandBus.execute(
             new CreateRoomCommand(
-                user,
                 { roleName, rolePermission },
                 {
                     name,
                     isPublic,
                     profileURL,
                     description,
+                    owner: user,
                 },
             ),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'list room',
+        description: 'gives a List of rooms',
+    })
+    @ApiOkResponse({ type: ListRoomResponseDto })
+    @Get()
+    async listRoom(
+        @GetUser() user: User,
+        @Query('page', ParseIntPipe) page: number,
+        @Query('order', new ParseEnumPipe(RoomOrder)) order: RoomOrder,
+        @Query('dir', new ParseEnumPipe(RoomOrderDir)) dir: RoomOrderDir,
+        @Query('query') query?: string,
+        @Query('size', ParseIntPipe) size?: number,
+        @Query('startdate', ParseDatePipe) startDate?: Date,
+        @Query('enddate', ParseDatePipe) endDate?: Date,
+        // should add tag
+    ): Promise<ListRoomResponseDto> {
+        return await this.queryBus.execute(
+            new ListRoomQuery(user, {
+                page,
+                size,
+                order,
+                query,
+                endDate,
+                startDate,
+                orderDir: dir,
+            }),
         );
     }
 

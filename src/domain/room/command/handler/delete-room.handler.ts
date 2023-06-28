@@ -1,25 +1,26 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import {
+    NoOwnerPermissionException,
+    RoomNotFoundException,
+} from '../../exception';
 import { DeleteRoomCommand } from '../delete-room.command';
 import { RoomRepository } from '../../repository';
-import { RoomAdminChecker } from '../../util';
-import { RoomNotFoundException } from '../../exception';
 
 @CommandHandler(DeleteRoomCommand)
 export class DeleteRoomHandler implements ICommandHandler<DeleteRoomCommand> {
-    constructor(
-        private readonly roomRepsitory: RoomRepository,
-        private readonly roomAdminChecker: RoomAdminChecker,
-    ) {}
+    constructor(private readonly roomRepsitory: RoomRepository) {}
 
     async execute(command: DeleteRoomCommand): Promise<void> {
         const { roomID, user } = command;
 
-        const room = await this.roomRepsitory.findOneBy({ id: roomID });
+        const room = await this.roomRepsitory.findOneWithOwnerById(roomID);
         if (room == null) {
             throw new RoomNotFoundException(roomID);
         }
 
-        await this.roomAdminChecker.checkOrThrow(room, user);
+        if (room.owner != user) {
+            throw new NoOwnerPermissionException();
+        }
         await this.roomRepsitory.delete(room);
     }
 }

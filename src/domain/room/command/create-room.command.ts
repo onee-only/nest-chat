@@ -7,6 +7,7 @@ type RoomInput = {
     readonly name: string;
     readonly description: string;
     readonly isPublic: boolean;
+    readonly owner: User;
 };
 
 type RoleInput = {
@@ -16,7 +17,6 @@ type RoleInput = {
 
 export class CreateRoomCommand implements ICommand {
     constructor(
-        public readonly user: User,
         public readonly roleInput: RoleInput,
         public readonly roomInput: RoomInput,
     ) {}
