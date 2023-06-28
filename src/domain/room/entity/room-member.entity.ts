@@ -1,4 +1,4 @@
-import { Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from 'src/domain/user/entity';
 import { Room } from './room.entity';
 import { MemberRole } from './member-role.entity';
@@ -6,9 +6,6 @@ import { MemberRole } from './member-role.entity';
 export class RoomMember {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;
-
-    @Column()
-    isAdmin: boolean;
 
     @ManyToOne(() => User, {
         cascade: true,
@@ -28,7 +25,7 @@ export class RoomMember {
     @ManyToOne(() => MemberRole, {
         cascade: true,
         nullable: false,
-        onDelete: 'CASCADE',
+        onDelete: 'RESTRICT',
     })
     role: MemberRole;
 }
