@@ -13,7 +13,7 @@ import {
 import { DeleteRoleCommand } from '../delete-role.command';
 
 @CommandHandler(DeleteRoleCommand)
-export class UpdateRoleHandler implements ICommandHandler<DeleteRoleCommand> {
+export class DeleteRoleHandler implements ICommandHandler<DeleteRoleCommand> {
     constructor(
         private readonly roomRepository: RoomRepository,
         private readonly roomMemberRepository: RoomMemberRepository,
