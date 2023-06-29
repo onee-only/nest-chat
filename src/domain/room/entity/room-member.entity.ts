@@ -11,7 +11,6 @@ export class RoomMember {
         cascade: true,
         nullable: false,
         onDelete: 'CASCADE',
-        eager: true,
     })
     user: User;
 
