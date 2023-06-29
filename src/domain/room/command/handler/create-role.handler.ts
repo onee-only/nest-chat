@@ -3,7 +3,10 @@ import { CreateRoleCommand } from '../create-role.command';
 import { MemberRoleRepository, RoomRepository } from '../../repository';
 import { PermissionChecker } from '../../util';
 import { RoomPermission } from '../../enum';
-import { RoomNotFoundException } from '../../exception';
+import {
+    DuplicateRoleAliasException,
+    RoomNotFoundException,
+} from '../../exception';
 
 @CommandHandler(CreateRoleCommand)
 export class CreateRoleHandler implements ICommandHandler<CreateRoleCommand> {
@@ -17,7 +20,6 @@ export class CreateRoleHandler implements ICommandHandler<CreateRoleCommand> {
         const { alias, permission, roomID, user } = command;
 
         const room = await this.roomRepository.findOneBy({ id: roomID });
-
         if (room == null) {
             throw new RoomNotFoundException(roomID);
         }
@@ -33,6 +35,10 @@ export class CreateRoleHandler implements ICommandHandler<CreateRoleCommand> {
             permission,
             room,
         });
+
+        if (await this.memberRoleRepository.duplicateAliasExists(room, alias)) {
+            throw new DuplicateRoleAliasException(roomID, alias);
+        }
 
         await this.memberRoleRepository.save(role);
     }
