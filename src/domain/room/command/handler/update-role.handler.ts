@@ -19,7 +19,7 @@ export class UpdateRoleHandler implements ICommandHandler<UpdateRoleCommand> {
         private readonly objectManager: ObjectManager,
     ) {}
 
-    async execute(command: UpdateRoleCommand): Promise<any> {
+    async execute(command: UpdateRoleCommand): Promise<void> {
         const { alias, permission, roomID, user, roleID } = command;
 
         const room = await this.roomRepository.findOneBy({ id: roomID });
@@ -27,11 +27,11 @@ export class UpdateRoleHandler implements ICommandHandler<UpdateRoleCommand> {
             throw new RoomNotFoundException(roomID);
         }
 
-        await this.permissionChecker.checkAvailableOrThrow(
-            room,
-            user,
-            RoomPermission.MANAGE_ROLE,
-        );
+        await this.permissionChecker.checkOrThrow({
+            action: RoomPermission.MANAGE_ROLE,
+            room: room,
+            user: user,
+        });
 
         const role = await this.memberRoleRepository.findOneBy({ id: roleID });
         if (role == null) {
