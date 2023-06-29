@@ -58,10 +58,6 @@ export class PermissionChecker {
         permission: Permission,
         action: RoomPermission,
     ): boolean {
-        return Boolean(
-            Object.entries(permission).filter(
-                ([key, value]) => key === action && value,
-            ),
-        );
+        return Object.entries(permission).includes([action, true]);
     }
 }
