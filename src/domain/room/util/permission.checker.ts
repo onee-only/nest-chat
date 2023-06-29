@@ -1,12 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { RoomMemberRepository } from '../repository';
-import { Permission, Room } from '../entity';
+import { Room } from '../entity';
 import { User } from 'src/domain/user/entity';
 import { RoomPermission } from '../enum';
 import {
     NoRolePermissionException,
     NotRoomMemberException,
 } from '../exception';
+
+type Params = {
+    room: Room;
+    user: User;
+    action: RoomPermission;
+};
 
 @Injectable()
 export class PermissionChecker {
@@ -15,30 +21,22 @@ export class PermissionChecker {
     /**
      * checks the user permission
      */
-    async checkAvailable(
-        room: Room,
-        user: User,
-        action: RoomPermission,
-    ): Promise<boolean> {
-        return await this.check(room, user, action);
+    async check({ action, room, user }: Params): Promise<boolean> {
+        return await this.doCheck(room, user, action);
     }
 
     /**
      * checks the user permission and throws
      * @throws NoRolePermissionException
      */
-    async checkAvailableOrThrow(
-        room: Room,
-        user: User,
-        action: RoomPermission,
-    ): Promise<void> {
-        const available = await this.check(room, user, action);
+    async checkOrThrow({ action, room, user }: Params): Promise<void> {
+        const available = await this.doCheck(room, user, action);
         if (!available) {
             throw new NoRolePermissionException(room.id, action);
         }
     }
 
-    private async check(
+    private async doCheck(
         room: Room,
         user: User,
         action: RoomPermission,
@@ -51,13 +49,6 @@ export class PermissionChecker {
         if (member == null) {
             throw new NotRoomMemberException(user.id, room.id);
         }
-        return this.checkAllowed(member.role.permission, action);
-    }
-
-    private checkAllowed(
-        permission: Permission,
-        action: RoomPermission,
-    ): boolean {
-        return Object.entries(permission).includes([action, true]);
+        return member.role.permission[action] == true;
     }
 }

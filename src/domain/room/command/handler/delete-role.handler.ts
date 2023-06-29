@@ -1,26 +1,28 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UpdateRoleCommand } from '../update-role.command';
-import { MemberRoleRepository, RoomRepository } from '../../repository';
+import {
+    MemberRoleRepository,
+    RoomMemberRepository,
+    RoomRepository,
+} from '../../repository';
 import { PermissionChecker } from '../../util';
 import { RoomPermission } from '../../enum';
 import {
-    DuplicateRoleAliasException,
     NoMatchingRoleException,
     RoomNotFoundException,
 } from '../../exception';
-import { ObjectManager } from 'src/global/modules/utils/object';
+import { DeleteRoleCommand } from '../delete-role.command';
 
-@CommandHandler(UpdateRoleCommand)
-export class UpdateRoleHandler implements ICommandHandler<UpdateRoleCommand> {
+@CommandHandler(DeleteRoleCommand)
+export class UpdateRoleHandler implements ICommandHandler<DeleteRoleCommand> {
     constructor(
         private readonly roomRepository: RoomRepository,
+        private readonly roomMemberRepository: RoomMemberRepository,
         private readonly memberRoleRepository: MemberRoleRepository,
         private readonly permissionChecker: PermissionChecker,
-        private readonly objectManager: ObjectManager,
     ) {}
 
-    async execute(command: UpdateRoleCommand): Promise<void> {
-        const { alias, permission, roomID, user, roleID } = command;
+    async execute(command: DeleteRoleCommand): Promise<any> {
+        const { roomID, user, roleID } = command;
 
         const room = await this.roomRepository.findOneBy({ id: roomID });
         if (room == null) {
@@ -38,16 +40,10 @@ export class UpdateRoleHandler implements ICommandHandler<UpdateRoleCommand> {
             throw new NoMatchingRoleException(roomID, roleID);
         }
 
-        const candiate = this.objectManager.filterNullish({
-            alias,
-            permission,
-        });
-        Object.assign(role, candiate);
-
-        if (await this.memberRoleRepository.duplicateAliasExists(room, alias)) {
-            throw new DuplicateRoleAliasException(roomID, alias);
+        if (await this.roomMemberRepository.existsByRoomAndRole(room, role)) {
+            // throw
         }
 
-        await this.memberRoleRepository.save(role);
+        await this.memberRoleRepository.delete(role);
     }
 }

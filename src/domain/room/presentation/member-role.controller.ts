@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Param,
     ParseIntPipe,
     Patch,
@@ -13,7 +14,11 @@ import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
 import { CreateRoleRequestDto, UpdateRoleRequestDto } from './dto/request';
-import { CreateRoleCommand, UpdateRoleCommand } from '../command';
+import {
+    CreateRoleCommand,
+    DeleteRoleCommand,
+    UpdateRoleCommand,
+} from '../command';
 
 @ApiTags('member role')
 @Controller('rooms/:roomID/roles')
@@ -55,6 +60,22 @@ export class MemberRoleController {
         const { name, permission } = request;
         return await this.commandBus.execute(
             new UpdateRoleCommand(user, roomID, roleID, name, permission),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'delete role',
+        description: 'Deletes a role',
+    })
+    @Delete(':roleID')
+    @UseGuards(JwtAuthGuard)
+    async deleteRole(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('roleID', ParseIntPipe) roleID: number,
+        @GetUser() user: User,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new DeleteRoleCommand(user, roomID, roleID),
         );
     }
 }

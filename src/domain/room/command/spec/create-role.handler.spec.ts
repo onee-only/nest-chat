@@ -50,10 +50,9 @@ describe('CreateRoleHandler', () => {
         jest.spyOn(roomRepository, 'findOneBy').mockImplementation(
             async () => new Room(),
         );
-        jest.spyOn(
-            permissionChecker,
-            'checkAvailableOrThrow',
-        ).mockImplementation(async () => undefined);
+        jest.spyOn(permissionChecker, 'checkOrThrow').mockImplementation(
+            async () => undefined,
+        );
         jest.spyOn(memberRoleRepository, 'create').mockImplementation(
             () => new MemberRole(),
         );
@@ -76,10 +75,9 @@ describe('CreateRoleHandler', () => {
         jest.spyOn(roomRepository, 'findOneBy').mockImplementation(
             async () => null,
         );
-        jest.spyOn(
-            permissionChecker,
-            'checkAvailableOrThrow',
-        ).mockImplementation(async () => undefined);
+        jest.spyOn(permissionChecker, 'checkOrThrow').mockImplementation(
+            async () => undefined,
+        );
         jest.spyOn(memberRoleRepository, 'create').mockImplementation(
             () => new MemberRole(),
         );
