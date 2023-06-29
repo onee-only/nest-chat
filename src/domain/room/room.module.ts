@@ -9,6 +9,7 @@ import {
 } from './repository';
 import { RoomController } from './presentation/room.controller';
 import { MemberRoleController } from './presentation/member-role.controller';
+import { RoomMemberController } from './presentation/room-member.controller';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CommandHandlers } from './command/handler';
 import { QueryHandlers } from './query/handler';
@@ -19,7 +20,7 @@ import { PermissionChecker } from './util';
         CqrsModule,
         TypeOrmModule.forFeature([Room, RoomMember, MemberRole, Invitation]),
     ],
-    controllers: [RoomController, MemberRoleController],
+    controllers: [RoomController, MemberRoleController, RoomMemberController],
     providers: [
         // handlers
         ...CommandHandlers,
