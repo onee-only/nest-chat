@@ -11,7 +11,7 @@ import {
 type Params = {
     room: Room;
     user: User;
-    action: RoomPermission;
+    action?: RoomPermission;
 };
 
 @Injectable()
@@ -19,14 +19,14 @@ export class PermissionChecker {
     constructor(private readonly roomMemberRepository: RoomMemberRepository) {}
 
     /**
-     * checks the user permission
+     * checks the user permission. action is optional
      */
     async check({ action, room, user }: Params): Promise<boolean> {
         return await this.doCheck(room, user, action);
     }
 
     /**
-     * checks the user permission and throws
+     * checks the user permission and throws. action is optional
      * @throws NoRolePermissionException
      */
     async checkOrThrow({ action, room, user }: Params): Promise<void> {
@@ -39,7 +39,7 @@ export class PermissionChecker {
     private async doCheck(
         room: Room,
         user: User,
-        action: RoomPermission,
+        action?: RoomPermission,
     ): Promise<boolean> {
         const member = await this.roomMemberRepository.findOne({
             relations: { role: true },
@@ -49,6 +49,8 @@ export class PermissionChecker {
         if (member == null) {
             throw new NotRoomMemberException(user.id, room.id);
         }
+
+        if (action == null) return true;
         return member.role.permission[action] == true;
     }
 }
