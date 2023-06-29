@@ -2,6 +2,7 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     Param,
     ParseIntPipe,
     Patch,
@@ -9,7 +10,7 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
@@ -19,6 +20,8 @@ import {
     DeleteRoleCommand,
     UpdateRoleCommand,
 } from '../command';
+import { ListRoleQuery } from '../query';
+import { ListRoleResponseDto } from './dto/response';
 
 @ApiTags('member role')
 @Controller('rooms/:roomID/roles')
@@ -43,6 +46,20 @@ export class MemberRoleController {
         return await this.commandBus.execute(
             new CreateRoleCommand(user, roomID, name, permission),
         );
+    }
+
+    @ApiOperation({
+        summary: 'create role',
+        description: 'Creates a new role',
+    })
+    @ApiOkResponse({ type: ListRoleResponseDto })
+    @Get()
+    @UseGuards(JwtAuthGuard)
+    async listRole(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @GetUser() user: User,
+    ): Promise<ListRoleResponseDto> {
+        return await this.queryBus.execute(new ListRoleQuery(user, roomID));
     }
 
     @ApiOperation({
