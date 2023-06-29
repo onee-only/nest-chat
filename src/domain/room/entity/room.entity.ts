@@ -1,6 +1,7 @@
 import {
     Column,
     CreateDateColumn,
+    ManyToMany,
     ManyToOne,
     OneToMany,
     OneToOne,
@@ -9,6 +10,7 @@ import {
 import { MemberRole } from './member-role.entity';
 import { RoomMember } from './room-member.entity';
 import { User } from 'src/domain/user/entity';
+import { Tag } from 'src/domain/tag/entity/tag.entity';
 
 export class Room {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
@@ -48,4 +50,7 @@ export class Room {
         cascade: true,
     })
     members: RoomMember[];
+
+    @ManyToMany(() => Tag, { lazy: true })
+    tags: Tag[];
 }
