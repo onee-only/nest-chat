@@ -49,7 +49,7 @@ export class RoomRepository extends Repository<Room> {
         const count = await qb.getCount();
 
         const list = await qb
-            .select('room')
+            .select('room.*')
             .addSelect('count(*)', 'count')
             .addSelect(
                 (subquery) =>
