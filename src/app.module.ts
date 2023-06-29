@@ -3,6 +3,7 @@ import { ConfigModule, DatabaseModule, MailerModule } from './global/modules';
 import { AuthModule } from './domain/auth/auth.module';
 import { UserModule } from './domain/user/user.module';
 import { RoomModule } from './domain/room/room.module';
+import { TagModule } from './domain/tag/tag.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { RoomModule } from './domain/room/room.module';
         AuthModule,
         UserModule,
         RoomModule,
+        TagModule,
     ],
 })
 export class AppModule {}
