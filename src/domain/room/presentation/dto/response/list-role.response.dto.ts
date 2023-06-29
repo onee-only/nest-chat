@@ -1,6 +1,7 @@
 import { PermissionDto } from '../internal';
 
 export type RoleElement = {
+    readonly id: number;
     readonly alias: string;
     readonly permission: PermissionDto;
     readonly memberCount: number;
