@@ -3,9 +3,10 @@ import { DataSource, Repository } from 'typeorm';
 import { Room, RoomMember } from '../entity';
 import { User } from 'src/domain/user/entity';
 import { ListOptions } from '../query';
+import { RoomListElementDto } from '../presentation/dto/internal';
 
 type ListResult = {
-    list: any[];
+    list: RoomListElementDto[];
     count: number;
 };
 
@@ -53,7 +54,7 @@ export class RoomRepository extends Repository<Room> {
             .addSelect(
                 (subquery) =>
                     subquery
-                        .select(['user.isMember', 'members.count'])
+                        .select(['user.isMember', 'members.memberCount'])
                         .from(
                             (subquery) =>
                                 subquery
@@ -66,7 +67,7 @@ export class RoomRepository extends Repository<Room> {
                         .addFrom(
                             (subquery) =>
                                 subquery
-                                    .select('count(*) > 0', 'count')
+                                    .select('count(*) > 0', 'memberCount')
                                     .from(RoomMember, 'roomMember')
                                     .where('roomMember.userId = :userID'),
                             'members',
@@ -78,7 +79,7 @@ export class RoomRepository extends Repository<Room> {
             .orderBy(order, orderDir)
             .offset(size * (page - 1))
             .limit(size)
-            .getRawMany();
+            .getRawMany<RoomListElementDto>();
 
         return {
             list,
