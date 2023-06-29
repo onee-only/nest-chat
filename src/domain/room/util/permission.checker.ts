@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RoomMemberRepository } from '../repository';
-import { Permission, Room } from '../entity';
+import { Room } from '../entity';
 import { User } from 'src/domain/user/entity';
 import { RoomPermission } from '../enum';
 import {
@@ -51,13 +51,6 @@ export class PermissionChecker {
         if (member == null) {
             throw new NotRoomMemberException(user.id, room.id);
         }
-        return this.checkAllowed(member.role.permission, action);
-    }
-
-    private checkAllowed(
-        permission: Permission,
-        action: RoomPermission,
-    ): boolean {
-        return Object.entries(permission).includes([action, true]);
+        return member.role.permission[action] == true;
     }
 }
