@@ -1,18 +1,9 @@
-import {
-    Column,
-    Generated,
-    ManyToOne,
-    OneToOne,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
 import { Room } from './room.entity';
 import { MemberRole } from './member-role.entity';
 
 export class Invitation {
-    @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
-    id: number;
-
-    @Generated('uuid')
+    @PrimaryColumn({ generated: 'uuid' })
     token: string;
 
     @ManyToOne(() => Room, {
