@@ -14,13 +14,19 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { CommandHandlers } from './command/handler';
 import { QueryHandlers } from './query/handler';
 import { PermissionChecker } from './util';
+import { InvitationController } from './presentation/invitation.controller';
 
 @Module({
     imports: [
         CqrsModule,
         TypeOrmModule.forFeature([Room, RoomMember, MemberRole, Invitation]),
     ],
-    controllers: [RoomController, MemberRoleController, RoomMemberController],
+    controllers: [
+        RoomController,
+        MemberRoleController,
+        RoomMemberController,
+        InvitationController,
+    ],
     providers: [
         // handlers
         ...CommandHandlers,
