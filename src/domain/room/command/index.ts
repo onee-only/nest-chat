@@ -5,3 +5,4 @@ export { CreateRoleCommand } from './create-role.command';
 export { UpdateRoleCommand } from './update-role.command';
 export { DeleteRoleCommand } from './delete-role.command';
 export { CreateInvitationCommand } from './create-invitation.command';
+export { DeleteInvitationCommand } from './delete-invitation.command';
