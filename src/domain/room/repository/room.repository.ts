@@ -16,8 +16,11 @@ export class RoomRepository extends Repository<Room> {
         super(Room, dataSource.createEntityManager());
     }
 
+    /**
+     * finds room with owner. if room does not exist, throws error
+     */
     async findOneWithOwnerById(id: number): Promise<Room> {
-        return await this.findOne({
+        return await this.findOneOrFail({
             where: { id },
             relations: { owner: true },
         });
