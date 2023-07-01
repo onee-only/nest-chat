@@ -5,6 +5,7 @@ import { CreateRoleHandler } from './create-role.handler';
 import { UpdateRoleHandler } from './update-role.handler';
 import { DeleteRoleHandler } from './delete-role.handler';
 import { CreateInvitationHandler } from './create-invitation.handler';
+import { DeleteInvitationHandler } from './delete-invitation.handler';
 
 export const CommandHandlers = [
     CreateRoomHandler,
@@ -14,4 +15,5 @@ export const CommandHandlers = [
     UpdateRoleHandler,
     DeleteRoleHandler,
     CreateInvitationHandler,
+    DeleteInvitationHandler,
 ];

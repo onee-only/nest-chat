@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Param,
     ParseIntPipe,
     Post,
@@ -11,7 +12,7 @@ import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
-import { CreateInvitationCommand } from '../command';
+import { CreateInvitationCommand, DeleteInvitationCommand } from '../command';
 import { CreateInvitationRequestDto } from './dto/request';
 import { CreateInvitationResponseDto } from './dto/response';
 
@@ -38,6 +39,22 @@ export class InvitationController {
         const { duration, roleID } = request;
         return await this.commandBus.execute(
             new CreateInvitationCommand(roomID, roleID, duration, user),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'delete invitation',
+        description: 'Deletes an invitation',
+    })
+    @Delete(':token')
+    @UseGuards(JwtAuthGuard)
+    async deleteInvitation(
+        @GetUser() user: User,
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('token', ParseIntPipe) token: string,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new DeleteInvitationCommand(roomID, token, user),
         );
     }
 }
