@@ -1,12 +1,9 @@
 import { Room } from 'src/domain/room/entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Tag {
-    @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
-    id: number;
-
-    @Column({ unique: true })
+    @PrimaryColumn()
     name: string;
 
     @ManyToMany(() => Room, (room) => room.tags, { lazy: true })
