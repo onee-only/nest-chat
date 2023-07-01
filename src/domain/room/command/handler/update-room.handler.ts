@@ -21,10 +21,11 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
         } = command;
         const { user, roomID, data } = command;
 
-        const room = await this.roomRepsitory.findOneWithOwnerById(roomID);
-        if (room == null) {
-            throw new RoomNotFoundException(roomID);
-        }
+        const room = await this.roomRepsitory
+            .findOneWithOwnerById(roomID)
+            .catch(() => {
+                throw new RoomNotFoundException(roomID);
+            });
 
         if (room.owner != user) {
             throw new NoOwnerPermissionException();
@@ -42,14 +43,15 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
         roleID: number,
         room: Room,
     ): Promise<MemberRole> {
-        const role = await this.memberRoleRepository.findOneBy({
-            room: room,
-            id: roleID,
-        });
+        const role = await this.memberRoleRepository
+            .findOneByOrFail({
+                room: room,
+                id: roleID,
+            })
+            .catch(() => {
+                throw new NoMatchingRoleException(room.id, roleID);
+            });
 
-        if (role == null) {
-            throw new NoMatchingRoleException(room.id, roleID);
-        }
         return role;
     }
 }

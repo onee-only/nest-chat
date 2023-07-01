@@ -13,10 +13,11 @@ export class DeleteRoomHandler implements ICommandHandler<DeleteRoomCommand> {
     async execute(command: DeleteRoomCommand): Promise<void> {
         const { roomID, user } = command;
 
-        const room = await this.roomRepsitory.findOneWithOwnerById(roomID);
-        if (room == null) {
-            throw new RoomNotFoundException(roomID);
-        }
+        const room = await this.roomRepsitory
+            .findOneWithOwnerById(roomID)
+            .catch(() => {
+                throw new RoomNotFoundException(roomID);
+            });
 
         if (room.owner != user) {
             throw new NoOwnerPermissionException();
