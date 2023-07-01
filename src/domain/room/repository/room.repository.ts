@@ -33,6 +33,7 @@ export class RoomRepository extends Repository<Room> {
             endDate,
             startDate,
             query,
+            tags,
             page = 1,
             size = 20,
         } = options;
@@ -47,6 +48,9 @@ export class RoomRepository extends Repository<Room> {
             })
             .andWhere(this.optional(startDate, 'room.createdAt >= :endDate'), {
                 startDate,
+            })
+            .andWhere(this.optional(tags, 'room.tags IN (:tags)'), {
+                tags: tags,
             });
 
         const count = await qb.getCount();

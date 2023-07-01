@@ -4,6 +4,7 @@ import {
     Delete,
     Get,
     Param,
+    ParseArrayPipe,
     ParseEnumPipe,
     ParseIntPipe,
     Patch,
@@ -88,6 +89,7 @@ export class RoomController {
         @Query('size', ParseIntPipe) size?: number,
         @Query('startdate', ParseDatePipe) startDate?: Date,
         @Query('enddate', ParseDatePipe) endDate?: Date,
+        @Query('tags', new ParseArrayPipe()) tags?: string[],
         // should add tag
     ): Promise<ListRoomResponseDto> {
         return await this.queryBus.execute(
@@ -98,6 +100,7 @@ export class RoomController {
                 query,
                 endDate,
                 startDate,
+                tags,
                 orderDir: dir,
             }),
         );

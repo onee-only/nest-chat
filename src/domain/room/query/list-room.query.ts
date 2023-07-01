@@ -10,6 +10,7 @@ export type ListOptions = {
     readonly query?: string;
     readonly startDate?: Date;
     readonly endDate?: Date;
+    readonly tags?: string[];
 };
 
 export class ListRoomQuery implements IQuery {
