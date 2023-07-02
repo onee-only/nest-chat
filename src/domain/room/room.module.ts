@@ -41,6 +41,6 @@ import { InvitationController } from './presentation/invitation.controller';
         RoomMemberRepository,
         InvitationRepository,
     ],
-    exports: [PermissionChecker],
+    exports: [PermissionChecker, RoomRepository],
 })
 export class RoomModule {}
