@@ -11,6 +11,7 @@ import { MemberRole } from './member-role.entity';
 import { RoomMember } from './room-member.entity';
 import { User } from 'src/domain/user/entity';
 import { Tag } from 'src/domain/tag/entity/tag.entity';
+import { Thread } from 'src/domain/thread/entity';
 
 export class Room {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
@@ -43,13 +44,21 @@ export class Room {
 
     @OneToMany(() => MemberRole, (role) => role.room, {
         cascade: true,
+        onDelete: 'CASCADE',
     })
     roles: MemberRole[];
 
     @OneToMany(() => RoomMember, (member) => member.room, {
         cascade: true,
+        onDelete: 'CASCADE',
     })
     members: RoomMember[];
+
+    @OneToMany(() => Thread, (thread) => thread.room, {
+        cascade: true,
+        onDelete: 'CASCADE',
+    })
+    threads: Thread[];
 
     @ManyToMany(() => Tag, { lazy: true })
     tags: Tag[];
