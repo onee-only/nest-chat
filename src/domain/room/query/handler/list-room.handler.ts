@@ -17,8 +17,8 @@ export class ListRoomHandler implements IQueryHandler<ListRoomQuery> {
 
         return ListRoomResponseDto.from(roomList, {
             pageNum: options.page,
-            pageSize: options.size,
-            totalPages: Math.ceil(count / options.size),
+            pageSize: roomList.length,
+            totalPages: Math.ceil(count / roomList.length),
             totalRooms: count,
         });
     }
