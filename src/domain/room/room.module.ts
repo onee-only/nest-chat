@@ -15,11 +15,13 @@ import { CommandHandlers } from './command/handler';
 import { QueryHandlers } from './query/handler';
 import { PermissionChecker } from './util';
 import { InvitationController } from './presentation/invitation.controller';
+import { TagModule } from '../tag/tag.module';
 
 @Module({
     imports: [
         CqrsModule,
         TypeOrmModule.forFeature([Room, RoomMember, MemberRole, Invitation]),
+        TagModule,
     ],
     controllers: [
         RoomController,
