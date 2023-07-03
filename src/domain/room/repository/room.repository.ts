@@ -74,7 +74,7 @@ export class RoomRepository extends Repository<Room> {
                         .addFrom(
                             (subquery) =>
                                 subquery
-                                    .select('count(*) > 0', 'memberCount')
+                                    .select('count(*)', 'memberCount')
                                     .from(RoomMember, 'roomMember')
                                     .where('roomMember.userId = :userID'),
                             'members',
