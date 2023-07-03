@@ -1,11 +1,14 @@
 import {
+    Body,
     Controller,
     Get,
     Param,
     ParseArrayPipe,
     ParseEnumPipe,
     ParseIntPipe,
+    Post,
     Query,
+    UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -14,7 +17,10 @@ import { GetUser } from 'src/global/decorators';
 import { ThreadOrder, ThreadOrderDir } from '../enum';
 import { ParseDatePipe } from 'src/global/pipes';
 import { ListThreadQuery } from '../query';
-import { ListThreadReponseDto } from './dto/response';
+import { CreateThreadResponseDto, ListThreadReponseDto } from './dto/response';
+import { CreateThreadCommand } from '../command';
+import { CreateThreadRequestDto } from './dto/request';
+import { JwtAuthGuard } from 'src/global/guards';
 
 @ApiTags('threads')
 @Controller('rooms/:roomID/threads')
@@ -25,11 +31,29 @@ export class ThreadController {
     ) {}
 
     @ApiOperation({
+        summary: 'create thread',
+        description: 'Creates a new thread',
+    })
+    @Post()
+    @UseGuards(JwtAuthGuard)
+    async createThread(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @GetUser() user: User,
+        @Body() request: CreateThreadRequestDto,
+    ): Promise<CreateThreadResponseDto> {
+        const { title } = request;
+        return await this.commandBus.execute(
+            new CreateThreadCommand(user, roomID, title),
+        );
+    }
+
+    @ApiOperation({
         summary: 'list threads',
         description: 'Gives a list of the threads',
     })
     @ApiOkResponse({ type: ListThreadReponseDto })
     @Get()
+    @UseGuards(JwtAuthGuard)
     async listThread(
         @Param('roomID', ParseIntPipe) roomID: number,
         @GetUser() user: User,
