@@ -51,8 +51,9 @@ export class UpdateThreadHandler
         const tags = tagNames.map((name) =>
             this.tagRepository.create({ name }),
         );
-
-        await this.tagRepository.insertOrIgnore(tags);
+        if (tagNames != null) {
+            await this.tagRepository.insertOrIgnore(tags);
+        }
 
         const candiate = this.objectManager.filterNullish({
             tags: tagNames ? tags : null,
