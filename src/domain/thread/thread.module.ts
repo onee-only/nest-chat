@@ -6,6 +6,7 @@ import { RoomModule } from '../room/room.module';
 import { ThreadController } from './presentation/thread.controller';
 import { PinnedThreadRepository, ThreadRepository } from './repository';
 import { QueryHandlers } from './query/handler';
+import { CommandHandlers } from './command/handler';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { QueryHandlers } from './query/handler';
     controllers: [ThreadController],
     providers: [
         // handlers
+        ...CommandHandlers,
         ...QueryHandlers,
 
         // repositories
