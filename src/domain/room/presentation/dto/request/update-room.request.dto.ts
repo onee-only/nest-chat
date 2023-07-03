@@ -26,4 +26,9 @@ export class UpdateRoomRequestDto {
     @IsOptional()
     @IsBoolean()
     defaultRoleID?: number;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString({ each: true })
+    tags?: string[];
 }
