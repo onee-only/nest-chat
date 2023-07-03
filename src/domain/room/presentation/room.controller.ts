@@ -90,7 +90,6 @@ export class RoomController {
         @Query('startdate', ParseDatePipe) startDate?: Date,
         @Query('enddate', ParseDatePipe) endDate?: Date,
         @Query('tags', new ParseArrayPipe()) tags?: string[],
-        // should add tag
     ): Promise<ListRoomResponseDto> {
         return await this.queryBus.execute(
             new ListRoomQuery(user, {
