@@ -7,17 +7,21 @@ import {
     NoOwnerPermissionException,
     RoomNotFoundException,
 } from '../../exception';
+import { ObjectManager } from 'src/global/modules/utils';
+import { TagRepository } from 'src/domain/tag/repository/tag.repository';
 
 @CommandHandler(UpdateRoomCommand)
 export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
     constructor(
         private readonly roomRepsitory: RoomRepository,
         private readonly memberRoleRepository: MemberRoleRepository,
+        private readonly tagRepository: TagRepository,
+        private readonly objectManager: ObjectManager,
     ) {}
 
     async execute(command: UpdateRoomCommand): Promise<void> {
         const {
-            data: { defaultRoleID },
+            data: { defaultRoleID, tags: tagNames },
         } = command;
         const { user, roomID, data } = command;
 
@@ -36,7 +40,22 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
             delete data.defaultRoleID;
         }
 
-        await this.roomRepsitory.update(room, data);
+        // should refactor it. update thread too.
+        const tags = tagNames.map((name) =>
+            this.tagRepository.create({ name }),
+        );
+        if (tagNames != null) {
+            await this.tagRepository.insertOrIgnore(tags);
+        }
+        delete data.tags;
+
+        const candiate = this.objectManager.filterNullish({
+            tags: tags,
+            ...data,
+        });
+        Object.assign(room, candiate);
+
+        await this.roomRepsitory.save(room);
     }
 
     private async getMemberRole(

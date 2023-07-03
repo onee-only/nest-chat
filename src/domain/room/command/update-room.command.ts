@@ -6,6 +6,7 @@ type UpdateData = {
     readonly description?: string;
     readonly profileURL?: string;
     readonly isPublic?: boolean;
+    tags?: string[];
     defaultRoleID?: number;
 };
 
