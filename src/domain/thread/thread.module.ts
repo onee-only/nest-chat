@@ -7,11 +7,13 @@ import { ThreadController } from './presentation/thread.controller';
 import { PinnedThreadRepository, ThreadRepository } from './repository';
 import { QueryHandlers } from './query/handler';
 import { CommandHandlers } from './command/handler';
+import { TagModule } from '../tag/tag.module';
 
 @Module({
     imports: [
         CqrsModule,
         TypeOrmModule.forFeature([Thread, PinnedThread]),
+        TagModule,
         RoomModule,
     ],
     controllers: [ThreadController],
