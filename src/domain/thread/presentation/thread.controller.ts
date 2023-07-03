@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     ParseArrayPipe,
@@ -18,7 +19,7 @@ import { ThreadOrder, ThreadOrderDir } from '../enum';
 import { ParseDatePipe } from 'src/global/pipes';
 import { ListThreadQuery } from '../query';
 import { CreateThreadResponseDto, ListThreadReponseDto } from './dto/response';
-import { CreateThreadCommand } from '../command';
+import { CreateThreadCommand, DeleteThreadCommand } from '../command';
 import { CreateThreadRequestDto } from './dto/request';
 import { JwtAuthGuard } from 'src/global/guards';
 
@@ -78,6 +79,22 @@ export class ThreadController {
                 tags,
                 orderDir: dir,
             }),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'delete thread',
+        description: 'Deletes a thread',
+    })
+    @Delete(':threadID')
+    @UseGuards(JwtAuthGuard)
+    async deleteThread(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('threadID', ParseIntPipe) threadID: number,
+        @GetUser() user: User,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new DeleteThreadCommand(roomID, threadID, user),
         );
     }
 }
