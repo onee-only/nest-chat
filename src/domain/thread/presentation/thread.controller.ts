@@ -7,6 +7,7 @@ import {
     ParseArrayPipe,
     ParseEnumPipe,
     ParseIntPipe,
+    Patch,
     Post,
     Query,
     UseGuards,
@@ -19,8 +20,12 @@ import { ThreadOrder, ThreadOrderDir } from '../enum';
 import { ParseDatePipe } from 'src/global/pipes';
 import { ListThreadQuery } from '../query';
 import { CreateThreadResponseDto, ListThreadReponseDto } from './dto/response';
-import { CreateThreadCommand, DeleteThreadCommand } from '../command';
-import { CreateThreadRequestDto } from './dto/request';
+import {
+    CreateThreadCommand,
+    DeleteThreadCommand,
+    UpdateThreadCommand,
+} from '../command';
+import { CreateThreadRequestDto, UpdateThreadRequestDto } from './dto/request';
 import { JwtAuthGuard } from 'src/global/guards';
 
 @ApiTags('threads')
@@ -95,6 +100,23 @@ export class ThreadController {
     ): Promise<void> {
         return await this.commandBus.execute(
             new DeleteThreadCommand(roomID, threadID, user),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'update thread',
+        description: 'Updates a thread',
+    })
+    @Patch(':threadID')
+    @UseGuards(JwtAuthGuard)
+    async updateThread(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('threadID', ParseIntPipe) threadID: number,
+        @Body() request: UpdateThreadRequestDto,
+        @GetUser() user: User,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new UpdateThreadCommand(roomID, threadID, user, { ...request }),
         );
     }
 }
