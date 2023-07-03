@@ -2,8 +2,8 @@ import { ICommand } from '@nestjs/cqrs';
 import { User } from 'src/domain/user/entity';
 
 type UpdateData = {
-    title?: string;
-    tags?: string[];
+    readonly title?: string;
+    readonly tags?: string[];
 };
 
 export class UpdateThreadCommand implements ICommand {
