@@ -4,6 +4,7 @@ import { AuthModule } from './domain/auth/auth.module';
 import { UserModule } from './domain/user/user.module';
 import { RoomModule } from './domain/room/room.module';
 import { TagModule } from './domain/tag/tag.module';
+import { ThreadModule } from './domain/thread/thread.module';
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import { TagModule } from './domain/tag/tag.module';
         UserModule,
         RoomModule,
         TagModule,
+        ThreadModule,
     ],
 })
 export class AppModule {}
