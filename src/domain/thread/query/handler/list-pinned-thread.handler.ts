@@ -3,9 +3,8 @@ import { ListPinnedThreadQuery } from '../list-pinned-thread.query';
 import { ListThreadReponseDto } from '../../presentation/dto/response';
 import { RoomRepository } from 'src/domain/room/repository';
 import { PermissionChecker } from 'src/domain/room/util';
-import { ThreadRepository } from '../../repository';
+import { PinnedThreadRepository } from '../../repository';
 import { RoomNotFoundException } from 'src/domain/room/exception';
-import { ThreadOrder, ThreadOrderDir } from '../../enum';
 
 @QueryHandler(ListPinnedThreadQuery)
 export class ListPinnedThreadHandler
@@ -13,7 +12,7 @@ export class ListPinnedThreadHandler
 {
     constructor(
         public readonly roomRepository: RoomRepository,
-        public readonly threadRepository: ThreadRepository,
+        private readonly pinnedThreadRepository: PinnedThreadRepository,
         public readonly permissionChecker: PermissionChecker,
     ) {}
 
@@ -29,13 +28,7 @@ export class ListPinnedThreadHandler
         await this.permissionChecker.check({ room, user });
 
         const { list: threadList, count } =
-            await this.threadRepository.findList(user, {
-                roomID: room.id,
-                order: ThreadOrder.POPULARITY,
-                orderDir: ThreadOrderDir.DESC,
-                page: 1,
-                size: 100,
-            });
+            await this.pinnedThreadRepository.findList(user, roomID);
 
         return ListThreadReponseDto.from(threadList, {
             pageNum: 1,
