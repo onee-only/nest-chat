@@ -22,7 +22,11 @@ import {
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { CreateRoomRequestDto, UpdateRoomRequestDto } from './dto/request';
-import { CreateRoomResponseDto, ListRoomResponseDto } from './dto/response';
+import {
+    CreateRoomResponseDto,
+    ListRoomResponseDto,
+    RetreiveRoomResponseDto,
+} from './dto/response';
 import { JwtAuthGuard } from 'src/global/guards';
 import {
     CreateRoomCommand,
@@ -140,12 +144,13 @@ export class RoomController {
         summary: 'retreive a room',
         description: 'Finds a room',
     })
+    @ApiOkResponse({ type: RetreiveRoomResponseDto })
     @Get(':id')
     @UseGuards(JwtAuthGuard)
     async retreiveRoom(
         @Param('id', ParseIntPipe) roomID: number,
         @GetUser() user: User,
-    ): Promise<void> {
+    ): Promise<RetreiveRoomResponseDto> {
         return await this.queryBus.execute(new RetreiveRoomQuery(user, roomID));
     }
 }

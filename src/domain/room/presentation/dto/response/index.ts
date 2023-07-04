@@ -7,3 +7,4 @@ export {
     ListInvitationResponseDto,
     ListInvitationElement,
 } from './list-invitation.response.dto';
+export { RetreiveRoomResponseDto } from './retreive-room.response.dto';
