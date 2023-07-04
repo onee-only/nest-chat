@@ -30,7 +30,7 @@ import {
     UpdateRoomCommand,
 } from '../command';
 import { RoomOrder, RoomOrderDir } from '../enum';
-import { ListRoomQuery } from '../query';
+import { ListRoomQuery, RetreiveRoomQuery } from '../query';
 import { ParseDatePipe } from 'src/global/pipes';
 
 @ApiTags('rooms')
@@ -134,5 +134,18 @@ export class RoomController {
         return await this.commandBus.execute(
             new DeleteRoomCommand(user, roomID),
         );
+    }
+
+    @ApiOperation({
+        summary: 'retreive a room',
+        description: 'Finds a room',
+    })
+    @Get(':id')
+    @UseGuards(JwtAuthGuard)
+    async retreiveRoom(
+        @Param('id', ParseIntPipe) roomID: number,
+        @GetUser() user: User,
+    ): Promise<void> {
+        return await this.queryBus.execute(new RetreiveRoomQuery(user, roomID));
     }
 }

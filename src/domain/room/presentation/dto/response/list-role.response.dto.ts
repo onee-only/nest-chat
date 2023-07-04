@@ -5,6 +5,7 @@ export type RoleElement = {
     readonly alias: string;
     readonly permission: PermissionDto;
     readonly memberCount: number;
+    readonly isDefault: boolean;
 };
 
 export class ListRoleResponseDto {

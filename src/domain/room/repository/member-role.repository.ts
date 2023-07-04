@@ -22,6 +22,13 @@ export class MemberRoleRepository extends Repository<MemberRole> {
                     .from(RoomMember, 'roomMember')
                     .where('roomMember.roleId = role.id'),
             )
+            .addSelect((subquery) =>
+                subquery
+                    .select('count(*) > 0', 'isDefault')
+                    .from(Room, 'room')
+                    .where('room.id = role.roomId')
+                    .andWhere('role.id = room.defaultRoleId'),
+            )
             .where('role.roomId = :roomID', { roomID: room.id })
             .getRawMany<RoleElement>();
     }
