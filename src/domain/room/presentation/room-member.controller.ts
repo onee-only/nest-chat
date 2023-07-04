@@ -1,8 +1,12 @@
 import {
     Controller,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseIntPipe,
+    Post,
+    Query,
     UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -12,6 +16,7 @@ import { ListMemberResponseDto } from './dto/response';
 import { GetUser } from 'src/global/decorators';
 import { User } from 'src/domain/user/entity';
 import { ListMemberQuery } from '../query';
+import { JoinRoomCommand } from '../command';
 
 @ApiTags('room members')
 @Controller('rooms/:roomID/members')
@@ -29,9 +34,26 @@ export class RoomMemberController {
     @Get()
     @UseGuards(JwtAuthGuard)
     async listMember(
-        @GetUser() user: User,
         @Param('roomID', ParseIntPipe) roomID: number,
+        @GetUser() user: User,
     ): Promise<ListMemberResponseDto> {
         return await this.queryBus.execute(new ListMemberQuery(user, roomID));
+    }
+
+    @ApiOperation({
+        summary: 'join room',
+        description: 'Join a room',
+    })
+    @HttpCode(HttpStatus.OK)
+    @Post()
+    @UseGuards(JwtAuthGuard)
+    async joinRoom(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @GetUser() user: User,
+        @Query('token') token?: string,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new JoinRoomCommand(roomID, user, token),
+        );
     }
 }
