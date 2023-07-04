@@ -1,6 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
 import { PinnedThread, Thread } from '../entity';
-import { User } from 'src/domain/user/entity';
 import { ListThreadElementDto } from '../presentation/dto/internal';
 import { Message } from 'src/domain/message/entity';
 
@@ -14,7 +13,7 @@ export class PinnedThreadRepository extends Repository<PinnedThread> {
         super(PinnedThread, dataSource.createEntityManager());
     }
 
-    async findList(user: User, roomID: number): Promise<ListResult> {
+    async findList(roomID: number): Promise<ListResult> {
         const qb = this.createQueryBuilder('pinnedThread')
             .where('thread.roomId = :roomID', { roomID })
             .innerJoinAndSelect(Thread, 'thread');

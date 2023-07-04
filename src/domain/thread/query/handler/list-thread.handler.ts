@@ -29,7 +29,7 @@ export class ListThreadHandler implements IQueryHandler<ListThreadQuery> {
         });
 
         const { count, list: threadList } =
-            await this.threadRepository.findList(user, options);
+            await this.threadRepository.findList(options);
 
         return ListThreadReponseDto.from(threadList, {
             pageNum: options.page,

@@ -1,7 +1,6 @@
 import { DataSource, Repository } from 'typeorm';
 import { Thread } from '../entity';
 import { ListOptions } from '../query';
-import { User } from 'src/domain/user/entity';
 import { ListThreadElementDto } from '../presentation/dto/internal';
 import { Message } from 'src/domain/message/entity';
 
@@ -15,7 +14,7 @@ export class ThreadRepository extends Repository<Thread> {
         super(Thread, dataSource.createEntityManager());
     }
 
-    async findList(user: User, options: ListOptions): Promise<ListResult> {
+    async findList(options: ListOptions): Promise<ListResult> {
         const {
             roomID,
             order,

@@ -28,7 +28,7 @@ export class ListPinnedThreadHandler
         await this.permissionChecker.check({ room, user });
 
         const { list: threadList, count } =
-            await this.pinnedThreadRepository.findList(user, roomID);
+            await this.pinnedThreadRepository.findList(roomID);
 
         return ListThreadReponseDto.from(threadList, {
             pageNum: 1,
