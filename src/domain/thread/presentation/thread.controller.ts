@@ -3,6 +3,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseArrayPipe,
     ParseEnumPipe,
@@ -23,6 +25,7 @@ import { CreateThreadResponseDto, ListThreadReponseDto } from './dto/response';
 import {
     CreateThreadCommand,
     DeleteThreadCommand,
+    TogglePinCommand,
     UpdateThreadCommand,
 } from '../command';
 import { CreateThreadRequestDto, UpdateThreadRequestDto } from './dto/request';
@@ -133,6 +136,24 @@ export class ThreadController {
     ): Promise<void> {
         return await this.commandBus.execute(
             new UpdateThreadCommand(roomID, threadID, user, { ...request }),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'toggle pin thread',
+        description: 'Toggles a pin of a thread. if pinned, unpin',
+    })
+    @HttpCode(HttpStatus.OK)
+    @Post(':threadID/pin')
+    @UseGuards(JwtAuthGuard)
+    async togglepinThread(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('threadID', ParseIntPipe) threadID: number,
+        @Body() request: UpdateThreadRequestDto,
+        @GetUser() user: User,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new TogglePinCommand(roomID, threadID, user),
         );
     }
 }
