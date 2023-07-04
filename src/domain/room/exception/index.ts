@@ -5,3 +5,6 @@ export { NoRolePermissionException } from './no-role-permission.exception';
 export { NotRoomMemberException } from './not-room-member.exception';
 export { DuplicateRoleAliasException } from './duplicate-role-alias.exception';
 export { NoMatchingInvitationException } from './no-matching-invitation.exception';
+export { AlreadyJoinedException } from './already-joined.exception';
+export { MissingTokenException } from './missing-token.exception';
+export { InvalidInvitationTokenException } from './invalid-invitation-token.exception';
