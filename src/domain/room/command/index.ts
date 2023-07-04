@@ -6,3 +6,4 @@ export { UpdateRoleCommand } from './update-role.command';
 export { DeleteRoleCommand } from './delete-role.command';
 export { CreateInvitationCommand } from './create-invitation.command';
 export { DeleteInvitationCommand } from './delete-invitation.command';
+export { JoinRoomCommand } from './join-room.command';
