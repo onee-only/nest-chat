@@ -18,7 +18,7 @@ import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { ThreadOrder, ThreadOrderDir } from '../enum';
 import { ParseDatePipe } from 'src/global/pipes';
-import { ListThreadQuery } from '../query';
+import { ListPinnedThreadQuery, ListThreadQuery } from '../query';
 import { CreateThreadResponseDto, ListThreadReponseDto } from './dto/response';
 import {
     CreateThreadCommand,
@@ -84,6 +84,22 @@ export class ThreadController {
                 tags,
                 orderDir: dir,
             }),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'list pinned threads',
+        description: 'Gives a list of the pinned threads',
+    })
+    @ApiOkResponse({ type: ListThreadReponseDto })
+    @Get('pinned')
+    @UseGuards(JwtAuthGuard)
+    async listPinnedThread(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @GetUser() user: User,
+    ): Promise<ListThreadReponseDto> {
+        return await this.queryBus.execute(
+            new ListPinnedThreadQuery(roomID, user),
         );
     }
 
