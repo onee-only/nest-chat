@@ -16,6 +16,7 @@ import { QueryHandlers } from './query/handler';
 import { PermissionChecker } from './util';
 import { InvitationController } from './presentation/invitation.controller';
 import { TagModule } from '../tag/tag.module';
+import { ExpireInvitationTask } from './tasks';
 
 @Module({
     imports: [
@@ -36,6 +37,9 @@ import { TagModule } from '../tag/tag.module';
 
         // utils
         PermissionChecker,
+
+        // scheduled tasks
+        ExpireInvitationTask,
 
         // repositories
         RoomRepository,
