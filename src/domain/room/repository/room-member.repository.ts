@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { MemberRole, Room, RoomMember } from '../entity';
 
 @Injectable()
@@ -24,6 +24,16 @@ export class RoomMemberRepository extends Repository<RoomMember> {
                 },
             },
             where: { room },
+        });
+    }
+
+    async findByRoomAndUserNicknames(
+        room: Room,
+        nicknames: string[],
+    ): Promise<RoomMember[]> {
+        return await this.findBy({
+            room,
+            user: { avatar: { nickname: In(nicknames) } },
         });
     }
 }
