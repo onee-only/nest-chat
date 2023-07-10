@@ -47,6 +47,11 @@ import { ExpireInvitationTask } from './tasks';
         RoomMemberRepository,
         InvitationRepository,
     ],
-    exports: [PermissionChecker, RoomRepository],
+    exports: [
+        PermissionChecker,
+        RoomRepository,
+        MemberRoleRepository,
+        RoomMemberRepository,
+    ],
 })
 export class RoomModule {}
