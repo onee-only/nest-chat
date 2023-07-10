@@ -6,7 +6,7 @@ export class Embedment {
     @PrimaryColumn({ type: 'uuid', generated: true })
     id: string;
 
-    @ManyToOne(() => Message)
+    @ManyToOne(() => Message, { cascade: true, onDelete: 'CASCADE' })
     message: Message;
 
     @Column()
