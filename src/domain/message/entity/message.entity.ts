@@ -10,11 +10,15 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { Embedment } from './embedment.entity';
+import { User } from 'src/domain/user/entity';
 
 @Entity()
 export class Message {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;
+
+    @ManyToOne(() => User, { onDelete: 'SET NULL' })
+    author: User;
 
     @ManyToOne(() => Message, { onDelete: 'SET NULL' })
     replyTo: Message;
