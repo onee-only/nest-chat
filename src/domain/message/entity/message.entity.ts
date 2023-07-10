@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Embedment } from './embedment.entity';
 import { User } from 'src/domain/user/entity';
+import { Thread } from 'src/domain/thread/entity';
 
 @Entity()
 export class Message {
@@ -20,7 +21,10 @@ export class Message {
     @ManyToOne(() => User, { onDelete: 'SET NULL' })
     author: User;
 
-    @ManyToOne(() => Message, { onDelete: 'SET NULL' })
+    @ManyToOne(() => Thread, { onDelete: 'CASCADE' })
+    thread: Thread;
+
+    @ManyToOne(() => Message, { onDelete: 'SET NULL', nullable: true })
     replyTo: Message;
 
     @Column()
