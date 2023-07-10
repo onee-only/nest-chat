@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { MemberRole, Room, RoomMember } from '../entity';
 import { RoleElement } from '../presentation/dto/response';
 
@@ -31,5 +31,12 @@ export class MemberRoleRepository extends Repository<MemberRole> {
             )
             .where('role.roomId = :roomID', { roomID: room.id })
             .getRawMany<RoleElement>();
+    }
+
+    async findByRoomAndAliases(
+        room: Room,
+        names: string[],
+    ): Promise<MemberRole[]> {
+        return await this.findBy({ room, alias: In(names) });
     }
 }
