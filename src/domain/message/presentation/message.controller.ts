@@ -51,9 +51,9 @@ export class MessageController {
         @GetUser() user: User,
         @Body() request: CreateMessageRequestDto,
     ): Promise<void> {
-        const { body } = request;
+        const { body, replyTo } = request;
         return await this.commandBus.execute(
-            new CreateMessageCommand(roomID, threadID, user, body),
+            new CreateMessageCommand(roomID, threadID, user, body, replyTo),
         );
     }
 }
