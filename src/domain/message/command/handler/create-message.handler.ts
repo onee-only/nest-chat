@@ -12,6 +12,7 @@ import { RoomNotFoundException } from 'src/domain/room/exception';
 import { NoMathcingThreadException } from 'src/domain/thread/exception';
 import { RoomPermission } from 'src/domain/room/enum';
 import { MessageParser } from '../../util';
+import { NoMatchingMessageException } from '../../exception';
 
 @CommandHandler(CreateMessageCommand)
 export class CreateMessageHandler
@@ -30,7 +31,7 @@ export class CreateMessageHandler
     ) {}
 
     async execute(command: CreateMessageCommand): Promise<void> {
-        const { roomID, threadID, user, body } = command;
+        const { roomID, threadID, user, body, replyTo } = command;
 
         const room = await this.roomRepository
             .findOneByOrFail({ id: roomID })
@@ -70,6 +71,14 @@ export class CreateMessageHandler
                     room,
                     mentionNames,
                 );
+        }
+
+        if (replyTo !== undefined) {
+            message.replyTo = await this.messageRepository
+                .findOneByOrFail({ thread, id: replyTo })
+                .catch(() => {
+                    throw new NoMatchingMessageException(threadID, replyTo);
+                });
         }
 
         await this.messageRepository.save(message);

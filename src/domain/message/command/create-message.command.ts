@@ -7,5 +7,6 @@ export class CreateMessageCommand implements ICommand {
         public readonly threadID: number,
         public readonly user: User,
         public readonly body: string,
+        public readonly replyTo?: number,
     ) {}
 }
