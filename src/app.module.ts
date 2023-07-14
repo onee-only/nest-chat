@@ -1,6 +1,11 @@
 import { MessageModule } from './domain/message/message.module';
 import { Module } from '@nestjs/common';
-import { ConfigModule, DatabaseModule, MailerModule } from './global/modules';
+import {
+    ConfigModule,
+    DatabaseModule,
+    MailerModule,
+    StorageModule,
+} from './global/modules';
 import { AuthModule } from './domain/auth/auth.module';
 import { UserModule } from './domain/user/user.module';
 import { RoomModule } from './domain/room/room.module';
@@ -14,6 +19,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         ConfigModule,
         MailerModule,
         DatabaseModule,
+        StorageModule,
         ScheduleModule.forRoot(),
 
         // app modules
