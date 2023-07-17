@@ -3,12 +3,12 @@ import { Message } from './message.entity';
 
 @Entity()
 export class Embedment {
-    @PrimaryColumn({ type: 'uuid', generated: true })
-    id: string;
+    @PrimaryColumn()
+    key: string;
+
+    @Column()
+    name: string;
 
     @ManyToOne(() => Message, { cascade: true, onDelete: 'CASCADE' })
     message: Message;
-
-    @Column()
-    url: string;
 }
