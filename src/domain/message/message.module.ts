@@ -8,6 +8,7 @@ import { RoomModule } from '../room/room.module';
 import { ThreadModule } from '../thread/thread.module';
 import { MessageParser } from './util';
 import { CommandHandlers } from './command/handler';
+import { StorageModule } from 'src/global/modules';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { CommandHandlers } from './command/handler';
         TypeOrmModule.forFeature([Message, Embedment]),
         RoomModule,
         ThreadModule,
+        StorageModule,
     ],
     controllers: [MessageController],
     providers: [
