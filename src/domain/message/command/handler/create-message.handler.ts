@@ -1,4 +1,4 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { CreateMessageCommand } from '../create-message.command';
 import { EmbedmentRepository, MessageRepository } from '../../repository';
 import { PermissionChecker } from 'src/domain/room/util';
@@ -17,6 +17,12 @@ import { MemberRole, Room, RoomMember } from 'src/domain/room/entity';
 import { Embedment, Message } from '../../entity';
 import { Thread } from 'src/domain/thread/entity';
 import { StorageManager, UploadResult } from 'src/global/modules/utils';
+import {
+    MemberMentionedEvent,
+    MessageCreatedEvent,
+    ReplyCreatedEvent,
+    RoleMentionedEvent,
+} from '../../event';
 
 @CommandHandler(CreateMessageCommand)
 export class CreateMessageHandler
@@ -34,6 +40,8 @@ export class CreateMessageHandler
         private readonly permissionChecker: PermissionChecker,
         private readonly messageParser: MessageParser,
         private readonly storageManager: StorageManager,
+
+        private readonly eventBus: EventBus,
     ) {}
 
     async execute(command: CreateMessageCommand): Promise<void> {
@@ -56,13 +64,14 @@ export class CreateMessageHandler
                 throw new NoMathcingThreadException(roomID, threadID);
             });
 
+        // should verify if requested user is currently attending this chat
+
         await this.permissionChecker.checkOrThrow({
             action: RoomPermission.WRITE_MESSAGE,
             room,
             user,
         });
 
-        // should add embedments, reply
         const message = this.messageRepository.create({
             author: user,
             thread: thread,
@@ -86,7 +95,12 @@ export class CreateMessageHandler
 
         await this.messageRepository.save(message);
 
-        // should publish event
+        this.eventBus.publishAll([
+            new MessageCreatedEvent(thread, message),
+            new ReplyCreatedEvent(message.replyTo, message),
+            new MemberMentionedEvent(message.mentionMembers, message),
+            new RoleMentionedEvent(message.mentionRoles, message),
+        ]);
     }
 
     private async findMentionMembers(
