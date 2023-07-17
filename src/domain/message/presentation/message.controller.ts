@@ -5,7 +5,9 @@ import {
     ParseIntPipe,
     Post,
     Sse,
+    UploadedFiles,
     UseGuards,
+    UseInterceptors,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -15,6 +17,7 @@ import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
 import { CreateMessageRequestDto } from './dto/request/create-message.request.dto';
 import { CreateMessageCommand } from '../command';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('messages')
 @Controller('rooms/:roomID/threads/:threadID/messages')
@@ -45,15 +48,21 @@ export class MessageController {
     })
     @Post()
     @UseGuards(JwtAuthGuard)
+    @UseInterceptors(FilesInterceptor('embedments'))
     async createMessage(
         @Param('roomID', ParseIntPipe) roomID: number,
         @Param('threadID', ParseIntPipe) threadID: number,
         @GetUser() user: User,
+        @UploadedFiles() embedments: Array<Express.Multer.File>,
         @Body() request: CreateMessageRequestDto,
     ): Promise<void> {
         const { body, replyTo } = request;
         return await this.commandBus.execute(
-            new CreateMessageCommand(roomID, threadID, user, body, replyTo),
+            new CreateMessageCommand(roomID, threadID, user, {
+                body,
+                replyTo,
+                embedments,
+            }),
         );
     }
 }
