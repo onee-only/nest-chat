@@ -6,6 +6,7 @@ import { ServerConfig, ServerValidationScheme } from './server/server.config';
 import { JwtConfig, JwtValidationScheme } from '../strategy/jwt';
 import { CacheConfig, CacheValidationScheme } from '../cache';
 import * as Joi from 'joi';
+import { AwsConfig, AwsValidationScheme } from './storage';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import * as Joi from 'joi';
                 .concat(DatabaseValidationScheme())
                 .concat(ServerValidationScheme())
                 .concat(CacheValidationScheme())
+                .concat(AwsValidationScheme())
                 .options({ abortEarly: false }),
             load: [
                 ServerConfig,
@@ -25,6 +27,7 @@ import * as Joi from 'joi';
                 JwtConfig,
                 EmailConfig,
                 CacheConfig,
+                AwsConfig,
             ],
             isGlobal: true,
         }),
