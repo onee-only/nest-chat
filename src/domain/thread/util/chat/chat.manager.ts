@@ -1,39 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { RoomRepository } from 'src/domain/room/repository';
-import { ThreadRepository } from '../repository';
+import { ThreadRepository } from '../../repository';
 import { PermissionChecker } from 'src/domain/room/util';
 import {
     WsAlreadyJoinedException,
     WsNoMatchingThreadException,
     WsNotRoomMemberException,
     WsRoomNotFoundException,
-} from '../exception';
+} from '../../exception';
 import { Socket } from 'socket.io';
 import { User } from 'src/domain/user/entity';
-
-type SocketData = {
-    readonly roomID: number;
-    readonly threadID: number;
-    readonly userID: number;
-};
-
-type UserInfo = {
-    readonly id: number;
-    readonly nickname: string;
-    readonly profileURL: string;
-};
-
-type LeaveInfo = {
-    readonly id: number;
-};
-
-type TypingInfo = {
-    readonly id: number;
-};
-
-type Chat = {
-    users: UserInfo[];
-};
 
 @Injectable()
 export class ChatManager {
@@ -118,6 +94,56 @@ export class ChatManager {
         const typingInfo: TypingInfo = { id: userID };
 
         socket.to(chatName).emit('typing', typingInfo);
+    }
+
+    async getChatInfo(
+        user: User,
+        roomID: number,
+        threadID: number,
+    ): Promise<ChatInfo> {
+        const room = await this.roomRepository
+            .findOneByOrFail({ id: roomID })
+            .catch(() => {
+                throw new WsRoomNotFoundException(roomID);
+            });
+
+        const thread = await this.threadRepository
+            .findOneByOrFail({ room, id: threadID })
+            .catch(() => {
+                throw new WsNoMatchingThreadException(roomID, threadID);
+            });
+
+        const available = await this.permissionChecker.check({ room, user });
+        if (!available) {
+            throw new WsNotRoomMemberException();
+        }
+
+        const chatName = this.genChatName(room.id, thread.id);
+        const chat = this.chats.get(chatName);
+        if (chat === undefined) {
+            return {
+                users: [],
+                totalMembers: 0,
+            };
+        }
+
+        return {
+            users: chat.users,
+            totalMembers: chat.users.length,
+        };
+    }
+
+    isParticipating(user: User, roomID: number, threadID: number): boolean {
+        const chatName = this.genChatName(roomID, threadID);
+
+        const chat = this.chats.get(chatName);
+        if (chat === undefined) return false;
+
+        return chat.users.includes({
+            id: user.id,
+            nickname: user.avatar.nickname,
+            profileURL: user.avatar.profileURL,
+        });
     }
 
     private genChatName(roomID: number, threadID: number): string {

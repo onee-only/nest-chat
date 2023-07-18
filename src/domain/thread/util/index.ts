@@ -1,1 +1,1 @@
-export { ChatManager } from './chat.manager';
+export { ChatManager } from './chat/chat.manager';
