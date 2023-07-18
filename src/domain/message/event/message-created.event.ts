@@ -1,10 +1,7 @@
 import { IEvent } from '@nestjs/cqrs';
-import { Thread } from 'src/domain/thread/entity';
 import { Message } from '../entity';
+import { Room } from 'src/domain/room/entity';
 
 export class MessageCreatedEvent implements IEvent {
-    constructor(
-        public readonly thread: Thread,
-        public readonly message: Message,
-    ) {}
+    constructor(public readonly room: Room, public readonly message: Message) {}
 }
