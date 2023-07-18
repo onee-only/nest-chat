@@ -26,7 +26,7 @@ import {
     ReplyCreatedEvent,
     RoleMentionedEvent,
 } from '../../event';
-import { ChatManager } from 'src/domain/thread/util';
+import { ChatBroker } from 'src/domain/thread/util/chat';
 
 @CommandHandler(CreateMessageCommand)
 export class CreateMessageHandler
@@ -44,7 +44,7 @@ export class CreateMessageHandler
         private readonly permissionChecker: PermissionChecker,
         private readonly messageParser: MessageParser,
         private readonly storageManager: StorageManager,
-        private readonly chatManager: ChatManager,
+        private readonly chatBroker: ChatBroker,
 
         private readonly eventBus: EventBus,
     ) {}
@@ -69,7 +69,7 @@ export class CreateMessageHandler
                 throw new NoMathcingThreadException(roomID, threadID);
             });
 
-        const participating = this.chatManager.isParticipating(
+        const participating = await this.chatBroker.isParticipating(
             user,
             room.id,
             thread.id,
