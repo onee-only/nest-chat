@@ -9,6 +9,7 @@ import { ThreadModule } from '../thread/thread.module';
 import { MessageParser } from './util';
 import { CommandHandlers } from './command/handler';
 import { StorageModule } from 'src/global/modules';
+import { MessageSaga } from './saga';
 
 @Module({
     imports: [
@@ -22,6 +23,9 @@ import { StorageModule } from 'src/global/modules';
     providers: [
         // handlers
         ...CommandHandlers,
+
+        // sagas
+        MessageSaga,
 
         // utils
         MessageParser,
