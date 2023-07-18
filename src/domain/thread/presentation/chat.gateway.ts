@@ -12,7 +12,7 @@ import { Server, Socket } from 'socket.io';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { WsJwtGuard } from 'src/global/guards/ws';
-import { ChatManager } from '../util';
+import { ChatBroker } from '../util/chat';
 
 @UseGuards(WsJwtGuard)
 @WebSocketGateway(3001, {
@@ -27,7 +27,7 @@ export class ChatGateway
 {
     constructor(
         private readonly logger: LoggerService,
-        private readonly chat: ChatManager,
+        private readonly chatBroker: ChatBroker,
     ) {}
 
     @WebSocketServer()
@@ -35,7 +35,7 @@ export class ChatGateway
 
     @SubscribeMessage('typing')
     async handleEvent(@ConnectedSocket() socket: Socket) {
-        await this.chat.broadcastTyping(socket);
+        await this.chatBroker.broadcastTyping(socket);
     }
 
     async handleConnection(
@@ -44,11 +44,11 @@ export class ChatGateway
         @Param('threadID', ParseIntPipe) threadID: number,
         @GetUser() user: User,
     ) {
-        await this.chat.join(socket, user, roomID, threadID);
+        await this.chatBroker.join(socket, user, roomID, threadID);
     }
 
     async handleDisconnect(@ConnectedSocket() socket: Socket) {
-        await this.chat.leave(socket);
+        await this.chatBroker.leave(socket);
     }
 
     afterInit(server: Server) {
