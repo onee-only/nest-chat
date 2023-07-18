@@ -34,6 +34,6 @@ import { ChatManager } from './util';
         ThreadRepository,
         PinnedThreadRepository,
     ],
-    exports: [ThreadRepository],
+    exports: [ThreadRepository, ChatManager],
 })
 export class ThreadModule {}
