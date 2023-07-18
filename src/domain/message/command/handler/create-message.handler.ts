@@ -9,7 +9,10 @@ import {
 } from 'src/domain/room/repository';
 import { ThreadRepository } from 'src/domain/thread/repository';
 import { RoomNotFoundException } from 'src/domain/room/exception';
-import { NoMathcingThreadException } from 'src/domain/thread/exception';
+import {
+    NoMathcingThreadException,
+    NotParticipatingException,
+} from 'src/domain/thread/exception';
 import { RoomPermission } from 'src/domain/room/enum';
 import { MessageParser } from '../../util';
 import { NoMatchingMessageException } from '../../exception';
@@ -23,6 +26,7 @@ import {
     ReplyCreatedEvent,
     RoleMentionedEvent,
 } from '../../event';
+import { ChatManager } from 'src/domain/thread/util';
 
 @CommandHandler(CreateMessageCommand)
 export class CreateMessageHandler
@@ -40,6 +44,7 @@ export class CreateMessageHandler
         private readonly permissionChecker: PermissionChecker,
         private readonly messageParser: MessageParser,
         private readonly storageManager: StorageManager,
+        private readonly chatManager: ChatManager,
 
         private readonly eventBus: EventBus,
     ) {}
@@ -64,7 +69,14 @@ export class CreateMessageHandler
                 throw new NoMathcingThreadException(roomID, threadID);
             });
 
-        // should verify if requested user is currently attending this chat
+        const participating = this.chatManager.isParticipating(
+            user,
+            room.id,
+            thread.id,
+        );
+        if (!participating) {
+            throw new NotParticipatingException();
+        }
 
         await this.permissionChecker.checkOrThrow({
             action: RoomPermission.WRITE_MESSAGE,
