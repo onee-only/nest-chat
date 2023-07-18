@@ -96,10 +96,10 @@ export class CreateMessageHandler
         await this.messageRepository.save(message);
 
         this.eventBus.publishAll([
-            new MessageCreatedEvent(thread, message),
-            new ReplyCreatedEvent(message.replyTo, message),
-            new MemberMentionedEvent(message.mentionMembers, message),
-            new RoleMentionedEvent(message.mentionRoles, message),
+            new MessageCreatedEvent(room, message),
+            new ReplyCreatedEvent(room, message.replyTo, message),
+            new MemberMentionedEvent(room, message.mentionMembers, message),
+            new RoleMentionedEvent(room, message.mentionRoles, message),
         ]);
     }
 
