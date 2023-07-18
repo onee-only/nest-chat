@@ -1,6 +1,8 @@
+import { Socket } from 'socket.io';
 import { Injectable } from '@nestjs/common';
 import { RoomRepository } from 'src/domain/room/repository';
 import { ThreadRepository } from '../../repository';
+import { ChatRepository } from './repository/chat.repository';
 import { PermissionChecker } from 'src/domain/room/util';
 import {
     WsAlreadyJoinedException,
@@ -8,19 +10,27 @@ import {
     WsNotRoomMemberException,
     WsRoomNotFoundException,
 } from '../../exception';
-import { Socket } from 'socket.io';
 import { User } from 'src/domain/user/entity';
+import { ChatInfoManager } from './chat-info.manager';
+import {
+    Chat,
+    LeaveInfo,
+    SocketData,
+    TypingInfo,
+    UserInfo,
+} from './types/chat.types';
+import { Subject } from 'rxjs';
 
 @Injectable()
-export class ChatManager {
+export class ChatBroker {
     constructor(
         private readonly roomRepository: RoomRepository,
         private readonly threadRepository: ThreadRepository,
-        private readonly permissionChecker: PermissionChecker,
-    ) {}
+        private readonly chatRepository: ChatRepository,
 
-    // have to change it to external storage. in case the service scales up horizontally
-    private readonly chats = new Map<string, Chat>();
+        private readonly permissionChecker: PermissionChecker,
+        private readonly chatInfoManager: ChatInfoManager,
+    ) {}
 
     async join(
         socket: Socket,
@@ -53,16 +63,17 @@ export class ChatManager {
         };
 
         const userInfo: UserInfo = { id: user.id, nickname, profileURL };
-        const chatName = this.genChatName(room.id, thread.id);
+        const chatName = this.chatInfoManager.genChatName(room.id, thread.id);
 
-        let chat: Chat = this.chats.get(chatName);
-        chat ??= { users: [] };
+        let chat: Chat = await this.chatRepository.find(chatName);
+        chat ??= { users: [], events: new Subject() };
 
         if (chat.users.includes(userInfo)) {
             throw new WsAlreadyJoinedException(roomID, threadID);
         }
         chat.users.push(userInfo);
-        this.chats.set(chatName, chat);
+
+        await this.chatRepository.upsert(chatName, chat);
 
         socket.data = socketData;
         socket.join(chatName);
@@ -71,15 +82,15 @@ export class ChatManager {
 
     async leave(socket: Socket): Promise<void> {
         const { roomID, threadID, userID }: SocketData = socket.data;
-        const chatName = this.genChatName(roomID, threadID);
+        const chatName = this.chatInfoManager.genChatName(roomID, threadID);
 
-        const chat = this.chats.get(chatName);
+        const chat = await this.chatRepository.find(chatName);
         chat.users = chat.users.filter((userInfo) => userInfo.id !== userID);
 
         if (chat.users.length == 0) {
-            this.chats.delete(chatName);
+            await this.chatRepository.delete(chatName);
         } else {
-            this.chats.set(chatName, chat);
+            await this.chatRepository.upsert(chatName, chat);
 
             const leaveInfo: LeaveInfo = { id: userID };
             socket.to(chatName).emit('off', leaveInfo);
@@ -90,53 +101,20 @@ export class ChatManager {
     async broadcastTyping(socket: Socket): Promise<void> {
         const { roomID, threadID, userID }: SocketData = socket.data;
 
-        const chatName = this.genChatName(roomID, threadID);
+        const chatName = this.chatInfoManager.genChatName(roomID, threadID);
         const typingInfo: TypingInfo = { id: userID };
 
         socket.to(chatName).emit('typing', typingInfo);
     }
 
-    async getChatInfo(
+    public async isParticipating(
         user: User,
         roomID: number,
         threadID: number,
-    ): Promise<ChatInfo> {
-        const room = await this.roomRepository
-            .findOneByOrFail({ id: roomID })
-            .catch(() => {
-                throw new WsRoomNotFoundException(roomID);
-            });
+    ): Promise<boolean> {
+        const chatName = this.chatInfoManager.genChatName(roomID, threadID);
 
-        const thread = await this.threadRepository
-            .findOneByOrFail({ room, id: threadID })
-            .catch(() => {
-                throw new WsNoMatchingThreadException(roomID, threadID);
-            });
-
-        const available = await this.permissionChecker.check({ room, user });
-        if (!available) {
-            throw new WsNotRoomMemberException();
-        }
-
-        const chatName = this.genChatName(room.id, thread.id);
-        const chat = this.chats.get(chatName);
-        if (chat === undefined) {
-            return {
-                users: [],
-                totalMembers: 0,
-            };
-        }
-
-        return {
-            users: chat.users,
-            totalMembers: chat.users.length,
-        };
-    }
-
-    isParticipating(user: User, roomID: number, threadID: number): boolean {
-        const chatName = this.genChatName(roomID, threadID);
-
-        const chat = this.chats.get(chatName);
+        const chat = await this.chatRepository.find(chatName);
         if (chat === undefined) return false;
 
         return chat.users.includes({
@@ -144,9 +122,5 @@ export class ChatManager {
             nickname: user.avatar.nickname,
             profileURL: user.avatar.profileURL,
         });
-    }
-
-    private genChatName(roomID: number, threadID: number): string {
-        return `room:${roomID}/thread:${threadID}`;
     }
 }
