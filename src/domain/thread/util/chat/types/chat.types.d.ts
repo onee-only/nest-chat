@@ -1,3 +1,5 @@
+import { Subject } from 'rxjs';
+
 type SocketData = {
     readonly roomID: number;
     readonly threadID: number;
@@ -6,6 +8,7 @@ type SocketData = {
 
 type Chat = {
     users: UserInfo[];
+    events: Subject;
 };
 
 type ChatInfo = {
