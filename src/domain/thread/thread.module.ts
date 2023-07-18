@@ -9,7 +9,7 @@ import { QueryHandlers } from './query/handler';
 import { CommandHandlers } from './command/handler';
 import { TagModule } from '../tag/tag.module';
 import { ChatGateway } from './presentation/chat.gateway';
-import { ChatManager } from './util';
+import { ChatBroker, ChatInfoManager, ChatRepository } from './util/chat';
 
 @Module({
     imports: [
@@ -28,12 +28,14 @@ import { ChatManager } from './util';
         ...QueryHandlers,
 
         // utils
-        ChatManager,
+        ChatBroker,
+        ChatInfoManager,
 
         // repositories
         ThreadRepository,
         PinnedThreadRepository,
+        ChatRepository,
     ],
-    exports: [ThreadRepository, ChatManager],
+    exports: [ThreadRepository, ChatBroker, ChatInfoManager],
 })
 export class ThreadModule {}
