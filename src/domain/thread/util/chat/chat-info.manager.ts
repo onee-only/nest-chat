@@ -10,7 +10,7 @@ import {
 
 import { User } from 'src/domain/user/entity';
 import { ChatRepository } from './repository';
-import { ChatInfo } from './types/chat.types';
+import { ChatInfo } from './types';
 
 @Injectable()
 export class ChatInfoManager {
