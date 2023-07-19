@@ -18,6 +18,8 @@ import { JwtAuthGuard } from 'src/global/guards';
 import { CreateMessageRequestDto } from './dto/request/create-message.request.dto';
 import { CreateMessageCommand } from '../command';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { MessagePayload } from 'src/domain/thread/util/chat/types';
+import { SubscribeMessageQuery } from '../query';
 
 @ApiTags('messages')
 @Controller('rooms/:roomID/threads/:threadID/messages')
@@ -33,13 +35,14 @@ export class MessageController {
     })
     @Sse('events')
     @UseGuards(JwtAuthGuard)
-    subscribeMessage(
+    async subscribeMessage(
         @Param('roomID', ParseIntPipe) roomID: number,
         @Param('threadID', ParseIntPipe) threadID: number,
         @GetUser() user: User,
-    ): Observable<any> {
-        // TODO: subscribe message event
-        return new Observable();
+    ): Promise<Observable<MessagePayload>> {
+        return await this.queryBus.execute(
+            new SubscribeMessageQuery(roomID, threadID, user),
+        );
     }
 
     @ApiOperation({
