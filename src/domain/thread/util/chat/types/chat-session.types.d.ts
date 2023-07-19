@@ -1,31 +1,31 @@
 import { Subject } from 'rxjs';
 
-type SocketData = {
+export type SocketData = {
     readonly roomID: number;
     readonly threadID: number;
     readonly userID: number;
 };
 
-type Chat = {
+export type Chat = {
     users: UserInfo[];
-    events: Subject;
+    events: Subject<MessagePayload>;
 };
 
-type ChatInfo = {
+export type ChatInfo = {
     users: UserInfo[];
     totalMembers: number;
 };
 
-type UserInfo = {
+export type UserInfo = {
     readonly id: number;
     readonly nickname: string;
     readonly profileURL: string;
 };
 
-type LeaveInfo = {
+export type LeaveInfo = {
     readonly id: number;
 };
 
-type TypingInfo = {
+export type TypingInfo = {
     readonly id: number;
 };
