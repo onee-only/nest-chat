@@ -147,7 +147,10 @@ export class CreateMessageHandler
     ): Promise<Message> {
         if (replyTo !== undefined) {
             return await this.messageRepository
-                .findOneByOrFail({ thread, id: replyTo })
+                .findOneOrFail({
+                    relations: { author: { avatar: true } },
+                    where: { thread, id: replyTo },
+                })
                 .catch(() => {
                     throw new NoMatchingMessageException(thread.id, replyTo);
                 });
