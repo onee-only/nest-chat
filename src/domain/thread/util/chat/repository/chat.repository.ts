@@ -1,4 +1,4 @@
-import { Chat } from '../types/chat.types';
+import { Chat } from '../types/chat-session.types';
 
 export class ChatRepository {
     chats: Map<string, Chat>;
