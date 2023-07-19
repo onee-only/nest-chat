@@ -10,6 +10,7 @@ import { MessageParser } from './util';
 import { CommandHandlers } from './command/handler';
 import { StorageModule } from 'src/global/modules';
 import { MessageSaga } from './saga';
+import { QueryHandlers } from './query/handler';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { MessageSaga } from './saga';
     providers: [
         // handlers
         ...CommandHandlers,
+        ...QueryHandlers,
 
         // sagas
         MessageSaga,
