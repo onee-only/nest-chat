@@ -15,11 +15,12 @@ import { ChatInfoManager } from './chat-info.manager';
 import {
     Chat,
     LeaveInfo,
+    MessagePayload,
     SocketData,
     TypingInfo,
     UserInfo,
-} from './types/chat.types';
-import { Subject } from 'rxjs';
+} from './types';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class ChatBroker {
@@ -107,7 +108,33 @@ export class ChatBroker {
         socket.to(chatName).emit('typing', typingInfo);
     }
 
-    public async isParticipating(
+    async subscribe(
+        roomID: number,
+        threadID: number,
+    ): Promise<Observable<MessagePayload>> {
+        const chatName = this.chatInfoManager.genChatName(roomID, threadID);
+        const chat = await this.chatRepository.find(chatName);
+        if (chat === undefined) {
+            // do something
+        }
+        return chat.events.asObservable();
+    }
+
+    async publish(
+        roomID: number,
+        threadID: number,
+        message: MessagePayload,
+    ): Promise<void> {
+        const chatName = this.chatInfoManager.genChatName(roomID, threadID);
+        const chat = await this.chatRepository.find(chatName);
+        if (chat === undefined) {
+            // do something
+        }
+
+        chat.events.next(message);
+    }
+
+    async isParticipating(
         user: User,
         roomID: number,
         threadID: number,
