@@ -6,7 +6,7 @@ import {
     ManyToMany,
     ManyToOne,
     OneToMany,
-    PrimaryGeneratedColumn,
+    PrimaryColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { Embedment } from './embedment.entity';
@@ -15,8 +15,8 @@ import { Thread } from 'src/domain/thread/entity';
 
 @Entity()
 export class Message {
-    @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
-    id: number;
+    @PrimaryColumn({ generated: 'uuid' })
+    id: string;
 
     @ManyToOne(() => User, { onDelete: 'SET NULL' })
     author: User;
