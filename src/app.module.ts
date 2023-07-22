@@ -11,6 +11,7 @@ import { UserModule } from './domain/user/user.module';
 import { RoomModule } from './domain/room/room.module';
 import { TagModule } from './domain/tag/tag.module';
 import { ThreadModule } from './domain/thread/thread.module';
+import { NotificationModule } from './domain/notification/notification.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -29,6 +30,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         TagModule,
         ThreadModule,
         MessageModule,
+        NotificationModule,
     ],
 })
 export class AppModule {}
