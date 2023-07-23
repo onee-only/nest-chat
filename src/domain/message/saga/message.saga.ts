@@ -8,6 +8,7 @@ import {
     RoleMentionedEvent,
 } from '../event';
 import { PublishMessageCommand } from '../command';
+import { NotifyRoleMentionCommand } from 'src/domain/notification/command';
 
 @Injectable()
 export class MessageSaga {
@@ -22,17 +23,17 @@ export class MessageSaga {
         );
     }
 
-    // @Saga()
-    // notifyRoleMention(events$: Observable<any>): Observable<ICommand> {
-    //     return events$.pipe(
-    //         ofType(RoleMentionedEvent),
-    //         filter(({ roles }: RoleMentionedEvent) => roles.length !== 0),
-    //         map(
-    //             ({ room, roles, message }: RoleMentionedEvent) =>
-    //                 new SendEmailCommand(user),
-    //         ),
-    //     );
-    // }
+    @Saga()
+    notifyRoleMention(events$: Observable<any>): Observable<ICommand> {
+        return events$.pipe(
+            ofType(RoleMentionedEvent),
+            filter(({ roles }: RoleMentionedEvent) => roles.length !== 0),
+            map(
+                ({ room, roles, message }: RoleMentionedEvent) =>
+                    new NotifyRoleMentionCommand(room, roles, message),
+            ),
+        );
+    }
 
     // @Saga()
     // notifyMemberMention(events$: Observable<any>): Observable<ICommand> {
