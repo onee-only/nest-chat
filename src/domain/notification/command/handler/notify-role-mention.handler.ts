@@ -32,7 +32,7 @@ export class NotifyRoleMentionHandler
         );
 
         await this.notificationRepository.insert(notifications.flat());
-        // should publish event here
+        // should publish event
     }
 
     private createNotification(
