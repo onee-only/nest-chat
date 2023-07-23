@@ -1,4 +1,10 @@
-import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Room } from './room.entity';
 import { RoomMember } from './room-member.entity';
 
@@ -25,6 +31,7 @@ export class Permission {
     manageTag: boolean;
 }
 
+@Entity()
 export class MemberRole {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;

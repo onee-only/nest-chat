@@ -1,7 +1,8 @@
-import { Column, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
 import { Room } from './room.entity';
 import { MemberRole } from './member-role.entity';
 
+@Entity()
 export class Invitation {
     @PrimaryColumn({ generated: 'uuid' })
     token: string;

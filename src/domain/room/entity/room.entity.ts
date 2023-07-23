@@ -1,6 +1,7 @@
 import {
     Column,
     CreateDateColumn,
+    Entity,
     ManyToMany,
     ManyToOne,
     OneToMany,
@@ -13,6 +14,7 @@ import { User } from 'src/domain/user/entity';
 import { Tag } from 'src/domain/tag/entity/tag.entity';
 import { Thread } from 'src/domain/thread/entity';
 
+@Entity()
 export class Room {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;
