@@ -30,7 +30,7 @@ export type AuthorInfo = {
 };
 
 export type MsgInfo = {
-    readonly id: number;
+    readonly id: string;
     readonly content: string;
     readonly createdAt: Date;
     readonly updatedAt: Date;
