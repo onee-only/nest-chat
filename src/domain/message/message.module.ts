@@ -36,5 +36,6 @@ import { QueryHandlers } from './query/handler';
         MessageRepository,
         EmbedmentRepository,
     ],
+    exports: [MessageRepository],
 })
 export class MessageModule {}
