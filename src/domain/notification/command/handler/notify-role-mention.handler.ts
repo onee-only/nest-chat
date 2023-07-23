@@ -1,4 +1,4 @@
-import { ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { NotifyRoleMentionCommand } from '../notify-role-mention.command';
 import { RoomMemberRepository } from 'src/domain/room/repository';
 import { NotificationRepository } from '../../repository';
@@ -8,6 +8,7 @@ import { User } from 'src/domain/user/entity';
 import { Notification } from '../../entity';
 import { Message } from 'src/domain/message/entity';
 
+@CommandHandler(NotifyRoleMentionCommand)
 export class NotifyRoleMentionHandler
     implements ICommandHandler<NotifyRoleMentionCommand>
 {
