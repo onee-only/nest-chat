@@ -7,12 +7,15 @@ import { Room } from 'src/domain/room/entity';
 import { User } from 'src/domain/user/entity';
 import { Notification } from '../../entity';
 import { Message } from 'src/domain/message/entity';
+import { NotifiactionPublisher } from '../../util';
 
 @CommandHandler(NotifyRoleMentionCommand)
 export class NotifyRoleMentionHandler
     implements ICommandHandler<NotifyRoleMentionCommand>
 {
     constructor(
+        private readonly notificationPublisher: NotifiactionPublisher,
+
         private readonly roomMemberRepository: RoomMemberRepository,
         private readonly notificationRepository: NotificationRepository,
     ) {}
@@ -20,7 +23,7 @@ export class NotifyRoleMentionHandler
     async execute(command: NotifyRoleMentionCommand): Promise<void> {
         const { message, roles, room } = command;
 
-        const notifications = await Promise.all(
+        const results = await Promise.all(
             roles.map((role) =>
                 this.roomMemberRepository
                     .find({ where: { role, room }, relations: { user: true } })
@@ -31,9 +34,12 @@ export class NotifyRoleMentionHandler
                     ),
             ),
         );
+        const candidates = results.flat();
 
-        await this.notificationRepository.insert(notifications.flat());
-        // should publish event
+        const notifications = await this.notificationRepository.save(
+            candidates,
+        );
+        this.notificationPublisher.publish(...notifications);
     }
 
     private createNotification(

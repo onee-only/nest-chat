@@ -6,24 +6,23 @@ import { Room } from 'src/domain/room/entity';
 import { Message } from 'src/domain/message/entity';
 import { User } from 'src/domain/user/entity';
 import { Notification } from '../../entity';
+import { NotifiactionPublisher } from '../../util';
 
 @CommandHandler(NotifyReplyCommand)
 export class NotifyReplyHandler implements ICommandHandler<NotifyReplyCommand> {
     constructor(
+        private readonly notificationPublisher: NotifiactionPublisher,
+
         private readonly notificationRepository: NotificationRepository,
     ) {}
 
     async execute(command: NotifyReplyCommand): Promise<void> {
         const { reply, room, target } = command;
 
-        const notification = this.createNotification(
-            room,
-            reply,
-            target.author,
-        );
+        const candidate = this.createNotification(room, reply, target.author);
 
-        await this.notificationRepository.insert(notification);
-        // should publish event
+        const notification = await this.notificationRepository.save(candidate);
+        this.notificationPublisher.publish(notification);
     }
 
     private createNotification(

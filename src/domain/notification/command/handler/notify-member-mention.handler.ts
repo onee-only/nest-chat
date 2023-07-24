@@ -6,24 +6,30 @@ import { Message } from 'src/domain/message/entity';
 import { User } from 'src/domain/user/entity';
 import { NotificationType } from '../../enum';
 import { Notification } from '../../entity';
+import { NotifiactionPublisher } from '../../util';
 
 @CommandHandler(NotifyMemberMentionCommand)
 export class NotifyMemberMentionHandler
     implements ICommandHandler<NotifyMemberMentionCommand>
 {
     constructor(
+        private readonly notificationPublisher: NotifiactionPublisher,
+
         private readonly notificationRepository: NotificationRepository,
     ) {}
 
     async execute(command: NotifyMemberMentionCommand): Promise<void> {
         const { members, message, room } = command;
 
-        const notifications = members.map((member) =>
+        const results = members.map((member) =>
             this.createNotification(room, message, member.user),
         );
+        const candidates = results.flat();
 
-        await this.notificationRepository.insert(notifications.flat());
-        // should publish event
+        const notifications = await this.notificationRepository.save(
+            candidates,
+        );
+        this.notificationPublisher.publish(...notifications);
     }
 
     private createNotification(
