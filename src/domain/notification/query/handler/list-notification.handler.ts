@@ -24,6 +24,8 @@ export class ListNotificationHandler
                 thread: true,
                 message: true,
             },
+            order: { createdAt: 'DESC' },
+            take: 20,
         });
 
         return ListNotificationResponseDto.from(notifications);
