@@ -10,6 +10,7 @@ import {
 import { PublishMessageCommand } from '../command';
 import {
     NotifyMemberMentionCommand,
+    NotifyReplyCommand,
     NotifyRoleMentionCommand,
 } from 'src/domain/notification/command';
 
@@ -50,15 +51,15 @@ export class MessageSaga {
         );
     }
 
-    // @Saga()
-    // notifyReply(events$: Observable<any>): Observable<ICommand> {
-    //     return events$.pipe(
-    //         ofType(ReplyCreatedEvent),
-    //         filter(({ reply }: ReplyCreatedEvent) => reply != null),
-    //         map(
-    //             ({ room, reply, target }: ReplyCreatedEvent) =>
-    //                 new SendEmailCommand(user),
-    //         ),
-    //     );
-    // }
+    @Saga()
+    notifyReply(events$: Observable<any>): Observable<ICommand> {
+        return events$.pipe(
+            ofType(ReplyCreatedEvent),
+            filter(({ reply }: ReplyCreatedEvent) => reply != null),
+            map(
+                ({ room, reply, target }: ReplyCreatedEvent) =>
+                    new NotifyReplyCommand(room, target, reply),
+            ),
+        );
+    }
 }
