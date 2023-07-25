@@ -1,16 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, MessageEvent } from '@nestjs/common';
 import { Notification } from '../entity';
 import { Observable, Subject } from 'rxjs';
+import { NotificationPayload } from '../presentation/dto/sse';
 
 @Injectable()
 export class NotifiactionPublisher {
-    sessions: Map<number, Subject<any>>;
+    // TODO: probably have to make repository for this
+    private sessions: Map<number, Subject<MessageEvent>>;
+
     constructor() {
-        this.sessions = new Map<number, Subject<any>>();
+        this.sessions = new Map<number, Subject<MessageEvent>>();
     }
 
-    public subscribe(userID: number): Observable<any> {
-        const session = new Subject();
+    public subscribe(userID: number): Observable<MessageEvent> {
+        const session = new Subject<MessageEvent>();
         this.sessions.set(userID, session);
 
         return session.asObservable();
@@ -29,7 +32,19 @@ export class NotifiactionPublisher {
                 return;
             }
 
-            session.next(notification);
+            const payload: NotificationPayload = {
+                data: {
+                    ...notification,
+                    message: {
+                        ...notification.message,
+                        author: { ...notification.message.author.avatar },
+                        embedmentsCount: notification.message.embedments.length,
+                    },
+                },
+                type: notification.type,
+            };
+
+            session.next(payload);
         });
     }
 }
