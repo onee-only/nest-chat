@@ -3,7 +3,7 @@ import { User } from 'src/domain/user/entity';
 
 type MessageInput = {
     readonly body: string;
-    readonly replyTo?: number;
+    readonly replyTo?: string;
     readonly embedments?: Array<Express.Multer.File>;
 };
 

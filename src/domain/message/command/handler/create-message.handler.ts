@@ -142,7 +142,7 @@ export class CreateMessageHandler
     }
 
     private async findReplyTo(
-        replyTo: number,
+        replyTo: string,
         thread: Thread,
     ): Promise<Message> {
         if (replyTo !== undefined) {
