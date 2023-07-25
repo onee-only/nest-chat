@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { Injectable } from '@nestjs/common';
+import { Injectable, MessageEvent } from '@nestjs/common';
 import { RoomRepository } from 'src/domain/room/repository';
 import { ThreadRepository } from '../../repository';
 import { ChatRepository } from './repository/chat.repository';
@@ -12,14 +12,7 @@ import {
 } from '../../exception';
 import { User } from 'src/domain/user/entity';
 import { ChatInfoManager } from './chat-info.manager';
-import {
-    Chat,
-    LeaveInfo,
-    MessagePayload,
-    SocketData,
-    TypingInfo,
-    UserInfo,
-} from './types';
+import { Chat, LeaveInfo, SocketData, TypingInfo, UserInfo } from './types';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable()
@@ -111,7 +104,7 @@ export class ChatBroker {
     async subscribe(
         roomID: number,
         threadID: number,
-    ): Promise<Observable<MessagePayload>> {
+    ): Promise<Observable<MessageEvent>> {
         const chatName = this.chatInfoManager.genChatName(roomID, threadID);
         const chat = await this.chatRepository.find(chatName);
         if (chat === undefined) {
@@ -123,7 +116,7 @@ export class ChatBroker {
     async publish(
         roomID: number,
         threadID: number,
-        message: MessagePayload,
+        message: MessageEvent,
     ): Promise<void> {
         const chatName = this.chatInfoManager.genChatName(roomID, threadID);
         const chat = await this.chatRepository.find(chatName);

@@ -1,27 +1,37 @@
-export type MessagePayload = MessageInfo | UpdateInfo | DeleteInfo;
+import { MessageEvent } from '@nestjs/common';
+import { MessageKind } from './msg-kind.enum';
 
-export type DeleteInfo = {
-    readonly id: number;
-};
+export class DeleteInfo implements MessageEvent {
+    readonly data: {
+        readonly id: number;
+    };
+    readonly type: string = MessageKind.DELETE;
+}
 
-export type UpdateInfo = {
-    readonly id: number;
-    readonly content: string;
-    readonly updatedAt: Date;
-};
+export class UpdateInfo implements MessageEvent {
+    readonly data: {
+        readonly id: number;
+        readonly content: string;
+        readonly updatedAt: Date;
+    };
+    readonly type: string = MessageKind.UPDATE;
+}
 
-export type MessageInfo = {
+export class MessageInfo implements MessageEvent {
+    readonly data: {
+        readonly author: AuthorInfo;
+        readonly message: MsgInfo;
+        replyTo?: ReplyInfo;
+
+        readonly embedments: EmbedmentInfo[];
+    };
+    readonly type?: string = MessageKind.CREATE;
+}
+
+export class ReplyInfo implements MessageEvent {
     readonly author: AuthorInfo;
     readonly message: MsgInfo;
-    replyTo?: ReplyInfo;
-
-    readonly embedments: EmbedmentInfo[];
-};
-
-export type ReplyInfo = {
-    readonly author: AuthorInfo;
-    readonly message: MsgInfo;
-};
+}
 
 export type AuthorInfo = {
     readonly id: number;

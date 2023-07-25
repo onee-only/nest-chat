@@ -18,16 +18,18 @@ export class PublishMessageHandler
         const { author, thread, replyTo, embedments } = message;
 
         const msg: MessageInfo = {
-            message: { ...message },
-            author: { ...author, ...author.avatar },
-            embedments: embedments.map((embedment) => ({
-                name: embedment.name,
-                url: this.storageManager.getFileURL(embedment.key),
-            })),
+            data: {
+                message: { ...message },
+                author: { ...author, ...author.avatar },
+                embedments: embedments.map((embedment) => ({
+                    name: embedment.name,
+                    url: this.storageManager.getFileURL(embedment.key),
+                })),
+            },
         };
 
         if (replyTo !== undefined) {
-            msg.replyTo = {
+            msg.data.replyTo = {
                 author: { ...replyTo.author, ...replyTo.author.avatar },
                 message: { ...replyTo },
             };
