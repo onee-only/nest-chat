@@ -1,5 +1,5 @@
 export enum NotificationType {
-    REPLY,
-    ROLE_MENTION,
-    MEMBER_MENTION,
+    REPLY = 'reply',
+    ROLE_MENTION = 'role_mention',
+    MEMBER_MENTION = 'member_mention',
 }
