@@ -8,7 +8,6 @@ import { RoomModule } from '../room/room.module';
 import { ThreadModule } from '../thread/thread.module';
 import { MessageParser } from './util';
 import { CommandHandlers } from './command/handler';
-import { StorageModule } from 'src/global/modules';
 import { MessageSaga } from './saga';
 import { QueryHandlers } from './query/handler';
 
@@ -18,7 +17,6 @@ import { QueryHandlers } from './query/handler';
         TypeOrmModule.forFeature([Message, Embedment]),
         RoomModule,
         ThreadModule,
-        StorageModule,
     ],
     controllers: [MessageController],
     providers: [
