@@ -1,4 +1,11 @@
-import { Controller, Delete, Get, UseGuards } from '@nestjs/common';
+import {
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseUUIDPipe,
+    UseGuards,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/domain/user/entity';
@@ -6,7 +13,10 @@ import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
 import { ListNotificationQuery } from '../query';
 import { ListNotificationResponseDto } from './dto/response';
-import { ClearNotificationsCommand } from '../command';
+import {
+    ClearNotificationsCommand,
+    DeleteNotificationCommand,
+} from '../command';
 
 @ApiTags('notifications')
 @Controller('users/me/notifications')
@@ -37,6 +47,20 @@ export class NotificationController {
     async clearNotification(@GetUser() user: User): Promise<void> {
         return await this.commandBus.execute(
             new ClearNotificationsCommand(user),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'delete notification',
+        description: 'Deletes the given notification of requested user',
+    })
+    @Delete(':uuid')
+    async deleteNotification(
+        @GetUser() user: User,
+        @Param('uuid', ParseUUIDPipe) uuid: string,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new DeleteNotificationCommand(uuid, user),
         );
     }
 }
