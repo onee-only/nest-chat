@@ -1,17 +1,13 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PublishMessageCommand } from '../publish-message.command';
 import { ChatBroker } from 'src/domain/thread/util/chat';
-import { StorageManager } from 'src/global/modules/utils';
 import { MessageInfo } from 'src/domain/thread/util/chat/types';
 
 @CommandHandler(PublishMessageCommand)
 export class PublishMessageHandler
     implements ICommandHandler<PublishMessageCommand>
 {
-    constructor(
-        private readonly chatBroker: ChatBroker,
-        private readonly storageManager: StorageManager,
-    ) {}
+    constructor(private readonly chatBroker: ChatBroker) {}
 
     async execute(command: PublishMessageCommand): Promise<void> {
         const { room, message } = command;
@@ -23,7 +19,7 @@ export class PublishMessageHandler
                 author: { ...author, ...author.avatar },
                 embedments: embedments.map((embedment) => ({
                     name: embedment.name,
-                    url: this.storageManager.getFileURL(embedment.key),
+                    url: embedment.url,
                 })),
             },
         };

@@ -167,6 +167,7 @@ export class CreateMessageHandler
                 key,
                 message,
                 name: originalName,
+                url: this.storageManager.getFileURL(key),
             }),
         );
     }

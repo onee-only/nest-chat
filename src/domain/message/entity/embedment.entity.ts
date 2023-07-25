@@ -9,6 +9,9 @@ export class Embedment {
     @Column()
     name: string;
 
+    @Column()
+    url: string;
+
     @ManyToOne(() => Message, { cascade: true, onDelete: 'CASCADE' })
     message: Message;
 }
