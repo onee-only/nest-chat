@@ -3,6 +3,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     ManyToMany,
     ManyToOne,
     OneToMany,
@@ -30,6 +31,7 @@ export class Message {
     @Column()
     content: string;
 
+    @Index()
     @CreateDateColumn()
     createdAt: Date;
 
