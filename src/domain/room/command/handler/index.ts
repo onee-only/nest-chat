@@ -7,6 +7,7 @@ import { DeleteRoleHandler } from './delete-role.handler';
 import { CreateInvitationHandler } from './create-invitation.handler';
 import { DeleteInvitationHandler } from './delete-invitation.handler';
 import { JoinRoomHandler } from './join-room.handler';
+import { KickMemberHandler } from './kick-member.handler';
 
 export const CommandHandlers = [
     CreateRoomHandler,
@@ -18,4 +19,5 @@ export const CommandHandlers = [
     CreateInvitationHandler,
     DeleteInvitationHandler,
     JoinRoomHandler,
+    KickMemberHandler,
 ];
