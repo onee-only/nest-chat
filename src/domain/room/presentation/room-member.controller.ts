@@ -1,5 +1,6 @@
 import {
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -16,7 +17,7 @@ import { ListMemberResponseDto } from './dto/response';
 import { GetUser } from 'src/global/decorators';
 import { User } from 'src/domain/user/entity';
 import { ListMemberQuery } from '../query';
-import { JoinRoomCommand } from '../command';
+import { JoinRoomCommand, KickMemberCommand } from '../command';
 
 @ApiTags('room members')
 @Controller('rooms/:roomID/members')
@@ -54,6 +55,22 @@ export class RoomMemberController {
     ): Promise<void> {
         return await this.commandBus.execute(
             new JoinRoomCommand(roomID, user, token),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'kick member',
+        description: 'Kicks the given member',
+    })
+    @Delete(':memberID')
+    @UseGuards(JwtAuthGuard)
+    async kickMember(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('memberID', ParseIntPipe) memberID: number,
+        @GetUser() user: User,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new KickMemberCommand(roomID, memberID, user),
         );
     }
 }
