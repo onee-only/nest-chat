@@ -8,3 +8,4 @@ export { NoMatchingInvitationException } from './no-matching-invitation.exceptio
 export { AlreadyJoinedException } from './already-joined.exception';
 export { MissingTokenException } from './missing-token.exception';
 export { InvalidInvitationTokenException } from './invalid-invitation-token.exception';
+export { NoMatchingMemberException } from './no-matching-member.exception';
