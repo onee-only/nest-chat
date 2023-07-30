@@ -1,17 +1,19 @@
 import {
     Body,
     Controller,
+    Get,
     MessageEvent,
     Param,
     ParseIntPipe,
     Post,
+    Query,
     Sse,
     UploadedFiles,
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
@@ -19,7 +21,9 @@ import { JwtAuthGuard } from 'src/global/guards';
 import { CreateMessageRequestDto } from './dto/request/create-message.request.dto';
 import { CreateMessageCommand } from '../command';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { SubscribeMessageQuery } from '../query';
+import { ListMessageQuery, SubscribeMessageQuery } from '../query';
+import { ParseDatePipe } from 'src/global/pipes';
+import { ListMessageResponseDto } from './dto/response';
 
 @ApiTags('messages')
 @Controller('rooms/:roomID/threads/:threadID/messages')
@@ -66,6 +70,26 @@ export class MessageController {
                 replyTo,
                 embedments,
             }),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'list messages',
+        description: 'Gives a list of messages',
+    })
+    @ApiOkResponse({
+        type: ListMessageResponseDto,
+    })
+    @Get()
+    async listMessage(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('threadID', ParseIntPipe) threadID: number,
+        @GetUser() user: User,
+        @Query('enddate', ParseDatePipe) endDate: Date,
+        @Query('limit', ParseIntPipe) limit: number,
+    ): Promise<ListMessageResponseDto> {
+        return await this.queryBus.execute(
+            new ListMessageQuery(user, { roomID, threadID, endDate, limit }),
         );
     }
 }
