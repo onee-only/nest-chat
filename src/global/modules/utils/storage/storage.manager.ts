@@ -63,6 +63,18 @@ export class StorageManager {
     }
 
     /**
+     * deletes files
+     */
+    async deleteFiles(keys: string[]): Promise<void> {
+        await this.s3
+            .deleteObjects({
+                Bucket: this.bucketName,
+                Delete: { Objects: keys.map((key) => ({ Key: key })) },
+            })
+            .promise();
+    }
+
+    /**
      * creates s3 url of given key
      */
     getFileURL(key: string): string {

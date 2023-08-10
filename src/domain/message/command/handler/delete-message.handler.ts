@@ -80,7 +80,6 @@ export class DeleteMessageHandler
         await this.messageRepository.delete(message);
 
         this.storageManager.deleteFiles(
-            'messages/embedments',
             message.embedments.map((embedment) => embedment.key),
         );
         this.eventBus.publishAll([
