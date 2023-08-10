@@ -5,6 +5,7 @@ import {
     MessageEvent,
     Param,
     ParseIntPipe,
+    Patch,
     Post,
     Query,
     Sse,
@@ -18,12 +19,16 @@ import { Observable } from 'rxjs';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
-import { CreateMessageRequestDto } from './dto/request/create-message.request.dto';
+import {
+    CreateMessageRequestDto,
+    UpdateMessageRequestDto,
+} from './dto/request';
 import { CreateMessageCommand } from '../command';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ListMessageQuery, SubscribeMessageQuery } from '../query';
 import { ParseDatePipe } from 'src/global/pipes';
 import { ListMessageResponseDto } from './dto/response';
+import { UpdateMessageCommand } from '../command/update-message.command';
 
 @ApiTags('messages')
 @Controller('rooms/:roomID/threads/:threadID/messages')
@@ -70,6 +75,25 @@ export class MessageController {
                 replyTo,
                 embedments,
             }),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'update message',
+        description: 'Updates a message',
+    })
+    @Patch(':messageID')
+    @UseGuards(JwtAuthGuard)
+    async updateMesage(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('threadID', ParseIntPipe) threadID: number,
+        @Param('messageID') messageID: string,
+        @GetUser() user: User,
+        @Body() request: UpdateMessageRequestDto,
+    ): Promise<void> {
+        const { body } = request;
+        return await this.commandBus.execute(
+            new UpdateMessageCommand(roomID, threadID, messageID, user, body),
         );
     }
 
