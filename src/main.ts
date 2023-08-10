@@ -11,6 +11,8 @@ async function bootstrap() {
         logger: WinstonModule.createLogger(LoggerConfig),
     });
 
+    app.setGlobalPrefix('v1');
+
     // validation pipe
     app.useGlobalPipes(new ValidationPipe());
 
