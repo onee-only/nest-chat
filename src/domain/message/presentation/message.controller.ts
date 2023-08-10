@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     MessageEvent,
     Param,
@@ -23,7 +24,7 @@ import {
     CreateMessageRequestDto,
     UpdateMessageRequestDto,
 } from './dto/request';
-import { CreateMessageCommand } from '../command';
+import { CreateMessageCommand, DeleteMessageCommand } from '../command';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ListMessageQuery, SubscribeMessageQuery } from '../query';
 import { ParseDatePipe } from 'src/global/pipes';
@@ -79,6 +80,26 @@ export class MessageController {
     }
 
     @ApiOperation({
+        summary: 'list messages',
+        description: 'Gives a list of messages',
+    })
+    @ApiOkResponse({
+        type: ListMessageResponseDto,
+    })
+    @Get()
+    async listMessage(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('threadID', ParseIntPipe) threadID: number,
+        @GetUser() user: User,
+        @Query('enddate', ParseDatePipe) endDate: Date,
+        @Query('limit', ParseIntPipe) limit: number,
+    ): Promise<ListMessageResponseDto> {
+        return await this.queryBus.execute(
+            new ListMessageQuery(user, { roomID, threadID, endDate, limit }),
+        );
+    }
+
+    @ApiOperation({
         summary: 'update message',
         description: 'Updates a message',
     })
@@ -98,22 +119,19 @@ export class MessageController {
     }
 
     @ApiOperation({
-        summary: 'list messages',
-        description: 'Gives a list of messages',
+        summary: 'update message',
+        description: 'Updates a message',
     })
-    @ApiOkResponse({
-        type: ListMessageResponseDto,
-    })
-    @Get()
-    async listMessage(
+    @Delete(':messageID')
+    @UseGuards(JwtAuthGuard)
+    async deleteMessage(
         @Param('roomID', ParseIntPipe) roomID: number,
         @Param('threadID', ParseIntPipe) threadID: number,
+        @Param('messageID') messageID: string,
         @GetUser() user: User,
-        @Query('enddate', ParseDatePipe) endDate: Date,
-        @Query('limit', ParseIntPipe) limit: number,
-    ): Promise<ListMessageResponseDto> {
-        return await this.queryBus.execute(
-            new ListMessageQuery(user, { roomID, threadID, endDate, limit }),
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new DeleteMessageCommand(roomID, threadID, messageID, user),
         );
     }
 }
