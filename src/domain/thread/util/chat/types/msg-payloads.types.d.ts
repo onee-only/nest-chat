@@ -3,18 +3,18 @@ import { MessageKind } from './msg-kind.enum';
 
 export class DeleteInfo implements MessageEvent {
     readonly data: {
-        readonly id: number;
+        readonly id: string;
     };
-    readonly type: string = MessageKind.DELETE;
+    readonly type? = MessageKind.DELETE;
 }
 
 export class UpdateInfo implements MessageEvent {
     readonly data: {
-        readonly id: number;
+        readonly id: string;
         readonly content: string;
         readonly updatedAt: Date;
     };
-    readonly type: string = MessageKind.UPDATE;
+    readonly type? = MessageKind.UPDATE;
 }
 
 export class MessageInfo implements MessageEvent {
@@ -25,7 +25,7 @@ export class MessageInfo implements MessageEvent {
 
         readonly embedments: EmbedmentInfo[];
     };
-    readonly type?: string = MessageKind.CREATE;
+    readonly type? = MessageKind.CREATE;
 }
 
 export class ReplyInfo implements MessageEvent {
