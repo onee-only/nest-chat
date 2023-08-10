@@ -3,3 +3,4 @@ export { MemberMentionedEvent } from './member-mentioned.event';
 export { RoleMentionedEvent } from './role-mentioned.event';
 export { MessageCreatedEvent } from './message-created.event';
 export { MessageUpdatedEvent } from './message-updated.event';
+export { MessageDeletedEvent } from './message-deleted.event';

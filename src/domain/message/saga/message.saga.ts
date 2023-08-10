@@ -4,6 +4,7 @@ import { Observable, filter, map } from 'rxjs';
 import {
     MemberMentionedEvent,
     MessageCreatedEvent,
+    MessageDeletedEvent,
     MessageUpdatedEvent,
     ReplyCreatedEvent,
     RoleMentionedEvent,
@@ -34,6 +35,17 @@ export class MessageSaga {
             ofType(MessageUpdatedEvent),
             map(
                 ({ room, thread, message }: MessageUpdatedEvent) =>
+                    new PublishUpdateCommand(room, thread, message),
+            ),
+        );
+    }
+
+    @Saga()
+    publishDeleteMessage(events$: Observable<any>): Observable<ICommand> {
+        return events$.pipe(
+            ofType(MessageDeletedEvent),
+            map(
+                ({ room, thread, message }: MessageDeletedEvent) =>
                     new PublishUpdateCommand(room, thread, message),
             ),
         );

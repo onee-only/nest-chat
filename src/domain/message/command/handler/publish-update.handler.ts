@@ -20,6 +20,6 @@ export class PublishUpdateHandler
             },
         };
 
-        this.chatBroker.publish(room.id, thread.id, msg);
+        await this.chatBroker.publish(room.id, thread.id, msg);
     }
 }
