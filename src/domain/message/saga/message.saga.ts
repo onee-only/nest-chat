@@ -4,10 +4,11 @@ import { Observable, filter, map } from 'rxjs';
 import {
     MemberMentionedEvent,
     MessageCreatedEvent,
+    MessageUpdatedEvent,
     ReplyCreatedEvent,
     RoleMentionedEvent,
 } from '../event';
-import { PublishMessageCommand } from '../command';
+import { PublishMessageCommand, PublishUpdateCommand } from '../command';
 import {
     NotifyMemberMentionCommand,
     NotifyReplyCommand,
@@ -23,6 +24,17 @@ export class MessageSaga {
             map(
                 ({ room, message }: MessageCreatedEvent) =>
                     new PublishMessageCommand(room, message),
+            ),
+        );
+    }
+
+    @Saga()
+    publishUpdateMessage(events$: Observable<any>): Observable<ICommand> {
+        return events$.pipe(
+            ofType(MessageUpdatedEvent),
+            map(
+                ({ room, thread, message }: MessageUpdatedEvent) =>
+                    new PublishUpdateCommand(room, thread, message),
             ),
         );
     }
