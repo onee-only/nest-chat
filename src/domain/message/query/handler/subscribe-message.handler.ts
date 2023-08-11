@@ -1,13 +1,13 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { SubscribeMessageQuery } from '../subscribe-message.query';
 import { Observable } from 'rxjs';
-import { MessagePayload } from 'src/domain/thread/util/chat/types';
 import { ChatBroker } from 'src/domain/thread/util/chat';
 import { RoomRepository } from 'src/domain/room/repository';
 import { ThreadRepository } from 'src/domain/thread/repository';
 import { RoomNotFoundException } from 'src/domain/room/exception';
 import { NoMathcingThreadException } from 'src/domain/thread/exception';
 import { PermissionChecker } from 'src/domain/room/util';
+import { MessageEvent } from '@nestjs/common';
 
 @QueryHandler(SubscribeMessageQuery)
 export class SubscribeMessageHandler
@@ -23,7 +23,7 @@ export class SubscribeMessageHandler
 
     async execute(
         query: SubscribeMessageQuery,
-    ): Promise<Observable<MessagePayload>> {
+    ): Promise<Observable<MessageEvent>> {
         const { roomID, threadID, user } = query;
 
         const room = await this.roomRepository
