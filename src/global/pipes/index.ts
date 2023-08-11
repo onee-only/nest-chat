@@ -1,1 +1,1 @@
-export { ParseDatePipe } from './parse-date.pipe';
+export * from './parse-date.pipe';

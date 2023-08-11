@@ -1,1 +1,1 @@
-export { ListTagResponse } from './list-tag.response.dto';
+export * from './list-tag.response.dto';

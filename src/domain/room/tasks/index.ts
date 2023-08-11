@@ -1,1 +1,1 @@
-export { ExpireInvitationTask } from './expire-invitation.task';
+export * from './expire-invitation.task';

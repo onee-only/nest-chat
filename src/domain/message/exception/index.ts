@@ -1,2 +1,2 @@
-export { NoMatchingMessageException } from './no-matching-message.exception';
-export { NotAuthorException } from './not-author.exception';
+export * from './no-matching-message.exception';
+export * from './not-author.exception';

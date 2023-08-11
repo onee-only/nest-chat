@@ -1,1 +1,1 @@
-export { DuplicateNicknameException } from './duplicate-nickname.exception';
+export * from './duplicate-nickname.exception';

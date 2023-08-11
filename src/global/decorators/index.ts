@@ -1,2 +1,2 @@
-export { GetUser } from './get-user.decorator';
-export { GetRefresh } from './get-refresh.decorator';
+export * from './get-user.decorator';
+export * from './get-refresh.decorator';

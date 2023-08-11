@@ -1,2 +1,2 @@
-export { SetCookieInterceptor } from './set-cookie.interceptor';
-export { CookieDto } from './cookie.dto';
+export * from './set-cookie.interceptor';
+export * from './cookie.dto';

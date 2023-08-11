@@ -1,1 +1,1 @@
-export { NotificationNotFoundException } from './notification-not-found.exception';
+export * from './notification-not-found.exception';

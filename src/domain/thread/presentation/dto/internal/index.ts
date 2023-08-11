@@ -1,1 +1,1 @@
-export { ListThreadElement } from './thread/list-thread.dto';
+export * from './thread/list-thread.dto';

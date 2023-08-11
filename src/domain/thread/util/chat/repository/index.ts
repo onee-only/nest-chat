@@ -1,1 +1,1 @@
-export { ChatRepository } from './chat.repository';
+export * from './chat.repository';

@@ -1,2 +1,2 @@
-export { PasswordManager } from './password.manager';
-export { JwtProvider } from './jwt.provider';
+export * from './password.manager';
+export * from './jwt.provider';

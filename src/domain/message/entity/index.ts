@@ -1,2 +1,2 @@
-export { Embedment } from './embedment.entity';
-export { Message } from './message.entity';
+export * from './embedment.entity';
+export * from './message.entity';

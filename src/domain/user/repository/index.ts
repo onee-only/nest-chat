@@ -1,2 +1,2 @@
-export { AvatarRepository } from './avatar.repository';
-export { UserRepository } from './user.repository';
+export * from './avatar.repository';
+export * from './user.repository';

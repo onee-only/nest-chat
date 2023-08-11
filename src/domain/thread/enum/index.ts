@@ -1,2 +1,2 @@
-export { ThreadOrderDir } from './thread-order-dir.enum';
-export { ThreadOrder } from './thread-order.enum';
+export * from './thread-order-dir.enum';
+export * from './thread-order.enum';

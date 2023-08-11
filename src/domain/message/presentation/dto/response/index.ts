@@ -1,1 +1,1 @@
-export { ListMessageResponse } from './list-message.response.dto';
+export * from './list-message.response.dto';

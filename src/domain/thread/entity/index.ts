@@ -1,2 +1,2 @@
-export { Thread } from './thread.entity';
-export { PinnedThread } from './pinned-thread.entity';
+export * from './thread.entity';
+export * from './pinned-thread.entity';

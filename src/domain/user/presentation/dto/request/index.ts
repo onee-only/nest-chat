@@ -1,1 +1,1 @@
-export { UpdateProfileRequest } from './update-profile.request.dto';
+export * from './update-profile.request.dto';

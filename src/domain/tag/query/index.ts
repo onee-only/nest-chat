@@ -1,1 +1,1 @@
-export { ListTagQuery } from './list-tag.query';
+export * from './list-tag.query';

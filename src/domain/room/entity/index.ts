@@ -1,4 +1,4 @@
-export { Room } from './room.entity';
-export { MemberRole, Permission } from './member-role.entity';
-export { RoomMember } from './room-member.entity';
-export { Invitation } from './invitation.entity';
+export * from './room.entity';
+export * from './member-role.entity';
+export * from './room-member.entity';
+export * from './invitation.entity';

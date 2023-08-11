@@ -1,2 +1,2 @@
-export { StorageModule } from './storage.module';
-export { StorageManager, UploadResult } from './storage.manager';
+export * from './storage.module';
+export * from './storage.manager';

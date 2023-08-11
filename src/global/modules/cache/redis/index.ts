@@ -1,3 +1,3 @@
-export { CacheModule } from './cache.module';
-export { CacheService } from './cache.service';
-export { CacheValidationScheme, CacheConfig } from './cache.config';
+export * from './cache.module';
+export * from './cache.service';
+export * from './cache.config';

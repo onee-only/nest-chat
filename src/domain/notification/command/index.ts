@@ -1,5 +1,5 @@
-export { NotifyRoleMentionCommand } from './notify-role-mention.command';
-export { NotifyMemberMentionCommand } from './notify-member-mention.command';
-export { NotifyReplyCommand } from './notify-reply.command';
-export { ClearNotificationsCommand } from './clear-notifications.command';
-export { DeleteNotificationCommand } from './delete-notification.command';
+export * from './notify-role-mention.command';
+export * from './notify-member-mention.command';
+export * from './notify-reply.command';
+export * from './clear-notifications.command';
+export * from './delete-notification.command';

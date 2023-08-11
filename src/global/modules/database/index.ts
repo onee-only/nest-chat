@@ -1,2 +1,2 @@
-export { DatabaseConfig, DatabaseValidationScheme } from './database.config';
-export { DatabaseModule } from './database.module';
+export * from './database.config';
+export * from './database.module';

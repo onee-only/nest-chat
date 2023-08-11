@@ -1,2 +1,2 @@
-export { ListNotificationQuery } from './list-notification.query';
-export { SubscribeNotificationQuery } from './subscribe-notification.query';
+export * from './list-notification.query';
+export * from './subscribe-notification.query';

@@ -1,3 +1,3 @@
-export { DuplicateEmailException } from './duplicate-email.exception';
-export { InvalidCredentialsException } from './invalid-credentials.exception';
-export { InvalidEmailTokenException } from './invalid-email-token.exception';
+export * from './duplicate-email.exception';
+export * from './invalid-credentials.exception';
+export * from './invalid-email-token.exception';

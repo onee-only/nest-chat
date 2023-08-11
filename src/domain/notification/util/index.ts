@@ -1,1 +1,1 @@
-export { NotifiactionPublisher } from './notification.publisher';
+export * from './notification.publisher';

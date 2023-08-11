@@ -1,6 +1,6 @@
-export { ReplyCreatedEvent } from './reply-created.event';
-export { MemberMentionedEvent } from './member-mentioned.event';
-export { RoleMentionedEvent } from './role-mentioned.event';
-export { MessageCreatedEvent } from './message-created.event';
-export { MessageUpdatedEvent } from './message-updated.event';
-export { MessageDeletedEvent } from './message-deleted.event';
+export * from './reply-created.event';
+export * from './member-mentioned.event';
+export * from './role-mentioned.event';
+export * from './message-created.event';
+export * from './message-updated.event';
+export * from './message-deleted.event';

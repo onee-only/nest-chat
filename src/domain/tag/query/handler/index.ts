@@ -1,1 +1,1 @@
-export { ListTagHandler } from './list-tag.handler';
+export * from './list-tag.handler';

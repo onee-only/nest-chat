@@ -1,2 +1,2 @@
-export { Avatar } from './avatar.entity';
-export { User } from './user.entity';
+export * from './avatar.entity';
+export * from './user.entity';

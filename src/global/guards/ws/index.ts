@@ -1,1 +1,1 @@
-export { WsJwtGuard } from './ws-jwt.guard';
+export * from './ws-jwt.guard';

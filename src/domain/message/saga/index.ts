@@ -1,1 +1,1 @@
-export { MessageSaga } from './message.saga';
+export * from './message.saga';

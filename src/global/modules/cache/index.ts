@@ -1,4 +1,4 @@
-export { BlackListService, BlackListModule } from './blacklist';
+export * from './blacklist';
 export {
     CacheConfig,
     CacheService,

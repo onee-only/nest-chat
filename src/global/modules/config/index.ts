@@ -1,3 +1,3 @@
-export { ConfigModule } from './config.module';
-export { SwaggerConfig } from './doc/swagger.config';
-export { LoggerConfig } from './log/logger.config';
+export * from './config.module';
+export * from './doc/swagger.config';
+export * from './log/logger.config';

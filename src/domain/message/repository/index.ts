@@ -1,2 +1,2 @@
-export { EmbedmentRepository } from './embedment.repository';
-export { MessageRepository } from './message.repository';
+export * from './embedment.repository';
+export * from './message.repository';

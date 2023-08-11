@@ -1,1 +1,1 @@
-export { StrategyModule } from './strategy.module';
+export * from './strategy.module';

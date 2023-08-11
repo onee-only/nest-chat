@@ -1,3 +1,3 @@
-export { RoomOrder } from './room-order.enum';
-export { RoomOrderDir } from './room-order-dir.enum';
-export { RoomPermission } from './room-permission.enum';
+export * from './room-order.enum';
+export * from './room-order-dir.enum';
+export * from './room-permission.enum';

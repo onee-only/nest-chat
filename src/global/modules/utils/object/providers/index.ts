@@ -1,2 +1,2 @@
-export { NullishFilter } from './filter-nullish.service';
-export { ObjectValidator } from './validate.service';
+export * from './filter-nullish.service';
+export * from './validate.service';

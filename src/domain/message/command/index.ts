@@ -1,6 +1,6 @@
-export { CreateMessageCommand } from './create-message.command';
-export { PublishMessageCommand } from './publish-message.command';
-export { UpdateMessageCommand } from './update-message.command';
-export { PublishUpdateCommand } from './publish-update.command';
-export { DeleteMessageCommand } from './delete-message.command';
-export { PublishDeleteCommand } from './publish-delete.command';
+export * from './create-message.command';
+export * from './publish-message.command';
+export * from './update-message.command';
+export * from './publish-update.command';
+export * from './delete-message.command';
+export * from './publish-delete.command';

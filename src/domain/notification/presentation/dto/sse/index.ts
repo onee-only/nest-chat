@@ -1,1 +1,1 @@
-export { NotificationPayload } from './notification.payload.dto';
+export * from './notification.payload.dto';

@@ -3,4 +3,4 @@ export {
     EmailValidationScheme,
     EmailConfig,
 } from './email.config';
-export { MailerModule } from './mailer.module';
+export * from './mailer.module';

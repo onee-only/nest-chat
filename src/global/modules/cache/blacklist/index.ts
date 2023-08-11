@@ -1,2 +1,2 @@
-export { BlackListModule } from './blacklist.module';
-export { BlackListService } from './blacklist.service';
+export * from './blacklist.module';
+export * from './blacklist.service';

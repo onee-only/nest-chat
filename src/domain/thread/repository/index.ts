@@ -1,2 +1,2 @@
-export { ThreadRepository } from './thread.repository';
-export { PinnedThreadRepository } from './pinned-thread.repository';
+export * from './thread.repository';
+export * from './pinned-thread.repository';

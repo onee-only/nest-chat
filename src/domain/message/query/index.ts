@@ -1,2 +1,2 @@
-export { SubscribeMessageQuery } from './subscribe-message.query';
-export { ListMessageQuery } from './list-message.query';
+export * from './subscribe-message.query';
+export * from './list-message.query';

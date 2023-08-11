@@ -1,1 +1,1 @@
-export { MessageParser } from './message.parser';
+export * from './message.parser';

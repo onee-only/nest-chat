@@ -1,3 +1,3 @@
-export { JwtAccessStrategy } from './jwt-access.strategy';
-export { JwtRefreshStrategy } from './jwt-refresh.strategy';
-export { IJwtConfig, JwtConfig, JwtValidationScheme } from './jwt.config';
+export * from './jwt-access.strategy';
+export * from './jwt-refresh.strategy';
+export * from './jwt.config';

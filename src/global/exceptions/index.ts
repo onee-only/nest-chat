@@ -1,1 +1,1 @@
-export { InvalidDtoException } from './invalid-dto.exception';
+export * from './invalid-dto.exception';
