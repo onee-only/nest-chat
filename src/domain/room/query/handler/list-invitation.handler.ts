@@ -2,7 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ListInvitationQuery } from '../list-invitation.query';
 import {
     ListInvitationElement,
-    ListInvitationResponseDto,
+    ListInvitationResponse,
 } from '../../presentation/dto/response';
 import { InvitationRepository, RoomRepository } from '../../repository';
 import {
@@ -19,9 +19,7 @@ export class ListInvitationHandler
         private readonly invitationRepository: InvitationRepository,
     ) {}
 
-    async execute(
-        query: ListInvitationQuery,
-    ): Promise<ListInvitationResponseDto> {
+    async execute(query: ListInvitationQuery): Promise<ListInvitationResponse> {
         const { roomID, user } = query;
 
         const room = await this.roomRepository
@@ -47,6 +45,6 @@ export class ListInvitationHandler
             }),
         );
 
-        return ListInvitationResponseDto.from(invitations);
+        return ListInvitationResponse.from(invitations);
     }
 }

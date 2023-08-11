@@ -1,2 +1,2 @@
-export { GetMeResponseDto } from './get-me.response.dto';
-export { GetMyProfileResponseDto } from './get-my-profile.response.dto';
+export { GetMeResponse } from './get-me.response.dto';
+export { GetMyProfileResponse } from './get-my-profile.response.dto';

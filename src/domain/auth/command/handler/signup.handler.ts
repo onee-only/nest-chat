@@ -1,6 +1,6 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { SignupCommand } from '../signup.command';
-import { SignupResponseDto } from '../../presentation/dto/response';
+import { SignupResponse } from '../../presentation/dto/response';
 import { DuplicateEmailException } from '../../exception';
 import { UserCreatedEvent } from '../../event';
 import { AvatarRepository, UserRepository } from 'src/domain/user/repository';
@@ -16,7 +16,7 @@ export class SignupHandler implements ICommandHandler<SignupCommand> {
         private readonly eventBus: EventBus,
     ) {}
 
-    async execute(command: SignupCommand): Promise<SignupResponseDto> {
+    async execute(command: SignupCommand): Promise<SignupResponse> {
         const { email, password, nickname } = command;
 
         if (await this.userRepository.existsByEmail(email)) {
@@ -35,6 +35,6 @@ export class SignupHandler implements ICommandHandler<SignupCommand> {
 
         this.eventBus.publish(new UserCreatedEvent(user));
 
-        return SignupResponseDto.from(user);
+        return SignupResponse.from(user);
     }
 }

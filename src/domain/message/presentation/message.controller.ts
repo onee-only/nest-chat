@@ -20,15 +20,12 @@ import { Observable } from 'rxjs';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
-import {
-    CreateMessageRequestDto,
-    UpdateMessageRequestDto,
-} from './dto/request';
+import { CreateMessageRequest, UpdateMessageRequest } from './dto/request';
 import { CreateMessageCommand, DeleteMessageCommand } from '../command';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ListMessageQuery, SubscribeMessageQuery } from '../query';
 import { ParseDatePipe } from 'src/global/pipes';
-import { ListMessageResponseDto } from './dto/response';
+import { ListMessageResponse } from './dto/response';
 import { UpdateMessageCommand } from '../command/update-message.command';
 
 @ApiTags('messages')
@@ -67,7 +64,7 @@ export class MessageController {
         @Param('threadID', ParseIntPipe) threadID: number,
         @GetUser() user: User,
         @UploadedFiles() embedments: Array<Express.Multer.File>,
-        @Body() request: CreateMessageRequestDto,
+        @Body() request: CreateMessageRequest,
     ): Promise<void> {
         const { body, replyTo } = request;
         return await this.commandBus.execute(
@@ -84,7 +81,7 @@ export class MessageController {
         description: 'Gives a list of messages',
     })
     @ApiOkResponse({
-        type: ListMessageResponseDto,
+        type: ListMessageResponse,
     })
     @Get()
     async listMessage(
@@ -93,7 +90,7 @@ export class MessageController {
         @GetUser() user: User,
         @Query('enddate', ParseDatePipe) endDate: Date,
         @Query('limit', ParseIntPipe) limit: number,
-    ): Promise<ListMessageResponseDto> {
+    ): Promise<ListMessageResponse> {
         return await this.queryBus.execute(
             new ListMessageQuery(user, { roomID, threadID, endDate, limit }),
         );
@@ -110,7 +107,7 @@ export class MessageController {
         @Param('threadID', ParseIntPipe) threadID: number,
         @Param('messageID') messageID: string,
         @GetUser() user: User,
-        @Body() request: UpdateMessageRequestDto,
+        @Body() request: UpdateMessageRequest,
     ): Promise<void> {
         const { body } = request;
         return await this.commandBus.execute(

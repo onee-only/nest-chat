@@ -1,11 +1,11 @@
 import { DataSource, Repository } from 'typeorm';
 import { Thread } from '../entity';
 import { ListOptions } from '../query';
-import { ListThreadElementDto } from '../presentation/dto/internal';
+import { ListThreadElement } from '../presentation/dto/internal';
 import { Message } from 'src/domain/message/entity';
 
 type ListResult = {
-    list: ListThreadElementDto[];
+    list: ListThreadElement[];
     count: number;
 };
 
@@ -62,7 +62,7 @@ export class ThreadRepository extends Repository<Thread> {
             .orderBy(order, orderDir)
             .offset(size * (page - 1))
             .limit(size)
-            .getRawMany<ListThreadElementDto>();
+            .getRawMany<ListThreadElement>();
 
         return {
             count,

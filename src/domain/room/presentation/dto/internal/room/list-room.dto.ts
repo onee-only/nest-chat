@@ -1,4 +1,4 @@
-export type RoomListElementDto = {
+export type RoomListElement = {
     id: number;
     name: string;
     profileURL: string;

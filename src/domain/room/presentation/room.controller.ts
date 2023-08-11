@@ -21,11 +21,11 @@ import {
 } from '@nestjs/swagger';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
-import { CreateRoomRequestDto, UpdateRoomRequestDto } from './dto/request';
+import { CreateRoomRequest, UpdateRoomRequest } from './dto/request';
 import {
-    CreateRoomResponseDto,
-    ListRoomResponseDto,
-    RetreiveRoomResponseDto,
+    CreateRoomResponse,
+    ListRoomResponse,
+    RetreiveRoomResponse,
 } from './dto/response';
 import { JwtAuthGuard } from 'src/global/guards';
 import {
@@ -49,13 +49,13 @@ export class RoomController {
         summary: 'create a room',
         description: 'Creates a room',
     })
-    @ApiCreatedResponse({ type: CreateRoomResponseDto })
+    @ApiCreatedResponse({ type: CreateRoomResponse })
     @Post()
     @UseGuards(JwtAuthGuard)
     async createRoom(
         @GetUser() user: User,
-        @Body() request: CreateRoomRequestDto,
-    ): Promise<CreateRoomResponseDto> {
+        @Body() request: CreateRoomRequest,
+    ): Promise<CreateRoomResponse> {
         const {
             profileURL,
             name,
@@ -82,7 +82,7 @@ export class RoomController {
         summary: 'list room',
         description: 'gives a List of rooms',
     })
-    @ApiOkResponse({ type: ListRoomResponseDto })
+    @ApiOkResponse({ type: ListRoomResponse })
     @Get()
     async listRoom(
         @GetUser() user: User,
@@ -94,7 +94,7 @@ export class RoomController {
         @Query('startdate', ParseDatePipe) startDate?: Date,
         @Query('enddate', ParseDatePipe) endDate?: Date,
         @Query('tags', new ParseArrayPipe()) tags?: string[],
-    ): Promise<ListRoomResponseDto> {
+    ): Promise<ListRoomResponse> {
         return await this.queryBus.execute(
             new ListRoomQuery(user, {
                 page,
@@ -118,7 +118,7 @@ export class RoomController {
     async updateRoom(
         @Param('id', ParseIntPipe) roomID: number,
         @GetUser() user: User,
-        @Body() request: UpdateRoomRequestDto,
+        @Body() request: UpdateRoomRequest,
     ): Promise<void> {
         return await this.commandBus.execute(
             new UpdateRoomCommand(user, roomID, { ...request }),
@@ -144,13 +144,13 @@ export class RoomController {
         summary: 'retreive a room',
         description: 'Finds a room',
     })
-    @ApiOkResponse({ type: RetreiveRoomResponseDto })
+    @ApiOkResponse({ type: RetreiveRoomResponse })
     @Get(':id')
     @UseGuards(JwtAuthGuard)
     async retreiveRoom(
         @Param('id', ParseIntPipe) roomID: number,
         @GetUser() user: User,
-    ): Promise<RetreiveRoomResponseDto> {
+    ): Promise<RetreiveRoomResponse> {
         return await this.queryBus.execute(new RetreiveRoomQuery(user, roomID));
     }
 }

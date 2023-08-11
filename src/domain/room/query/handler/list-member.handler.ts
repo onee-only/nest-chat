@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ListMemberQuery } from '../list-member.query';
-import { ListMemberResponseDto } from '../../presentation/dto/response';
+import { ListMemberResponse } from '../../presentation/dto/response';
 import { RoomMemberRepository, RoomRepository } from '../../repository';
 import { RoomNotFoundException } from '../../exception';
 import { PermissionChecker } from '../../util';
@@ -13,7 +13,7 @@ export class ListMemberHandler implements IQueryHandler<ListMemberQuery> {
         private readonly permissionChecker: PermissionChecker,
     ) {}
 
-    async execute(query: ListMemberQuery): Promise<ListMemberResponseDto> {
+    async execute(query: ListMemberQuery): Promise<ListMemberResponse> {
         const { roomID, user } = query;
 
         const room = await this.roomRepository
@@ -28,6 +28,6 @@ export class ListMemberHandler implements IQueryHandler<ListMemberQuery> {
             room,
         );
 
-        return ListMemberResponseDto.from(members);
+        return ListMemberResponse.from(members);
     }
 }

@@ -1,6 +1,6 @@
 import { Room } from 'src/domain/room/entity';
 
-export class CreateRoomResponseDto {
+export class CreateRoomResponse {
     constructor(
         public readonly roomID: number,
         public readonly roomName: string,
@@ -8,8 +8,8 @@ export class CreateRoomResponseDto {
         public readonly isPublic: boolean,
     ) {}
 
-    public static from(room: Room): CreateRoomResponseDto {
+    public static from(room: Room): CreateRoomResponse {
         const { id, name, profileURL, isPublic } = room;
-        return new CreateRoomResponseDto(id, name, profileURL, isPublic);
+        return new CreateRoomResponse(id, name, profileURL, isPublic);
     }
 }

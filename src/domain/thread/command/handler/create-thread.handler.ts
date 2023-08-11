@@ -5,7 +5,7 @@ import { PermissionChecker } from 'src/domain/room/util';
 import { ThreadRepository } from '../../repository';
 import { RoomNotFoundException } from 'src/domain/room/exception';
 import { RoomPermission } from 'src/domain/room/enum';
-import { CreateThreadResponseDto } from '../../presentation/dto/response';
+import { CreateThreadResponse } from '../../presentation/dto/response';
 
 @CommandHandler(CreateThreadCommand)
 export class CreateThreadHandler
@@ -17,9 +17,7 @@ export class CreateThreadHandler
         private readonly permissionChecker: PermissionChecker,
     ) {}
 
-    async execute(
-        command: CreateThreadCommand,
-    ): Promise<CreateThreadResponseDto> {
+    async execute(command: CreateThreadCommand): Promise<CreateThreadResponse> {
         const { roomID, title, user } = command;
 
         const room = await this.roomRepository
@@ -42,6 +40,6 @@ export class CreateThreadHandler
 
         const thread = await this.threadRepository.save(candiate);
 
-        return CreateThreadResponseDto.from(thread);
+        return CreateThreadResponse.from(thread);
     }
 }

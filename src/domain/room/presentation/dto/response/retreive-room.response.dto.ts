@@ -6,7 +6,7 @@ type Owner = {
     readonly profileURL: string;
 };
 
-export class RetreiveRoomResponseDto {
+export class RetreiveRoomResponse {
     constructor(
         public readonly name: string,
         public readonly description: string,
@@ -17,7 +17,7 @@ export class RetreiveRoomResponseDto {
         public readonly owner: Owner,
     ) {}
 
-    public static from(room: Room): RetreiveRoomResponseDto {
+    public static from(room: Room): RetreiveRoomResponse {
         const { name, description, profileURL, isPublic, createdAt } = room;
         const {
             owner: { avatar, id: ownerID },
@@ -25,7 +25,7 @@ export class RetreiveRoomResponseDto {
 
         const tags = room.tags.map((tag) => tag.name);
 
-        return new RetreiveRoomResponseDto(
+        return new RetreiveRoomResponse(
             name,
             description,
             profileURL,

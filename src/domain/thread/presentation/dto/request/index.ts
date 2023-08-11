@@ -1,2 +1,2 @@
-export { CreateThreadRequestDto } from './create-thread.request.dto';
-export { UpdateThreadRequestDto } from './update-thread.request.dto';
+export { CreateThreadRequest } from './create-thread.request.dto';
+export { UpdateThreadRequest } from './update-thread.request.dto';

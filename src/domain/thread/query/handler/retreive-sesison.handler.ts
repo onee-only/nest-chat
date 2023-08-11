@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RetreiveSessionQuery } from '../retreive-session.query';
-import { RetreiveSessionResponseDto } from '../../presentation/dto/response';
+import { RetreiveSessionResponse } from '../../presentation/dto/response';
 import { ChatInfoManager } from '../../util/chat';
 import { RoomRepository } from 'src/domain/room/repository';
 import { PermissionChecker } from 'src/domain/room/util';
@@ -19,7 +19,7 @@ export class RetreiveSessionHandler
 
     async execute(
         query: RetreiveSessionQuery,
-    ): Promise<RetreiveSessionResponseDto> {
+    ): Promise<RetreiveSessionResponse> {
         const { roomID, threadID, user } = query;
 
         const room = await this.roomRepository
@@ -38,6 +38,6 @@ export class RetreiveSessionHandler
             threadID,
         );
 
-        return RetreiveSessionResponseDto.from(chatInfo);
+        return RetreiveSessionResponse.from(chatInfo);
     }
 }

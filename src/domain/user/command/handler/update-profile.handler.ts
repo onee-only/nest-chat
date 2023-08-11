@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateProfileCommand } from '../update-profile.command';
 import { UserRepository } from '../../repository';
-import { GetMyProfileResponseDto } from '../../presentation/dto/response';
+import { GetMyProfileResponse } from '../../presentation/dto/response';
 import { ObjectManager } from 'src/global/modules/utils';
 
 @CommandHandler(UpdateProfileCommand)
@@ -15,7 +15,7 @@ export class UpdateProfileHandler
 
     async execute(
         command: UpdateProfileCommand,
-    ): Promise<GetMyProfileResponseDto> {
+    ): Promise<GetMyProfileResponse> {
         const { user, data } = command;
 
         const filtered = this.objectUtil.filterNullish(data);
@@ -23,6 +23,6 @@ export class UpdateProfileHandler
 
         await this.userRepository.save(user);
 
-        return GetMyProfileResponseDto.from(user);
+        return GetMyProfileResponse.from(user);
     }
 }

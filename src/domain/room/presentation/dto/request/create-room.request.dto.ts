@@ -7,7 +7,7 @@ import {
     ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { PermissionDto } from '../internal';
+import { Permission } from '../internal';
 
 class DefaultRoleDto {
     @ApiProperty()
@@ -18,11 +18,11 @@ class DefaultRoleDto {
     @ApiProperty()
     @IsNotEmptyObject()
     @ValidateNested()
-    @Type(() => PermissionDto)
-    permission: PermissionDto;
+    @Type(() => Permission)
+    permission: Permission;
 }
 
-export class CreateRoomRequestDto {
+export class CreateRoomRequest {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()

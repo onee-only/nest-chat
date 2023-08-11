@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsOptional, IsString, IsUrl } from 'class-validator';
 
-export class UpdateRoomRequestDto {
+export class UpdateRoomRequest {
     @ApiProperty()
     @IsOptional()
     @IsString()

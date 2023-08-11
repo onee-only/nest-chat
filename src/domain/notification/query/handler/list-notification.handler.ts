@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ListNotificationQuery } from '../list-notification.query';
-import { ListNotificationResponseDto } from '../../presentation/dto/response';
+import { ListNotificationResponse } from '../../presentation/dto/response';
 import { NotificationRepository } from '../../repository';
 
 @QueryHandler(ListNotificationQuery)
@@ -13,7 +13,7 @@ export class ListNotificationHandler
 
     async execute(
         query: ListNotificationQuery,
-    ): Promise<ListNotificationResponseDto> {
+    ): Promise<ListNotificationResponse> {
         const { user } = query;
 
         const notifications = await this.notificationRepository.find({
@@ -28,6 +28,6 @@ export class ListNotificationHandler
             take: 20,
         });
 
-        return ListNotificationResponseDto.from(notifications);
+        return ListNotificationResponse.from(notifications);
     }
 }

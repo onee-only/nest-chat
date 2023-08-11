@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ListMessageQuery } from '../list-message.query';
-import { ListMessageResponseDto } from '../../presentation/dto/response';
+import { ListMessageResponse } from '../../presentation/dto/response';
 import { RoomRepository } from 'src/domain/room/repository';
 import { ThreadRepository } from 'src/domain/thread/repository';
 import { MessageRepository } from '../../repository';
@@ -19,7 +19,7 @@ export class ListMessageHandler implements IQueryHandler<ListMessageQuery> {
         private readonly messageRepository: MessageRepository,
     ) {}
 
-    async execute(query: ListMessageQuery): Promise<ListMessageResponseDto> {
+    async execute(query: ListMessageQuery): Promise<ListMessageResponse> {
         const {
             user,
             options: { endDate, limit, roomID, threadID },
@@ -57,6 +57,6 @@ export class ListMessageHandler implements IQueryHandler<ListMessageQuery> {
             take: limit,
         });
 
-        return ListMessageResponseDto.from(messages);
+        return ListMessageResponse.from(messages);
     }
 }

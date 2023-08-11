@@ -1,2 +1,2 @@
-export { PermissionDto } from './role/permission.dto';
-export { RoomListElementDto } from './room/list-room.dto';
+export { Permission } from './role/permission.dto';
+export { RoomListElement } from './room/list-room.dto';

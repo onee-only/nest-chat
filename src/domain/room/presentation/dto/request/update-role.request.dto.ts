@@ -6,9 +6,9 @@ import {
     IsString,
     ValidateNested,
 } from 'class-validator';
-import { PermissionDto } from '../internal';
+import { Permission } from '../internal';
 
-export class UpdateRoleRequestDto {
+export class UpdateRoleRequest {
     @ApiProperty()
     @IsOptional()
     @IsString()
@@ -18,6 +18,6 @@ export class UpdateRoleRequestDto {
     @IsOptional()
     @IsNotEmptyObject()
     @ValidateNested()
-    @Type(() => PermissionDto)
-    permission?: PermissionDto;
+    @Type(() => Permission)
+    permission?: Permission;
 }

@@ -3,7 +3,7 @@ import { RetreiveRoomQuery } from '../retreive-room.query';
 import { RoomRepository } from '../../repository';
 import { PermissionChecker } from '../../util';
 import { RoomNotFoundException } from '../../exception';
-import { RetreiveRoomResponseDto } from '../../presentation/dto/response';
+import { RetreiveRoomResponse } from '../../presentation/dto/response';
 
 @QueryHandler(RetreiveRoomQuery)
 export class RetreiveRoomHandler implements IQueryHandler<RetreiveRoomQuery> {
@@ -12,7 +12,7 @@ export class RetreiveRoomHandler implements IQueryHandler<RetreiveRoomQuery> {
         private readonly permissionChecker: PermissionChecker,
     ) {}
 
-    async execute(query: RetreiveRoomQuery): Promise<RetreiveRoomResponseDto> {
+    async execute(query: RetreiveRoomQuery): Promise<RetreiveRoomResponse> {
         const { roomID, user } = query;
 
         const room = await this.roomRepository
@@ -29,6 +29,6 @@ export class RetreiveRoomHandler implements IQueryHandler<RetreiveRoomQuery> {
             user,
         });
 
-        return RetreiveRoomResponseDto.from(room);
+        return RetreiveRoomResponse.from(room);
     }
 }

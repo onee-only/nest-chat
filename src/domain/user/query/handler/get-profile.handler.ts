@@ -1,11 +1,11 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetProfileQuery } from '../get-profile.query';
-import { GetMyProfileResponseDto } from '../../presentation/dto/response';
+import { GetMyProfileResponse } from '../../presentation/dto/response';
 
 @QueryHandler(GetProfileQuery)
 export class GetProfileHandler implements IQueryHandler<GetProfileQuery> {
-    async execute(query: GetProfileQuery): Promise<GetMyProfileResponseDto> {
+    async execute(query: GetProfileQuery): Promise<GetMyProfileResponse> {
         const { user } = query;
-        return GetMyProfileResponseDto.from(user);
+        return GetMyProfileResponse.from(user);
     }
 }

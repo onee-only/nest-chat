@@ -1,4 +1,4 @@
-export type ListThreadElementDto = {
+export type ListThreadElement = {
     readonly id: number;
     readonly title: string;
     readonly createdAt: Date;

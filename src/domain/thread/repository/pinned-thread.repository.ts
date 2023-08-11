@@ -1,10 +1,10 @@
 import { DataSource, Repository } from 'typeorm';
 import { PinnedThread, Thread } from '../entity';
-import { ListThreadElementDto } from '../presentation/dto/internal';
+import { ListThreadElement } from '../presentation/dto/internal';
 import { Message } from 'src/domain/message/entity';
 
 type ListResult = {
-    list: ListThreadElementDto[];
+    list: ListThreadElement[];
     count: number;
 };
 
@@ -34,7 +34,7 @@ export class PinnedThreadRepository extends Repository<PinnedThread> {
                     .where('message.threadId = thread.id'),
             )
             .innerJoinAndSelect('thread.creator', 'creator')
-            .getRawMany<ListThreadElementDto>();
+            .getRawMany<ListThreadElement>();
 
         return {
             count,

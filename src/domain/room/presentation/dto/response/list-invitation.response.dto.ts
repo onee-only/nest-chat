@@ -7,7 +7,7 @@ export type ListInvitationElement = {
     };
 };
 
-export class ListInvitationResponseDto {
+export class ListInvitationResponse {
     constructor(
         public readonly invitations: ListInvitationElement[],
         public readonly totalCount: number,
@@ -15,7 +15,7 @@ export class ListInvitationResponseDto {
 
     public static from(
         invitations: ListInvitationElement[],
-    ): ListInvitationResponseDto {
-        return new ListInvitationResponseDto(invitations, invitations.length);
+    ): ListInvitationResponse {
+        return new ListInvitationResponse(invitations, invitations.length);
     }
 }

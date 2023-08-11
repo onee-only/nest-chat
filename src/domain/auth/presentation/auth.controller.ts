@@ -15,8 +15,8 @@ import {
     ApiTags,
     OmitType,
 } from '@nestjs/swagger';
-import { LoginRequestDto, SignupRequestDto } from './dto/request';
-import { AccessTokenResponseDto, SignupResponseDto } from './dto/response';
+import { LoginRequest, SignupRequest } from './dto/request';
+import { AccessTokenResponse, SignupResponse } from './dto/response';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { LogoutCommand, SignupCommand } from '../command';
 import { LoginQuery, RefreshQuery } from '../query';
@@ -37,11 +37,9 @@ export class AuthController {
         summary: 'SignUp',
         description: 'Creates user and sends verification email',
     })
-    @ApiCreatedResponse({ type: SignupRequestDto })
+    @ApiCreatedResponse({ type: SignupRequest })
     @Post('signup')
-    async signup(
-        @Body() request: SignupRequestDto,
-    ): Promise<SignupResponseDto> {
+    async signup(@Body() request: SignupRequest): Promise<SignupResponse> {
         return await this.commandBus.execute(
             new SignupCommand(
                 request.email,
@@ -56,13 +54,11 @@ export class AuthController {
         description:
             'returns access token and expiration of matching user and sets refresh token to http only cookie',
     })
-    @ApiOkResponse({ type: OmitType(AccessTokenResponseDto, ['cookies']) })
+    @ApiOkResponse({ type: OmitType(AccessTokenResponse, ['cookies']) })
     @Post('login')
     @HttpCode(HttpStatus.OK)
     @UseInterceptors(SetCookieInterceptor)
-    async login(
-        @Body() request: LoginRequestDto,
-    ): Promise<AccessTokenResponseDto> {
+    async login(@Body() request: LoginRequest): Promise<AccessTokenResponse> {
         return await this.queryBus.execute(
             new LoginQuery(request.email, request.password),
         );
@@ -72,12 +68,12 @@ export class AuthController {
         summary: 'refresh',
         description: 'refreshes access token if refresh token is valid',
     })
-    @ApiOkResponse({ type: OmitType(AccessTokenResponseDto, ['cookies']) })
+    @ApiOkResponse({ type: OmitType(AccessTokenResponse, ['cookies']) })
     @Post('refresh')
     @HttpCode(HttpStatus.OK)
     @UseGuards(RefreshAuthGuard)
     @UseInterceptors(SetCookieInterceptor)
-    async refresh(@GetUser() user: User): Promise<AccessTokenResponseDto> {
+    async refresh(@GetUser() user: User): Promise<AccessTokenResponse> {
         return await this.queryBus.execute(new RefreshQuery(user));
     }
 

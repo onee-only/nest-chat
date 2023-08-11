@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ListRoleQuery } from '../list-role.query';
-import { ListRoleResponseDto } from '../../presentation/dto/response';
+import { ListRoleResponse } from '../../presentation/dto/response';
 import { RoomNotFoundException } from '../../exception';
 import { MemberRoleRepository, RoomRepository } from '../../repository';
 import { PermissionChecker } from '../../util';
@@ -13,7 +13,7 @@ export class ListRoleHandler implements IQueryHandler<ListRoleQuery> {
         private readonly permissionChecker: PermissionChecker,
     ) {}
 
-    async execute(query: ListRoleQuery): Promise<ListRoleResponseDto> {
+    async execute(query: ListRoleQuery): Promise<ListRoleResponse> {
         const { roomID, user } = query;
 
         const room = await this.roomRepository
@@ -31,6 +31,6 @@ export class ListRoleHandler implements IQueryHandler<ListRoleQuery> {
             room,
         );
 
-        return ListRoleResponseDto.from(roles);
+        return ListRoleResponse.from(roles);
     }
 }

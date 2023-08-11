@@ -13,7 +13,7 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/global/guards';
-import { ListMemberResponseDto } from './dto/response';
+import { ListMemberResponse } from './dto/response';
 import { GetUser } from 'src/global/decorators';
 import { User } from 'src/domain/user/entity';
 import { ListMemberQuery } from '../query';
@@ -31,13 +31,13 @@ export class RoomMemberController {
         summary: 'list members',
         description: 'Gives a list of room members',
     })
-    @ApiOkResponse({ type: ListMemberResponseDto })
+    @ApiOkResponse({ type: ListMemberResponse })
     @Get()
     @UseGuards(JwtAuthGuard)
     async listMember(
         @Param('roomID', ParseIntPipe) roomID: number,
         @GetUser() user: User,
-    ): Promise<ListMemberResponseDto> {
+    ): Promise<ListMemberResponse> {
         return await this.queryBus.execute(new ListMemberQuery(user, roomID));
     }
 

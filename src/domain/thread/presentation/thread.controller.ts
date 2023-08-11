@@ -26,9 +26,9 @@ import {
     RetreiveSessionQuery,
 } from '../query';
 import {
-    CreateThreadResponseDto,
+    CreateThreadResponse,
     ListThreadReponseDto,
-    RetreiveSessionResponseDto,
+    RetreiveSessionResponse,
 } from './dto/response';
 import {
     CreateThreadCommand,
@@ -36,7 +36,7 @@ import {
     TogglePinCommand,
     UpdateThreadCommand,
 } from '../command';
-import { CreateThreadRequestDto, UpdateThreadRequestDto } from './dto/request';
+import { CreateThreadRequest, UpdateThreadRequest } from './dto/request';
 import { JwtAuthGuard } from 'src/global/guards';
 
 @ApiTags('threads')
@@ -56,8 +56,8 @@ export class ThreadController {
     async createThread(
         @Param('roomID', ParseIntPipe) roomID: number,
         @GetUser() user: User,
-        @Body() request: CreateThreadRequestDto,
-    ): Promise<CreateThreadResponseDto> {
+        @Body() request: CreateThreadRequest,
+    ): Promise<CreateThreadResponse> {
         const { title } = request;
         return await this.commandBus.execute(
             new CreateThreadCommand(user, roomID, title),
@@ -139,7 +139,7 @@ export class ThreadController {
     async updateThread(
         @Param('roomID', ParseIntPipe) roomID: number,
         @Param('threadID', ParseIntPipe) threadID: number,
-        @Body() request: UpdateThreadRequestDto,
+        @Body() request: UpdateThreadRequest,
         @GetUser() user: User,
     ): Promise<void> {
         return await this.commandBus.execute(
@@ -151,14 +151,14 @@ export class ThreadController {
         summary: 'get session info',
         description: 'Updates a thread',
     })
-    @ApiOkResponse({ type: RetreiveSessionResponseDto })
+    @ApiOkResponse({ type: RetreiveSessionResponse })
     @Get(':threadID/session')
     @UseGuards(JwtAuthGuard)
     async retreiveSession(
         @Param('roomID', ParseIntPipe) roomID: number,
         @Param('threadID', ParseIntPipe) threadID: number,
         @GetUser() user: User,
-    ): Promise<RetreiveSessionResponseDto> {
+    ): Promise<RetreiveSessionResponse> {
         return await this.queryBus.execute(
             new RetreiveSessionQuery(roomID, threadID, user),
         );
@@ -174,7 +174,7 @@ export class ThreadController {
     async togglepinThread(
         @Param('roomID', ParseIntPipe) roomID: number,
         @Param('threadID', ParseIntPipe) threadID: number,
-        @Body() request: UpdateThreadRequestDto,
+        @Body() request: UpdateThreadRequest,
         @GetUser() user: User,
     ): Promise<void> {
         return await this.commandBus.execute(

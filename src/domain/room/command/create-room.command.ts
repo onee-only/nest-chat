@@ -1,6 +1,6 @@
 import { ICommand } from '@nestjs/cqrs';
 import { User } from 'src/domain/user/entity';
-import { PermissionDto } from '../presentation/dto/internal';
+import { Permission } from '../presentation/dto/internal';
 
 type RoomInput = {
     readonly profileURL: string;
@@ -12,7 +12,7 @@ type RoomInput = {
 
 type RoleInput = {
     readonly roleName: string;
-    readonly rolePermission: PermissionDto;
+    readonly rolePermission: Permission;
 };
 
 export class CreateRoomCommand implements ICommand {

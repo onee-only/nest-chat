@@ -1,4 +1,4 @@
 export {
     ListNotificaitonElement,
-    ListNotificationResponseDto,
+    ListNotificationResponse,
 } from './list-notification.response.dto';

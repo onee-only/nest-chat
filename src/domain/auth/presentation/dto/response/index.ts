@@ -1,2 +1,2 @@
-export { SignupResponseDto } from './signup.response.dto';
-export { AccessTokenResponseDto } from './access-token.response.dto';
+export { SignupResponse } from './signup.response.dto';
+export { AccessTokenResponse } from './access-token.response.dto';

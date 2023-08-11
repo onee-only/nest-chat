@@ -5,8 +5,8 @@ import { GetUser } from 'src/global/decorators';
 import { User } from '../entity';
 import { JwtAuthGuard } from 'src/global/guards';
 import { GetMiniProfileQuery, GetProfileQuery } from '../query';
-import { GetMeResponseDto, GetMyProfileResponseDto } from './dto/response';
-import { UpdateProfileRequestDto } from './dto/request';
+import { GetMeResponse, GetMyProfileResponse } from './dto/response';
+import { UpdateProfileRequest } from './dto/request';
 import { UpdateProfileCommand } from '../command';
 
 @ApiTags('users/me')
@@ -22,9 +22,9 @@ export class MeController {
         summary: 'get me',
         description: 'Provides minified information of the current user',
     })
-    @ApiOkResponse({ type: GetMeResponseDto })
+    @ApiOkResponse({ type: GetMeResponse })
     @Get('mini')
-    async getMe(@GetUser() user: User): Promise<GetMeResponseDto> {
+    async getMe(@GetUser() user: User): Promise<GetMeResponse> {
         return await this.queryBus.execute(new GetMiniProfileQuery(user));
     }
 
@@ -32,11 +32,9 @@ export class MeController {
         summary: 'get my profile',
         description: 'Provides profile information of the current user',
     })
-    @ApiOkResponse({ type: GetMyProfileResponseDto })
+    @ApiOkResponse({ type: GetMyProfileResponse })
     @Get('')
-    async getMyProfile(
-        @GetUser() user: User,
-    ): Promise<GetMyProfileResponseDto> {
+    async getMyProfile(@GetUser() user: User): Promise<GetMyProfileResponse> {
         return await this.queryBus.execute(new GetProfileQuery(user));
     }
 
@@ -44,12 +42,12 @@ export class MeController {
         summary: 'update current user',
         description: 'Updates profile information of the current user',
     })
-    @ApiOkResponse({ type: GetMyProfileResponseDto })
+    @ApiOkResponse({ type: GetMyProfileResponse })
     @Patch('')
     async updateProfile(
         @GetUser() user: User,
-        @Body() request: UpdateProfileRequestDto,
-    ): Promise<GetMyProfileResponseDto> {
+        @Body() request: UpdateProfileRequest,
+    ): Promise<GetMyProfileResponse> {
         return await this.commandBus.execute(
             new UpdateProfileCommand(user, { ...request }),
         );

@@ -3,10 +3,10 @@ import { DataSource, Repository } from 'typeorm';
 import { Room, RoomMember } from '../entity';
 import { User } from 'src/domain/user/entity';
 import { ListOptions } from '../query';
-import { RoomListElementDto } from '../presentation/dto/internal';
+import { RoomListElement } from '../presentation/dto/internal';
 
 type ListResult = {
-    list: RoomListElementDto[];
+    list: RoomListElement[];
     count: number;
 };
 
@@ -86,7 +86,7 @@ export class RoomRepository extends Repository<Room> {
             .orderBy(order, orderDir)
             .offset(size * (page - 1))
             .limit(size)
-            .getRawMany<RoomListElementDto>();
+            .getRawMany<RoomListElement>();
 
         return {
             list,

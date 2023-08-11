@@ -1,12 +1,12 @@
 import { CookieDto } from 'src/global/interceptors/cookie';
 
-type AccessTokenResponseDtoParams = {
+type AccessTokenResponseParams = {
     accessToken: string;
     exp: number;
     cookies: Map<string, string>;
 };
 
-export class AccessTokenResponseDto extends CookieDto {
+export class AccessTokenResponse extends CookieDto {
     constructor(
         public readonly accessToken: string,
         public readonly exp: number,
@@ -15,10 +15,8 @@ export class AccessTokenResponseDto extends CookieDto {
         super(cookies);
     }
 
-    public static from(
-        params: AccessTokenResponseDtoParams,
-    ): AccessTokenResponseDto {
-        return new AccessTokenResponseDto(
+    public static from(params: AccessTokenResponseParams): AccessTokenResponse {
+        return new AccessTokenResponse(
             params.accessToken,
             params.exp,
             params.cookies,

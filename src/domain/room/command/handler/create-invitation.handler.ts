@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateInvitationCommand } from '../create-invitation.command';
-import { CreateInvitationResponseDto } from '../../presentation/dto/response';
+import { CreateInvitationResponse } from '../../presentation/dto/response';
 import {
     InvitationRepository,
     MemberRoleRepository,
@@ -26,7 +26,7 @@ export class CreateInvitationHandler
 
     async execute(
         command: CreateInvitationCommand,
-    ): Promise<CreateInvitationResponseDto> {
+    ): Promise<CreateInvitationResponse> {
         const { duration, roleID, roomID, user } = command;
 
         const room = await this.roomRepository
@@ -56,6 +56,6 @@ export class CreateInvitationHandler
         });
         const invitation = await this.invitationRepository.save(candiate);
 
-        return CreateInvitationResponseDto.from(invitation);
+        return CreateInvitationResponse.from(invitation);
     }
 }

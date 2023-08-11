@@ -19,10 +19,10 @@ import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
 import { CreateInvitationCommand, DeleteInvitationCommand } from '../command';
-import { CreateInvitationRequestDto } from './dto/request';
+import { CreateInvitationRequest } from './dto/request';
 import {
-    CreateInvitationResponseDto,
-    ListInvitationResponseDto,
+    CreateInvitationResponse,
+    ListInvitationResponse,
 } from './dto/response';
 import { ListInvitationQuery } from '../query';
 
@@ -38,14 +38,14 @@ export class InvitationController {
         summary: 'create invitation',
         description: 'Creates an invitation',
     })
-    @ApiCreatedResponse({ type: CreateInvitationResponseDto })
+    @ApiCreatedResponse({ type: CreateInvitationResponse })
     @Post()
     @UseGuards(JwtAuthGuard)
     async createInvitation(
         @GetUser() user: User,
         @Param('roomID', ParseIntPipe) roomID: number,
-        @Body() request: CreateInvitationRequestDto,
-    ): Promise<CreateInvitationResponseDto> {
+        @Body() request: CreateInvitationRequest,
+    ): Promise<CreateInvitationResponse> {
         const { duration, roleID } = request;
         return await this.commandBus.execute(
             new CreateInvitationCommand(roomID, roleID, duration, user),
@@ -56,13 +56,13 @@ export class InvitationController {
         summary: 'list invitation',
         description: 'Gives a list of invitations',
     })
-    @ApiOkResponse({ type: ListInvitationResponseDto })
+    @ApiOkResponse({ type: ListInvitationResponse })
     @Get()
     @UseGuards(JwtAuthGuard)
     async listInvitation(
         @GetUser() user: User,
         @Param('roomID', ParseIntPipe) roomID: number,
-    ): Promise<ListInvitationResponseDto> {
+    ): Promise<ListInvitationResponse> {
         return await this.queryBus.execute(
             new ListInvitationQuery(roomID, user),
         );

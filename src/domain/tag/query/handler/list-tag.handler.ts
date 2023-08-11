@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ListTagQuery } from '../list-tag.query';
-import { ListTagResponseDto } from '../../presentation/dto/response';
+import { ListTagResponse } from '../../presentation/dto/response';
 import { TagRepository } from '../../repository/tag.repository';
 import { Like } from 'typeorm';
 
@@ -8,7 +8,7 @@ import { Like } from 'typeorm';
 export class ListTagHandler implements IQueryHandler<ListTagQuery> {
     constructor(private readonly tagRepository: TagRepository) {}
 
-    async execute(query: ListTagQuery): Promise<ListTagResponseDto> {
+    async execute(query: ListTagQuery): Promise<ListTagResponse> {
         const { keyword, limit } = query;
 
         const tags = await this.tagRepository.find({
@@ -16,6 +16,6 @@ export class ListTagHandler implements IQueryHandler<ListTagQuery> {
             take: limit,
         });
 
-        return ListTagResponseDto.from(tags);
+        return ListTagResponse.from(tags);
     }
 }

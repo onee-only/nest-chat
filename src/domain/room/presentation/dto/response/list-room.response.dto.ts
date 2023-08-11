@@ -1,4 +1,4 @@
-import { RoomListElementDto } from '../internal';
+import { RoomListElement } from '../internal';
 
 type ListInfo = {
     readonly pageNum: number;
@@ -7,16 +7,16 @@ type ListInfo = {
     readonly totalRooms: number;
 };
 
-export class ListRoomResponseDto {
+export class ListRoomResponse {
     constructor(
-        public readonly rooms: RoomListElementDto[],
+        public readonly rooms: RoomListElement[],
         public readonly pageInfo: ListInfo,
     ) {}
 
     public static from(
-        rooms: RoomListElementDto[],
+        rooms: RoomListElement[],
         pageInfo: ListInfo,
-    ): ListRoomResponseDto {
-        return new ListRoomResponseDto(rooms, pageInfo);
+    ): ListRoomResponse {
+        return new ListRoomResponse(rooms, pageInfo);
     }
 }

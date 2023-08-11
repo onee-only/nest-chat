@@ -15,7 +15,7 @@ import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
 import { ListNotificationQuery, SubscribeNotificationQuery } from '../query';
-import { ListNotificationResponseDto } from './dto/response';
+import { ListNotificationResponse } from './dto/response';
 import {
     ClearNotificationsCommand,
     DeleteNotificationCommand,
@@ -36,11 +36,11 @@ export class NotificationController {
         summary: 'list notifications',
         description: 'Gives a list of notifications of requested user',
     })
-    @ApiOkResponse({ type: ListNotificationResponseDto })
+    @ApiOkResponse({ type: ListNotificationResponse })
     @Get('')
     async listNotification(
         @GetUser() user: User,
-    ): Promise<ListNotificationResponseDto> {
+    ): Promise<ListNotificationResponse> {
         return await this.queryBus.execute(new ListNotificationQuery(user));
     }
 

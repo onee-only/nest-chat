@@ -1,4 +1,4 @@
-import { ListThreadElementDto } from '../internal';
+import { ListThreadElement } from '../internal';
 
 type ListInfo = {
     readonly pageNum: number;
@@ -9,12 +9,12 @@ type ListInfo = {
 
 export class ListThreadReponseDto {
     constructor(
-        public readonly threads: ListThreadElementDto[],
+        public readonly threads: ListThreadElement[],
         public readonly pageInfo: ListInfo,
     ) {}
 
     public static from(
-        threads: ListThreadElementDto[],
+        threads: ListThreadElement[],
         pageInfo: ListInfo,
     ): ListThreadReponseDto {
         return new ListThreadReponseDto(threads, pageInfo);

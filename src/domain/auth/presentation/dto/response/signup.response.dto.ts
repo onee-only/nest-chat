@@ -1,9 +1,9 @@
 import { User } from 'src/domain/user/entity';
 
-export class SignupResponseDto {
+export class SignupResponse {
     constructor(public readonly userID: number) {}
 
-    public static from(user: User): SignupResponseDto {
-        return new SignupResponseDto(user.id);
+    public static from(user: User): SignupResponse {
+        return new SignupResponse(user.id);
     }
 }

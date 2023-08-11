@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateRoomCommand } from '../create-room.command';
-import { CreateRoomResponseDto } from '../../presentation/dto/response';
+import { CreateRoomResponse } from '../../presentation/dto/response';
 import {
     MemberRoleRepository,
     RoomMemberRepository,
@@ -15,7 +15,7 @@ export class CreateRoomHandler implements ICommandHandler<CreateRoomCommand> {
         private readonly memberRoleRepository: MemberRoleRepository,
     ) {}
 
-    async execute(command: CreateRoomCommand): Promise<CreateRoomResponseDto> {
+    async execute(command: CreateRoomCommand): Promise<CreateRoomResponse> {
         const {
             roleInput: { roleName, rolePermission },
             roomInput,
@@ -42,6 +42,6 @@ export class CreateRoomHandler implements ICommandHandler<CreateRoomCommand> {
 
         await this.roomRepository.save(room);
 
-        return CreateRoomResponseDto.from(room);
+        return CreateRoomResponse.from(room);
     }
 }

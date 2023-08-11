@@ -12,13 +12,13 @@ type DtoProfile = {
     readonly bio: string;
 };
 
-export class GetMyProfileResponseDto {
+export class GetMyProfileResponse {
     constructor(
         public readonly user: DtoUser,
         public readonly profile: DtoProfile,
     ) {}
 
-    public static from(user: User): GetMyProfileResponseDto {
-        return new GetMyProfileResponseDto({ ...user }, { ...user.avatar });
+    public static from(user: User): GetMyProfileResponse {
+        return new GetMyProfileResponse({ ...user }, { ...user.avatar });
     }
 }

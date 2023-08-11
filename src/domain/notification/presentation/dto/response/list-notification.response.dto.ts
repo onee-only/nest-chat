@@ -1,7 +1,7 @@
 import { Notification } from 'src/domain/notification/entity';
 import { NotificationDto } from '../internal';
 
-export class ListNotificationResponseDto {
+export class ListNotificationResponse {
     constructor(
         public readonly notifications: NotificationDto[],
         public readonly totalCount: number,
@@ -9,8 +9,8 @@ export class ListNotificationResponseDto {
 
     public static from(
         notifications: Notification[],
-    ): ListNotificationResponseDto {
-        return new ListNotificationResponseDto(
+    ): ListNotificationResponse {
+        return new ListNotificationResponse(
             notifications.map(
                 (notification): NotificationDto => ({
                     ...notification,

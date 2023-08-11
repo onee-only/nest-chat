@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { LoginQuery } from '../login.query';
 import { UserRepository } from 'src/domain/user/repository';
-import { AccessTokenResponseDto } from '../../presentation/dto/response';
+import { AccessTokenResponse } from '../../presentation/dto/response';
 import { JwtProvider } from '../../util';
 import { InvalidCredentialsException } from '../../exception';
 import { TokenPayload } from 'src/global/modules/strategy/jwt/payloads';
@@ -12,7 +12,7 @@ export class LoginHandler implements IQueryHandler<LoginQuery> {
         private readonly jwtProvider: JwtProvider,
         private readonly userRepository: UserRepository,
     ) {}
-    async execute(query: LoginQuery): Promise<AccessTokenResponseDto> {
+    async execute(query: LoginQuery): Promise<AccessTokenResponse> {
         const { email, password } = query;
 
         const userID = await this.userRepository.findIdByEmailAndPassword(
@@ -32,7 +32,7 @@ export class LoginHandler implements IQueryHandler<LoginQuery> {
         const exp = this.jwtProvider.getAccessExpiration();
         const cookies = new Map().set('refreshToken', refreshToken);
 
-        return AccessTokenResponseDto.from({
+        return AccessTokenResponse.from({
             accessToken,
             exp,
             cookies,

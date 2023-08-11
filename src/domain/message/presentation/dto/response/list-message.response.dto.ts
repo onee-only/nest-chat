@@ -14,14 +14,14 @@ type ListMessageElement = {
     readonly embedments: EmbedmentInfo[];
 };
 
-export class ListMessageResponseDto {
+export class ListMessageResponse {
     constructor(
         public readonly messages: ListMessageElement[],
         public readonly messageCount: number,
     ) {}
 
-    public static from(messages: Message[]): ListMessageResponseDto {
-        return new ListMessageResponseDto(
+    public static from(messages: Message[]): ListMessageResponse {
+        return new ListMessageResponse(
             messages.map(
                 (message): ListMessageElement => ({
                     message: { ...message },
