@@ -20,8 +20,16 @@ import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { ThreadOrder, ThreadOrderDir } from '../enum';
 import { ParseDatePipe } from 'src/global/pipes';
-import { ListPinnedThreadQuery, ListThreadQuery } from '../query';
-import { CreateThreadResponseDto, ListThreadReponseDto } from './dto/response';
+import {
+    ListPinnedThreadQuery,
+    ListThreadQuery,
+    RetreiveSessionQuery,
+} from '../query';
+import {
+    CreateThreadResponseDto,
+    ListThreadReponseDto,
+    RetreiveSessionResponseDto,
+} from './dto/response';
 import {
     CreateThreadCommand,
     DeleteThreadCommand,
@@ -136,6 +144,23 @@ export class ThreadController {
     ): Promise<void> {
         return await this.commandBus.execute(
             new UpdateThreadCommand(roomID, threadID, user, { ...request }),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'get session info',
+        description: 'Updates a thread',
+    })
+    @ApiOkResponse({ type: RetreiveSessionResponseDto })
+    @Get(':threadID/session')
+    @UseGuards(JwtAuthGuard)
+    async retreiveSession(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('threadID', ParseIntPipe) threadID: number,
+        @GetUser() user: User,
+    ): Promise<RetreiveSessionResponseDto> {
+        return await this.queryBus.execute(
+            new RetreiveSessionQuery(roomID, threadID, user),
         );
     }
 
