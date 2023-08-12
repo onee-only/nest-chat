@@ -1,13 +1,20 @@
+import { OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { IJwtConfig, JwtConfig } from 'src/global/modules/strategy/jwt';
+import { IJwtConfig, JWT_CONFIG } from 'src/global/modules/strategy/jwt';
 import { TokenPayload } from 'src/global/modules/strategy/jwt/payloads';
 
-export class JwtProvider {
+export class JwtProvider implements OnModuleInit {
     constructor(
         private readonly configService: ConfigService,
         private readonly jwtService: JwtService,
     ) {}
+
+    private jwtConfig: IJwtConfig;
+
+    async onModuleInit() {
+        this.jwtConfig = this.configService.get<IJwtConfig>(JWT_CONFIG);
+    }
 
     async provideAccess(payload: TokenPayload): Promise<string> {
         const {
@@ -46,6 +53,6 @@ export class JwtProvider {
     }
 
     private getJwtConfig(): IJwtConfig {
-        return this.configService.get<IJwtConfig>(JwtConfig.KEY);
+        return this.jwtConfig;
     }
 }

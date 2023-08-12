@@ -5,8 +5,8 @@ import { PassportModule } from '@nestjs/passport';
 import { UserModule } from 'src/domain/user/user.module';
 import {
     IJwtConfig,
+    JWT_CONFIG,
     JwtAccessStrategy,
-    JwtConfig,
     JwtRefreshStrategy,
 } from './jwt';
 
@@ -20,11 +20,11 @@ import {
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: async (configService: ConfigService) => ({
-                secret: configService.get<IJwtConfig>(JwtConfig.KEY).access
-                    .secret,
+                secret: configService.get<IJwtConfig>(JWT_CONFIG).access.secret,
                 signOptions: {
-                    expiresIn: configService.get<IJwtConfig>(JwtConfig.KEY)
-                        .access.expiration,
+                    expiresIn:
+                        configService.get<IJwtConfig>(JWT_CONFIG).access
+                            .expiration,
                 },
             }),
         }),

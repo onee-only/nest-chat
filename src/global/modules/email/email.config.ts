@@ -8,6 +8,8 @@ export type IEmailConfig = {
     moduleOptions: MailerOptions;
 };
 
+export const EMAIL_CONFIG = 'email';
+
 export const EmailValidationScheme = () =>
     Joi.object({
         MAIL_EXPIRE_DURATION_MS: Joi.number().required(),
@@ -16,7 +18,7 @@ export const EmailValidationScheme = () =>
     });
 
 export const EmailConfig = registerAs(
-    'email',
+    EMAIL_CONFIG,
     (): IEmailConfig => ({
         duration: parseInt(process.env.EMAIL_EXPIRE_DURATION_MS),
         moduleOptions: {

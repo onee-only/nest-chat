@@ -2,6 +2,8 @@ import { RedisModuleOptions } from '@nestjs-modules/ioredis';
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
 
+export const CACHE_CONFIG = 'cache';
+
 export const CacheValidationScheme = () =>
     Joi.object({
         REDIS_HOST: Joi.string().required(),
@@ -9,7 +11,7 @@ export const CacheValidationScheme = () =>
     });
 
 export const CacheConfig = registerAs(
-    'cache',
+    CACHE_CONFIG,
     (): RedisModuleOptions => ({
         config: {
             host: process.env.REDIS_HOST,

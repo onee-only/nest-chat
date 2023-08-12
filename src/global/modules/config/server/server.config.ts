@@ -8,6 +8,8 @@ export type IServerConfig = {
     };
 };
 
+export const SERVER_CONFIG = 'server';
+
 export const ServerValidationScheme = () =>
     Joi.object({
         FRONTEND_DOMAIN: Joi.string().hostname().required(),
@@ -15,7 +17,7 @@ export const ServerValidationScheme = () =>
     });
 
 export const ServerConfig = registerAs(
-    'server',
+    SERVER_CONFIG,
     (): IServerConfig => ({
         frontend: {
             domain: process.env.FRONTEND_DOMAIN,

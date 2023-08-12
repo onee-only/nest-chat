@@ -11,6 +11,8 @@ export type IAwsConfig = {
     };
 };
 
+export const AWS_CONFIG = 'aws';
+
 export const AwsValidationScheme = () =>
     Joi.object({
         AWS_ACCESS_KEY_ID: Joi.string().required(),
@@ -20,7 +22,7 @@ export const AwsValidationScheme = () =>
     });
 
 export const AwsConfig = registerAs(
-    'server',
+    AWS_CONFIG,
     (): IAwsConfig => ({
         accessKey: process.env.AWS_ACCESS_KEY_ID,
         secretKey: process.env.AWS_SECRET_ACCESS_KEY,

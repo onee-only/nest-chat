@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CacheConfig } from './cache.config';
+import { CACHE_CONFIG } from './cache.config';
 import { CacheService } from './cache.service';
 import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
 
@@ -10,7 +10,7 @@ import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (config: ConfigService) =>
-                config.get<RedisModuleOptions>(CacheConfig.KEY),
+                config.get<RedisModuleOptions>(CACHE_CONFIG),
         }),
     ],
     providers: [CacheService],

@@ -4,22 +4,35 @@ import { SendEmailCommand } from '../send-email.command';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from '@nestjs-modules/mailer';
-import { IServerConfig, ServerConfig } from 'src/global/modules/config/server';
-import { EmailConfig, IEmailConfig } from 'src/global/modules/email';
+import { IServerConfig } from 'src/global/modules/config/server';
+import { EMAIL_CONFIG, IEmailConfig } from 'src/global/modules/email';
+import { OnModuleInit } from '@nestjs/common';
+import { SERVER_CONFIG } from 'src/global/modules/config/server/server.config';
 
 @CommandHandler(SendEmailCommand)
-export class SendEmailHandler implements ICommandHandler<SendEmailCommand> {
+export class SendEmailHandler
+    implements ICommandHandler<SendEmailCommand>, OnModuleInit
+{
     constructor(
         private readonly emailConfirmationRepository: EmailConfirmationRepository,
         private readonly configService: ConfigService,
         private readonly mailService: MailerService,
     ) {}
 
+    private emailConfig: IEmailConfig;
+    private serverConfig: IServerConfig;
+
+    async onModuleInit() {
+        this.serverConfig =
+            this.configService.get<IServerConfig>(SERVER_CONFIG);
+        this.emailConfig = this.configService.get<IEmailConfig>(EMAIL_CONFIG);
+    }
+
     async execute(command: SendEmailCommand): Promise<void> {
         const { user } = command;
 
-        const { duration } = this.getEmailConfig();
-        const { domain, emailVerifyPath } = this.getFrontendConfig();
+        const { duration } = this.emailConfig;
+        const { domain, emailVerifyPath } = this.serverConfig.frontend;
 
         const expiresAt = new Date(Date.now() + duration);
         const token = await bcrypt.hash(user.email, 3);
@@ -44,16 +57,5 @@ export class SendEmailHandler implements ICommandHandler<SendEmailCommand> {
                 path: emailVerifyPath,
             },
         });
-    }
-
-    private getFrontendConfig() {
-        const { frontend } = this.configService.get<IServerConfig>(
-            ServerConfig.KEY,
-        );
-        return frontend;
-    }
-
-    private getEmailConfig() {
-        return this.configService.get<IEmailConfig>(EmailConfig.KEY);
     }
 }

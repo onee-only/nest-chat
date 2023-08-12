@@ -12,6 +12,8 @@ export type IJwtConfig = {
     };
 };
 
+export const JWT_CONFIG = 'jwt';
+
 export const JwtValidationScheme = () =>
     Joi.object({
         JWT_ACCESS_SECRET: Joi.string().required(),
@@ -21,7 +23,7 @@ export const JwtValidationScheme = () =>
     });
 
 export const JwtConfig = registerAs(
-    'jwt',
+    JWT_CONFIG,
     (): IJwtConfig => ({
         access: {
             secret: process.env.JWT_ACCESS_SECRET,

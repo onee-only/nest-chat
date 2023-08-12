@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AwsConfig, IAwsConfig } from '../../config/storage';
+import { AWS_CONFIG, IAwsConfig } from '../../config/storage';
 import { v4 as newuuid } from 'uuid';
 import * as aws from 'aws-sdk';
 
@@ -20,7 +20,7 @@ export class StorageManager {
             secretKey,
             region,
             s3: { bucketName },
-        } = configService.get<IAwsConfig>(AwsConfig.KEY);
+        } = configService.get<IAwsConfig>(AWS_CONFIG);
 
         aws.config.update({
             credentials: {

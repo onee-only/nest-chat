@@ -6,7 +6,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { TokenPayload } from './payloads/token.payload';
 import { UserRepository } from 'src/domain/user/repository/user.repository';
 import { User } from 'src/domain/user/entity';
-import { IJwtConfig, JwtConfig } from './jwt.config';
+import { IJwtConfig, JWT_CONFIG } from './jwt.config';
 
 function extractFromCookie(req: Request): string {
     return req.cookies['refreshToken'] as string;
@@ -20,8 +20,8 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     ) {
         super({
             jwtFromRequest: ExtractJwt.fromExtractors([extractFromCookie]),
-            secretOrKey: configService.get<IJwtConfig>(JwtConfig.KEY).refresh
-                .secret,
+            secretOrKey:
+                configService.get<IJwtConfig>(JWT_CONFIG).refresh.secret,
             ignoreExpiration: false,
         });
     }

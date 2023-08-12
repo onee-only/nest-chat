@@ -2,6 +2,8 @@ import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 
+export const DB_CONFIG = 'database';
+
 export const DatabaseValidationScheme = () =>
     Joi.object({
         DB: Joi.string().required(),
@@ -12,7 +14,7 @@ export const DatabaseValidationScheme = () =>
     });
 
 export const DatabaseConfig = registerAs(
-    'database',
+    DB_CONFIG,
     (): TypeOrmModuleOptions => ({
         type: 'mysql',
         host: process.env.DB_HOST,

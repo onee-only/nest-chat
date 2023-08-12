@@ -5,7 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { TokenPayload } from './payloads/token.payload';
 import { UserRepository } from 'src/domain/user/repository/user.repository';
 import { User } from 'src/domain/user/entity';
-import { IJwtConfig, JwtConfig } from './jwt.config';
+import { IJwtConfig, JWT_CONFIG } from './jwt.config';
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
@@ -15,8 +15,8 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
     ) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: configService.get<IJwtConfig>(JwtConfig.KEY).access
-                .secret,
+            secretOrKey:
+                configService.get<IJwtConfig>(JWT_CONFIG).access.secret,
             ignoreExpiration: false,
         });
     }
