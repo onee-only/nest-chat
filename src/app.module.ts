@@ -4,6 +4,7 @@ import {
     ConfigModule,
     DatabaseModule,
     MailerModule,
+    ObjectUtilModule,
     StorageModule,
 } from './global/modules';
 import { AuthModule } from './domain/auth/auth.module';
@@ -22,6 +23,9 @@ import { ScheduleModule } from '@nestjs/schedule';
         DatabaseModule,
         StorageModule,
         ScheduleModule.forRoot(),
+
+        // util
+        ObjectUtilModule,
 
         // app modules
         AuthModule,
