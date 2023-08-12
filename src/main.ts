@@ -7,11 +7,13 @@ import cookieParser from 'cookie-parser';
 import { LoggerConfig, SwaggerConfig } from './global/modules/config';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule, {
-        logger: WinstonModule.createLogger(LoggerConfig),
-    });
+    const app = await NestFactory.create(AppModule);
 
+    // versioning
     app.setGlobalPrefix('v1');
+
+    // logger
+    app.useLogger(WinstonModule.createLogger(LoggerConfig));
 
     // validation pipe
     app.useGlobalPipes(new ValidationPipe());
