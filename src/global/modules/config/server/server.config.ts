@@ -10,7 +10,7 @@ export type IServerConfig = {
 
 export const ServerValidationScheme = () =>
     Joi.object({
-        FRONTEND_DOMAIN: Joi.string().domain().required(),
+        FRONTEND_DOMAIN: Joi.string().hostname().required(),
         FRONTEND_EMAIL_VERIFY_PATH: Joi.string().required(),
     });
 
