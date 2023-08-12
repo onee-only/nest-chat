@@ -1,4 +1,4 @@
-import { LoggerService, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Logger, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import {
     SubscribeMessage,
     WebSocketGateway,
@@ -26,7 +26,7 @@ export class ChatGateway
         OnGatewayInit<Server>
 {
     constructor(
-        private readonly logger: LoggerService,
+        private readonly logger: Logger,
         private readonly chatBroker: ChatBroker,
     ) {}
 
