@@ -3,12 +3,14 @@ import { Thread } from '../entity';
 import { ListOptions } from '../query';
 import { ListThreadElement } from '../presentation/dto/internal';
 import { Message } from 'src/domain/message/entity';
+import { Injectable } from '@nestjs/common';
 
 type ListResult = {
     list: ListThreadElement[];
     count: number;
 };
 
+@Injectable()
 export class ThreadRepository extends Repository<Thread> {
     constructor(private readonly dataSource: DataSource) {
         super(Thread, dataSource.createEntityManager());

@@ -2,12 +2,14 @@ import { DataSource, Repository } from 'typeorm';
 import { PinnedThread, Thread } from '../entity';
 import { ListThreadElement } from '../presentation/dto/internal';
 import { Message } from 'src/domain/message/entity';
+import { Injectable } from '@nestjs/common';
 
 type ListResult = {
     list: ListThreadElement[];
     count: number;
 };
 
+@Injectable()
 export class PinnedThreadRepository extends Repository<PinnedThread> {
     constructor(private readonly dataSource: DataSource) {
         super(PinnedThread, dataSource.createEntityManager());
