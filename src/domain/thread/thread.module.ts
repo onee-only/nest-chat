@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Thread, PinnedThread } from './entity';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -30,6 +30,7 @@ import { ChatBroker, ChatInfoManager, ChatRepository } from './util/chat';
         // utils
         ChatBroker,
         ChatInfoManager,
+        Logger,
 
         // repositories
         ThreadRepository,
