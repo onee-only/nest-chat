@@ -14,5 +14,6 @@ import { ConfigModule } from '@nestjs/config';
         }),
     ],
     providers: [StorageManager],
+    exports: [StorageManager],
 })
 export class StorageModule {}
