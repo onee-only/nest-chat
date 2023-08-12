@@ -6,6 +6,7 @@ import {
     MailerModule,
     ObjectUtilModule,
     StorageModule,
+    StrategyModule,
 } from './global/modules';
 import { AuthModule } from './domain/auth/auth.module';
 import { UserModule } from './domain/user/user.module';
@@ -22,6 +23,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         MailerModule,
         DatabaseModule,
         StorageModule,
+        StrategyModule,
         ScheduleModule.forRoot(),
 
         // util

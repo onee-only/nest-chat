@@ -1,9 +1,10 @@
-import { OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { IJwtConfig, JWT_CONFIG } from 'src/global/modules/strategy/jwt';
 import { TokenPayload } from 'src/global/modules/strategy/jwt/payloads';
 
+@Injectable()
 export class JwtProvider implements OnModuleInit {
     constructor(
         private readonly configService: ConfigService,

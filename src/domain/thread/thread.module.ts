@@ -10,6 +10,7 @@ import { CommandHandlers } from './command/handler';
 import { TagModule } from '../tag/tag.module';
 import { ChatGateway } from './presentation/chat.gateway';
 import { ChatBroker, ChatInfoManager, ChatRepository } from './util/chat';
+import { UserModule } from '../user/user.module';
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import { ChatBroker, ChatInfoManager, ChatRepository } from './util/chat';
         TypeOrmModule.forFeature([Thread, PinnedThread]),
         TagModule,
         RoomModule,
+        UserModule,
     ],
     controllers: [ThreadController],
     providers: [
