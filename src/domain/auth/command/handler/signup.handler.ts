@@ -28,10 +28,18 @@ export class SignupHandler implements ICommandHandler<SignupCommand> {
         }
 
         const user = this.userRepository.create({ email });
-        user.avatar = this.avatarRepository.create({ user, nickname });
         user.password = await this.passwordManager.hash(password);
 
         await this.userRepository.save(user);
+
+        const avatar = this.avatarRepository.create({
+            user: user,
+            nickname: nickname,
+            userID: user.id,
+        });
+
+        await this.avatarRepository.save(avatar);
+        user.avatar = avatar;
 
         this.eventBus.publish(new UserCreatedEvent(user));
 

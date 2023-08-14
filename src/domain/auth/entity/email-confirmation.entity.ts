@@ -1,12 +1,12 @@
 import { User } from 'src/domain/user/entity';
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class EmailConfirmation {
     @OneToOne(() => User)
     user: User;
 
-    @Column()
+    @PrimaryColumn()
     token: string;
 
     @Column()

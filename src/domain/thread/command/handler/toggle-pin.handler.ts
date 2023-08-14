@@ -40,7 +40,10 @@ export class TogglePinHandler implements ICommandHandler<TogglePinCommand> {
             throw new NoOwnerPermissionException();
         }
 
-        const pinnedThread = this.pinnedThreadRepository.create({ thread });
+        const pinnedThread = this.pinnedThreadRepository.create({
+            thread,
+            threadID: thread.id,
+        });
         const exists = await this.pinnedThreadRepository.exist({
             where: pinnedThread,
         });

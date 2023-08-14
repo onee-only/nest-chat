@@ -1,8 +1,11 @@
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
 export class Avatar {
+    @PrimaryColumn({ type: 'bigint', unsigned: true })
+    userID: number;
+
     @Column({ unique: true })
     nickname: string;
 

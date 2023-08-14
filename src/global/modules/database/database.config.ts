@@ -22,7 +22,7 @@ export const DatabaseConfig = registerAs(
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB,
-        entities: [__dirname + '../../../**/*.entity.{js,ts}'],
+        entities: [__dirname + '/../../../**/*.entity.{js,ts}'],
         synchronize: true,
     }),
 );

@@ -9,21 +9,18 @@ export class RoomMember {
     id: number;
 
     @ManyToOne(() => User, {
-        cascade: true,
         nullable: false,
         onDelete: 'CASCADE',
     })
     user: User;
 
     @ManyToOne(() => Room, {
-        cascade: true,
         nullable: false,
         onDelete: 'CASCADE',
     })
     room: Room;
 
     @ManyToOne(() => MemberRole, {
-        cascade: true,
         nullable: false,
         onDelete: 'RESTRICT',
     })
