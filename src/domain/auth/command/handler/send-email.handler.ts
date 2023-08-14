@@ -2,12 +2,12 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { EmailConfirmationRepository } from '../../repository/email-confirmation.repository';
 import { SendEmailCommand } from '../send-email.command';
 import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
 import { MailerService } from '@nestjs-modules/mailer';
 import { IServerConfig } from 'src/global/modules/config/server';
 import { EMAIL_CONFIG, IEmailConfig } from 'src/global/modules/email';
 import { OnModuleInit } from '@nestjs/common';
 import { SERVER_CONFIG } from 'src/global/modules/config/server/server.config';
+import { v4 as generateUUID } from 'uuid';
 
 @CommandHandler(SendEmailCommand)
 export class SendEmailHandler
@@ -35,7 +35,7 @@ export class SendEmailHandler
         const { domain, emailVerifyPath } = this.serverConfig.frontend;
 
         const expiresAt = new Date(Date.now() + duration);
-        const token = await bcrypt.hash(user.email, 3);
+        const token = generateUUID();
 
         await this.emailConfirmationRepository.save(
             this.emailConfirmationRepository.create({
