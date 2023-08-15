@@ -18,7 +18,7 @@ import {
 import { LoginRequest, SignupRequest } from './dto/request';
 import { AccessTokenResponse, SignupResponse } from './dto/response';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { LogoutCommand, SignupCommand } from '../command';
+import { LogoutCommand, SignupCommand, VerifyEmailCommand } from '../command';
 import { LoginQuery, RefreshQuery } from '../query';
 import { RefreshAuthGuard } from 'src/global/guards';
 import { GetRefresh, GetUser } from 'src/global/decorators';
@@ -96,6 +96,6 @@ export class AuthController {
     @Post('verify-email')
     @HttpCode(HttpStatus.OK)
     async verifyEmail(@Query('token') token: string): Promise<void> {
-        return await this.commandBus.execute(new LogoutCommand(token));
+        return await this.commandBus.execute(new VerifyEmailCommand(token));
     }
 }
