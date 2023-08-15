@@ -3,7 +3,10 @@ import { LoginQuery } from '../login.query';
 import { UserRepository } from 'src/domain/user/repository';
 import { AccessTokenResponse } from '../../presentation/dto/response';
 import { JwtProvider } from '../../util';
-import { InvalidCredentialsException } from '../../exception';
+import {
+    InvalidCredentialsException,
+    UnVerifiedEamilException,
+} from '../../exception';
 import { TokenPayload } from 'src/global/modules/strategy/jwt/payloads';
 
 @QueryHandler(LoginQuery)
@@ -15,16 +18,20 @@ export class LoginHandler implements IQueryHandler<LoginQuery> {
     async execute(query: LoginQuery): Promise<AccessTokenResponse> {
         const { email, password } = query;
 
-        const userID = await this.userRepository.findIdByEmailAndPassword(
-            email,
-            password,
-        );
+        const user = await this.userRepository
+            .findOneByOrFail({
+                email,
+                password,
+            })
+            .catch(() => {
+                throw new InvalidCredentialsException();
+            });
 
-        if (userID == null) {
-            throw new InvalidCredentialsException();
+        if (!user.isVerified) {
+            throw new UnVerifiedEamilException();
         }
 
-        const payload: TokenPayload = { userID };
+        const payload: TokenPayload = { userID: user.id };
 
         const accessToken = await this.jwtProvider.provideAccess(payload);
         const refreshToken = await this.jwtProvider.provideRefresh(payload);

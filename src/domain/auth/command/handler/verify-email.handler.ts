@@ -14,14 +14,17 @@ export class VerifyEmailHandler implements ICommandHandler<VerifyEmailCommand> {
     async execute(command: VerifyEmailCommand): Promise<void> {
         const { token } = command;
 
-        const confirmation =
-            await this.emailConfirmationRepository.findWithUserByToken(token);
+        const { user } = await this.emailConfirmationRepository
+            .findOneOrFail({
+                relations: {
+                    user: true,
+                },
+                where: { token },
+            })
+            .catch(() => {
+                throw new InvalidEmailTokenException();
+            });
 
-        if (confirmation == null) {
-            throw new InvalidEmailTokenException();
-        }
-
-        const { user } = confirmation;
         await this.userRepository.verifyEmail(user);
     }
 }
