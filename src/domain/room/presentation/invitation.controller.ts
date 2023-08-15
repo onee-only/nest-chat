@@ -46,9 +46,9 @@ export class InvitationController {
         @Param('roomID', ParseIntPipe) roomID: number,
         @Body() request: CreateInvitationRequest,
     ): Promise<CreateInvitationResponse> {
-        const { duration, roleID } = request;
+        const { duration, roleAlias } = request;
         return await this.commandBus.execute(
-            new CreateInvitationCommand(roomID, roleID, duration, user),
+            new CreateInvitationCommand(roomID, roleAlias, duration, user),
         );
     }
 

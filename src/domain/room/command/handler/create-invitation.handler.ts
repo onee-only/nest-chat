@@ -27,7 +27,7 @@ export class CreateInvitationHandler
     async execute(
         command: CreateInvitationCommand,
     ): Promise<CreateInvitationResponse> {
-        const { duration, roleID, roomID, user } = command;
+        const { duration, alias, roomID, user } = command;
 
         const room = await this.roomRepository
             .findOneByOrFail({ id: roomID })
@@ -36,9 +36,9 @@ export class CreateInvitationHandler
             });
 
         const role = await this.memberRoleRepository
-            .findOneByOrFail({ id: roleID })
+            .findOneByOrFail({ alias, roomID })
             .catch(() => {
-                throw new NoMatchingRoleException(roomID, roleID);
+                throw new NoMatchingRoleException(roomID, alias);
             });
 
         await this.permissionChecker.checkOrThrow({

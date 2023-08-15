@@ -1,12 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateInvitationRequest {
     @ApiProperty()
-    @IsInt()
-    roleID: number;
+    @IsNotEmpty()
+    @IsString()
+    roleAlias: string;
 
     @ApiProperty()
+    @IsNotEmpty()
     @IsInt()
     duration: number;
 }

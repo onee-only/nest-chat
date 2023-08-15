@@ -35,7 +35,7 @@ export class DeleteRoleHandler implements ICommandHandler<DeleteRoleCommand> {
             user: user,
         });
 
-        const role = await this.memberRoleRepository.findOneBy({ id: roleID });
+        const role = await this.memberRoleRepository.findOneBy({  });
         if (role == null) {
             throw new NoMatchingRoleException(roomID, roleID);
         }
