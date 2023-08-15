@@ -66,17 +66,17 @@ export class MemberRoleController {
         summary: 'update role',
         description: 'Updates a role',
     })
-    @Patch(':roleID')
+    @Patch(':alias')
     @UseGuards(JwtAuthGuard)
     async updateRole(
         @Param('roomID', ParseIntPipe) roomID: number,
-        @Param('roleID', ParseIntPipe) roleID: number,
+        @Param('alias') alias: string,
         @Body() request: UpdateRoleRequest,
         @GetUser() user: User,
     ): Promise<void> {
         const { name, permission } = request;
         return await this.commandBus.execute(
-            new UpdateRoleCommand(user, roomID, roleID, name, permission),
+            new UpdateRoleCommand(user, roomID, alias, name, permission),
         );
     }
 
@@ -84,15 +84,15 @@ export class MemberRoleController {
         summary: 'delete role',
         description: 'Deletes a role',
     })
-    @Delete(':roleID')
+    @Delete(':alias')
     @UseGuards(JwtAuthGuard)
     async deleteRole(
         @Param('roomID', ParseIntPipe) roomID: number,
-        @Param('roleAlias') roleAlias: string,
+        @Param('alias') alias: string,
         @GetUser() user: User,
     ): Promise<void> {
         return await this.commandBus.execute(
-            new DeleteRoleCommand(user, roomID, roleAlias),
+            new DeleteRoleCommand(user, roomID, alias),
         );
     }
 }

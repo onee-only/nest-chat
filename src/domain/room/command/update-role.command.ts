@@ -6,8 +6,8 @@ export class UpdateRoleCommand implements ICommand {
     constructor(
         public readonly user: User,
         public readonly roomID: number,
-        public readonly roleID: number,
-        public readonly alias?: string,
+        public readonly alias: string,
+        public readonly newAlias?: string,
         public readonly permission?: Permission,
     ) {}
 }

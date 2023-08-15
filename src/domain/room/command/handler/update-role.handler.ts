@@ -20,7 +20,7 @@ export class UpdateRoleHandler implements ICommandHandler<UpdateRoleCommand> {
     ) {}
 
     async execute(command: UpdateRoleCommand): Promise<void> {
-        const { alias, permission, roomID, user, roleID } = command;
+        const { alias, permission, roomID, user, newAlias } = command;
 
         const room = await this.roomRepository.findOneBy({ id: roomID });
         if (room == null) {
@@ -33,19 +33,21 @@ export class UpdateRoleHandler implements ICommandHandler<UpdateRoleCommand> {
             user: user,
         });
 
-        const role = await this.memberRoleRepository.findOneBy({ id: roleID });
+        const role = await this.memberRoleRepository.findOneBy({ room, alias });
         if (role == null) {
-            throw new NoMatchingRoleException(roomID, roleID);
+            throw new NoMatchingRoleException(roomID, alias);
         }
 
         const candiate = this.objectManager.filterNullish({
-            alias,
+            newAlias,
             permission,
         });
         Object.assign(role, candiate);
 
-        if (await this.memberRoleRepository.duplicateAliasExists(room, alias)) {
-            throw new DuplicateRoleAliasException(roomID, alias);
+        if (
+            await this.memberRoleRepository.duplicateAliasExists(room, newAlias)
+        ) {
+            throw new DuplicateRoleAliasException(roomID, newAlias);
         }
 
         await this.memberRoleRepository.save(role);
