@@ -28,7 +28,7 @@ export class UserRepository extends Repository<User> {
         await this.dataSource.transaction(
             'READ COMMITTED',
             async (entityManager: EntityManager) => {
-                await entityManager.update(User, user, {
+                await entityManager.update(User, user.id, {
                     isVerified: true,
                 });
                 await entityManager.delete(EmailConfirmation, {
