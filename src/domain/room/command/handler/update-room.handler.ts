@@ -21,7 +21,7 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
 
     async execute(command: UpdateRoomCommand): Promise<void> {
         const {
-            data: { defaultRoleID, tags: tagNames },
+            data: { defaultRoleAlias, tags: tagNames },
         } = command;
         const { user, roomID, data } = command;
 
@@ -35,9 +35,9 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
             throw new NoOwnerPermissionException();
         }
 
-        if (defaultRoleID != null) {
-            room.defaultRole = await this.getMemberRole(defaultRoleID, room);
-            delete data.defaultRoleID;
+        if (defaultRoleAlias != null) {
+            room.defaultRole = await this.getMemberRole(defaultRoleAlias, room);
+            delete data.defaultRoleAlias;
         }
 
         // should refactor it. update thread too.
@@ -59,16 +59,13 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
     }
 
     private async getMemberRole(
-        roleID: number,
+        alias: string,
         room: Room,
     ): Promise<MemberRole> {
         const role = await this.memberRoleRepository
-            .findOneByOrFail({
-                room: room,
-                id: roleID,
-            })
+            .findOneByOrFail({ room, alias })
             .catch(() => {
-                throw new NoMatchingRoleException(room.id, roleID);
+                throw new NoMatchingRoleException(room.id, alias);
             });
 
         return role;

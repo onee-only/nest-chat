@@ -7,7 +7,7 @@ type UpdateData = {
     readonly profileURL?: string;
     readonly isPublic?: boolean;
     tags?: string[];
-    defaultRoleID?: number;
+    defaultRoleAlias?: string;
 };
 
 export class UpdateRoomCommand implements ICommand {

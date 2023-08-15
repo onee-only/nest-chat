@@ -24,8 +24,8 @@ export class UpdateRoomRequest {
 
     @ApiProperty()
     @IsOptional()
-    @IsBoolean()
-    defaultRoleID?: number;
+    @IsString()
+    defaultRoleAlias?: string;
 
     @ApiProperty()
     @IsOptional()
