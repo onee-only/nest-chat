@@ -1,10 +1,7 @@
 import { RoomMember } from 'src/domain/room/entity';
 
 export type MemberElement = {
-    readonly memberID: number;
-
     readonly role: {
-        readonly id: number;
         readonly alias: string;
     };
 
@@ -23,9 +20,8 @@ export class ListMemberResponse {
 
     public static from(members: RoomMember[]): ListMemberResponse {
         const elements = members.map(
-            ({ id, role, user: { id: userID, avatar } }): MemberElement => ({
-                memberID: id,
-                role: { ...role },
+            ({ role, user: { id: userID, avatar } }): MemberElement => ({
+                role: { alias: role.alias },
                 user: { id: userID, ...avatar },
             }),
         );

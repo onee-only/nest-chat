@@ -2,7 +2,6 @@ export type ListInvitationElement = {
     readonly token: string;
     readonly expiresAt: Date;
     readonly role: {
-        readonly id: number;
         readonly alias: string;
     };
 };

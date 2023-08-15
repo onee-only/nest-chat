@@ -16,8 +16,7 @@ export class RoomMemberRepository extends Repository<RoomMember> {
         return await this.find({
             relations: { role: true, user: { avatar: true } },
             select: {
-                id: true,
-                role: { alias: true, id: true },
+                role: { alias: true },
                 user: {
                     id: true,
                     avatar: { nickname: true, profileURL: true },
