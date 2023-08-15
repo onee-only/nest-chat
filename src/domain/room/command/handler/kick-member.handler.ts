@@ -33,7 +33,7 @@ export class KickMemberHandler implements ICommandHandler<KickMemberCommand> {
         });
 
         const member = await this.roomMemberRepository
-            .findOneByOrFail({ id: memberID })
+            .findOneByOrFail({ roomID, userID: memberID })
             .catch(() => {
                 throw new NoMatchingMemberException(roomID, memberID);
             });
