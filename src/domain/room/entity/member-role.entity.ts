@@ -1,9 +1,10 @@
 import {
     Column,
     Entity,
+    JoinColumn,
     ManyToOne,
     OneToMany,
-    PrimaryGeneratedColumn,
+    PrimaryColumn,
 } from 'typeorm';
 import { Room } from './room.entity';
 import { RoomMember } from './room-member.entity';
@@ -33,16 +34,17 @@ export class Permission {
 
 @Entity()
 export class MemberRole {
-    @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
-    id: number;
+    @PrimaryColumn({ type: 'bigint', unsigned: true })
+    roomID: number;
 
     @ManyToOne(() => Room, (room) => room.roles)
+    @JoinColumn({ name: 'roomID' })
     room: Room;
 
     @OneToMany(() => RoomMember, (member) => member.role)
     members: RoomMember[];
 
-    @Column()
+    @PrimaryColumn()
     alias: string;
 
     @Column(() => Permission)

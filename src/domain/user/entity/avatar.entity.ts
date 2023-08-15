@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
@@ -16,5 +16,6 @@ export class Avatar {
     profileURL: string;
 
     @OneToOne(() => User, (user) => user.avatar)
+    @JoinColumn({ name: 'userID' })
     user: User;
 }
