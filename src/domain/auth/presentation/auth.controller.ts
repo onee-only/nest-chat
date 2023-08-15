@@ -9,6 +9,7 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import {
+    ApiConflictResponse,
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
@@ -37,7 +38,8 @@ export class AuthController {
         summary: 'SignUp',
         description: 'Creates user and sends verification email',
     })
-    @ApiCreatedResponse({ type: SignupRequest })
+    @ApiCreatedResponse({ type: SignupResponse })
+    @ApiConflictResponse({ description: 'duplicate email or nickname' })
     @Post('signup')
     async signup(@Body() request: SignupRequest): Promise<SignupResponse> {
         return await this.commandBus.execute(
