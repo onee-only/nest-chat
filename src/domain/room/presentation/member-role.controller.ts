@@ -88,11 +88,11 @@ export class MemberRoleController {
     @UseGuards(JwtAuthGuard)
     async deleteRole(
         @Param('roomID', ParseIntPipe) roomID: number,
-        @Param('roleID', ParseIntPipe) roleID: number,
+        @Param('roleAlias') roleAlias: string,
         @GetUser() user: User,
     ): Promise<void> {
         return await this.commandBus.execute(
-            new DeleteRoleCommand(user, roomID, roleID),
+            new DeleteRoleCommand(user, roomID, roleAlias),
         );
     }
 }

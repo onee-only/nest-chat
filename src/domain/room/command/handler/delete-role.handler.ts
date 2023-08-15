@@ -22,7 +22,7 @@ export class DeleteRoleHandler implements ICommandHandler<DeleteRoleCommand> {
     ) {}
 
     async execute(command: DeleteRoleCommand): Promise<any> {
-        const { roomID, user, roleID } = command;
+        const { roomID, user, alias } = command;
 
         const room = await this.roomRepository.findOneBy({ id: roomID });
         if (room == null) {
@@ -35,9 +35,12 @@ export class DeleteRoleHandler implements ICommandHandler<DeleteRoleCommand> {
             user: user,
         });
 
-        const role = await this.memberRoleRepository.findOneBy({  });
+        const role = await this.memberRoleRepository.findOneBy({
+            alias,
+            roomID,
+        });
         if (role == null) {
-            throw new NoMatchingRoleException(roomID, roleID);
+            throw new NoMatchingRoleException(roomID, alias);
         }
 
         if (await this.roomMemberRepository.existsByRoomAndRole(room, role)) {

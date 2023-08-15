@@ -5,6 +5,6 @@ export class DeleteRoleCommand implements ICommand {
     constructor(
         public readonly user: User,
         public readonly roomID: number,
-        public readonly roleID: number,
+        public readonly alias: string,
     ) {}
 }
