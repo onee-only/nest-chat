@@ -11,9 +11,11 @@ import {
 import {
     ApiConflictResponse,
     ApiCreatedResponse,
+    ApiForbiddenResponse,
     ApiOkResponse,
     ApiOperation,
     ApiTags,
+    ApiUnauthorizedResponse,
     OmitType,
 } from '@nestjs/swagger';
 import { LoginRequest, SignupRequest } from './dto/request';
@@ -35,7 +37,7 @@ export class AuthController {
     ) {}
 
     @ApiOperation({
-        summary: 'SignUp',
+        summary: 'Sign Up',
         description: 'Creates user and sends verification email',
     })
     @ApiCreatedResponse({ type: SignupResponse })
@@ -52,11 +54,13 @@ export class AuthController {
     }
 
     @ApiOperation({
-        summary: 'LogIn',
+        summary: 'Log In',
         description:
             'returns access token and expiration of matching user and sets refresh token to http only cookie',
     })
     @ApiOkResponse({ type: OmitType(AccessTokenResponse, ['cookies']) })
+    @ApiUnauthorizedResponse({ description: 'invalid email or password' })
+    @ApiForbiddenResponse({ description: 'email is not verified' })
     @Post('login')
     @HttpCode(HttpStatus.OK)
     @UseInterceptors(SetCookieInterceptor)
