@@ -9,13 +9,13 @@ import { AuthSaga } from './saga';
 import { CommandHandlers } from './command/handler';
 import { JwtProvider, PasswordManager } from './util';
 import { QueryHandlers } from './query/handler';
-import { CacheModule } from 'src/global/modules';
+import { BlackListModule } from 'src/global/modules';
 
 @Module({
     imports: [
         UserModule,
         CqrsModule,
-        CacheModule,
+        BlackListModule,
         TypeOrmModule.forFeature([EmailConfirmation]),
     ],
     controllers: [AuthController],

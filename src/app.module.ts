@@ -1,6 +1,8 @@
 import { MessageModule } from './domain/message/message.module';
 import { Module } from '@nestjs/common';
 import {
+    BlackListModule,
+    CacheModule,
     ConfigModule,
     DatabaseModule,
     MailerModule,
@@ -25,6 +27,9 @@ import { ScheduleModule } from '@nestjs/schedule';
         StorageModule,
         StrategyModule,
         ScheduleModule.forRoot(),
+
+        CacheModule,
+        BlackListModule,
 
         // util
         ObjectUtilModule,
