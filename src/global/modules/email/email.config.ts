@@ -31,10 +31,10 @@ export const EmailConfig = registerAs(
                 },
             },
             defaults: {
-                from: '"simple-chat" <simple@chat.com>',
+                from: '"simple-chat" <onee.only.sudo@gmail.com>',
             },
             template: {
-                dir: __dirname + '../../../../resource/mail',
+                dir: __dirname + '../../../../resources/mail',
                 adapter: new PugAdapter(),
                 options: {
                     strict: true,
