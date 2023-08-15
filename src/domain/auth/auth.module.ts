@@ -10,6 +10,7 @@ import { CommandHandlers } from './command/handler';
 import { JwtProvider, PasswordManager } from './util';
 import { QueryHandlers } from './query/handler';
 import { BlackListModule } from 'src/global/modules';
+import { ExpireConfirmationTask } from './tasks';
 
 @Module({
     imports: [
@@ -29,6 +30,9 @@ import { BlackListModule } from 'src/global/modules';
 
         // repositories
         EmailConfirmationRepository,
+
+        // tasks
+        ExpireConfirmationTask,
 
         // utils
         PasswordManager,
