@@ -21,7 +21,7 @@ export class User {
     @Column()
     password: string;
 
-    @Column()
+    @Column({ default: false })
     isVerified: boolean;
 
     @OneToOne(() => Avatar, (avatar) => avatar.user, {

@@ -9,10 +9,10 @@ export class Avatar {
     @Column({ unique: true })
     nickname: string;
 
-    @Column()
+    @Column({ default: '' })
     bio: string;
 
-    @Column()
+    @Column({ default: '' })
     profileURL: string;
 
     @OneToOne(() => User, (user) => user.avatar)
