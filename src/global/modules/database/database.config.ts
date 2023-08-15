@@ -24,5 +24,9 @@ export const DatabaseConfig = registerAs(
         database: process.env.DB,
         entities: [__dirname + '/../../../**/*.entity.{js,ts}'],
         synchronize: true,
+        logging:
+            process.env.NODE_ENV === 'dev'
+                ? ['error', 'info', 'log', 'query', 'warn']
+                : ['error', 'migration', 'schema', 'log'],
     }),
 );
