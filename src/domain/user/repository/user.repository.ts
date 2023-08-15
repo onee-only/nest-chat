@@ -13,17 +13,6 @@ export class UserRepository extends Repository<User> {
         return await this.exist({ where: { email } });
     }
 
-    async findIdByEmailAndPassword(
-        email: string,
-        password: string,
-    ): Promise<number> {
-        const user = await this.findOne({
-            where: { email, password },
-            select: { id: true },
-        });
-        return user?.id;
-    }
-
     async verifyEmail(user: User): Promise<void> {
         await this.dataSource.transaction(
             'READ COMMITTED',
