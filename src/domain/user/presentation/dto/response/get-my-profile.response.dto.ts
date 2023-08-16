@@ -1,24 +1,44 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { User } from 'src/domain/user/entity';
 
-type DtoUser = {
+class DtoUser {
+    @ApiProperty()
     readonly id: number;
-    readonly email: string;
-    readonly joinedAt: Date;
-};
 
-type DtoProfile = {
-    readonly nickname: string;
-    readonly profileURL: string;
-    readonly bio: string;
-};
+    @ApiProperty()
+    readonly email: string;
+
+    @ApiProperty()
+    readonly joinedAt: Date;
+}
+
+class DtoProfile {
+    @ApiProperty()
+    public readonly nickname: string;
+
+    @ApiProperty()
+    public readonly profileURL: string;
+
+    @ApiProperty()
+    public readonly bio: string;
+}
 
 export class GetMyProfileResponse {
-    constructor(
-        public readonly user: DtoUser,
-        public readonly profile: DtoProfile,
-    ) {}
+    @ApiProperty()
+    public readonly user: DtoUser;
+
+    @ApiProperty()
+    public readonly profile: DtoProfile;
 
     public static from(user: User): GetMyProfileResponse {
-        return new GetMyProfileResponse({ ...user }, { ...user.avatar });
+        const { avatar, email, id, joinedAt } = user;
+        return {
+            user: { id, email, joinedAt },
+            profile: {
+                nickname: avatar.nickname,
+                profileURL: avatar.profileURL,
+                bio: avatar.bio,
+            },
+        };
     }
 }
