@@ -9,9 +9,11 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import {
+    ApiBadRequestResponse,
     ApiConflictResponse,
     ApiCreatedResponse,
     ApiForbiddenResponse,
+    ApiHeader,
     ApiOkResponse,
     ApiOperation,
     ApiTags,
@@ -74,7 +76,9 @@ export class AuthController {
         summary: 'refresh',
         description: 'refreshes access token if refresh token is valid',
     })
+    @ApiHeader({ name: 'Cookie' })
     @ApiOkResponse({ type: OmitType(AccessTokenResponse, ['cookies']) })
+    @ApiForbiddenResponse({ description: 'refresh token is invalid' })
     @Post('refresh')
     @HttpCode(HttpStatus.OK)
     @UseGuards(RefreshAuthGuard)
@@ -87,10 +91,12 @@ export class AuthController {
         summary: 'logout',
         description: 'blacklists the refresh token of the current user',
     })
+    @ApiHeader({ name: 'Cookie' })
+    @ApiOkResponse()
+    @ApiForbiddenResponse({ description: 'refresh token is invalid' })
     @Post('logout')
     @HttpCode(HttpStatus.OK)
     @UseGuards(RefreshAuthGuard)
-    @UseInterceptors(SetCookieInterceptor)
     async logout(@GetRefresh() token: string): Promise<void> {
         return await this.commandBus.execute(new LogoutCommand(token));
     }
@@ -99,6 +105,7 @@ export class AuthController {
         summary: 'verify email',
         description: 'verifies the code of this email',
     })
+    @ApiBadRequestResponse({ description: 'the token is invalid' })
     @Post('verify-email')
     @HttpCode(HttpStatus.OK)
     async verifyEmail(@Query('token') token: string): Promise<void> {
