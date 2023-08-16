@@ -33,7 +33,7 @@ export class MeController {
         description: 'Provides profile information of the current user',
     })
     @ApiOkResponse({ type: GetMyProfileResponse })
-    @Get('')
+    @Get()
     async getMyProfile(@GetUser() user: User): Promise<GetMyProfileResponse> {
         return await this.queryBus.execute(new GetProfileQuery(user));
     }
@@ -43,7 +43,7 @@ export class MeController {
         description: 'Updates profile information of the current user',
     })
     @ApiOkResponse({ type: GetMyProfileResponse })
-    @Patch('')
+    @Patch()
     async updateProfile(
         @GetUser() user: User,
         @Body() request: UpdateProfileRequest,
