@@ -15,7 +15,9 @@ export class ParseDatePipe implements PipeTransform<string> {
     }
 
     async transform(value: string, metadata: ArgumentMetadata) {
-        if ((this.isRequired && value == null) || this.regex.test(value)) {
+        if (!this.isRequired && value == null) return undefined;
+
+        if (!this.regex.test(value)) {
             throw new BadRequestException(
                 'Validation failed (date string of format [yyyy-mm-dd] is expected)',
             );
