@@ -1,22 +1,34 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { RoomListElement } from '../internal';
 
-type ListInfo = {
-    readonly pageNum: number;
-    readonly pageSize: number;
-    readonly totalPages: number;
-    readonly totalRooms: number;
-};
+class ListInfo {
+    @ApiProperty()
+    public readonly pageNum: number;
+
+    @ApiProperty()
+    public readonly pageSize: number;
+
+    @ApiProperty()
+    public readonly totalPages: number;
+
+    @ApiProperty()
+    public readonly totalRooms: number;
+}
 
 export class ListRoomResponse {
-    constructor(
-        public readonly rooms: RoomListElement[],
-        public readonly pageInfo: ListInfo,
-    ) {}
+    @ApiProperty({ type: [RoomListElement] })
+    public readonly rooms: RoomListElement[];
+
+    @ApiProperty()
+    public readonly pageInfo: ListInfo;
 
     public static from(
         rooms: RoomListElement[],
         pageInfo: ListInfo,
     ): ListRoomResponse {
-        return new ListRoomResponse(rooms, pageInfo);
+        return {
+            pageInfo: pageInfo,
+            rooms: rooms,
+        };
     }
 }

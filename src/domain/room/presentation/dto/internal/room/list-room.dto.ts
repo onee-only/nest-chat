@@ -1,15 +1,38 @@
-export type RoomListElement = {
-    id: number;
-    name: string;
-    profileURL: string;
-    description: string;
-    memberCount: number;
-    createdAt: Date;
-    isMember: boolean;
+import { ApiProperty } from '@nestjs/swagger';
 
-    owner: {
-        id: number;
-        nickname: string;
-        profileURL: string;
-    };
-};
+class NestedOwner {
+    @ApiProperty()
+    public readonly id: number;
+
+    @ApiProperty()
+    public readonly nickname: string;
+
+    @ApiProperty()
+    public readonly profileURL: string;
+}
+
+export class RoomListElement {
+    @ApiProperty()
+    public readonly id: number;
+
+    @ApiProperty()
+    public readonly name: string;
+
+    @ApiProperty()
+    public readonly profileURL: string;
+
+    @ApiProperty()
+    public readonly description: string;
+
+    @ApiProperty()
+    public readonly memberCount: number;
+
+    @ApiProperty()
+    public readonly createdAt: Date;
+
+    @ApiProperty()
+    public readonly isMember: boolean;
+
+    @ApiProperty()
+    owner: NestedOwner;
+}
