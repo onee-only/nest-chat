@@ -7,9 +7,9 @@ export class Tag {
     @PrimaryColumn()
     name: string;
 
-    @ManyToMany(() => Room, (room) => room.tags, { lazy: true })
+    @ManyToMany(() => Room, (room) => room.tags)
     rooms: Room[];
 
-    @ManyToMany(() => Thread, (thread) => thread.tags, { lazy: true })
+    @ManyToMany(() => Thread, (thread) => thread.tags)
     threads: Thread[];
 }

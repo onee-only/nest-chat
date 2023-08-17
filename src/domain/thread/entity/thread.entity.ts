@@ -33,6 +33,6 @@ export class Thread {
     createdAt: string;
 
     @ManyToMany(() => Tag)
-    @JoinTable()
+    @JoinTable({ name: 'thread_tags' })
     tags: Tag[];
 }

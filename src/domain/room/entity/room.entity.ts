@@ -2,6 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
     JoinTable,
     ManyToMany,
     ManyToOne,
@@ -43,6 +44,7 @@ export class Room {
         nullable: true,
         onDelete: 'SET NULL',
     })
+    @JoinColumn()
     defaultRole: MemberRole;
 
     @OneToMany(() => RoomMember, (member) => member.room, {
@@ -61,6 +63,6 @@ export class Room {
     threads: Thread[];
 
     @ManyToMany(() => Tag)
-    @JoinTable()
+    @JoinTable({ name: 'room_tags' })
     tags: Tag[];
 }
