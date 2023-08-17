@@ -117,6 +117,7 @@ export class RoomController {
         summary: 'update a room',
         description: 'Updates a room',
     })
+    @ApiNotFoundResponse({ description: 'room not found or role not found' })
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
     async updateRoom(

@@ -31,7 +31,7 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
                 throw new RoomNotFoundException(roomID);
             });
 
-        if (room.owner != user) {
+        if (room.owner.id != user.id) {
             throw new NoOwnerPermissionException();
         }
 
@@ -46,11 +46,11 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
         );
         if (tagNames != null) {
             await this.tagRepository.insertOrIgnore(tags);
+            room.tags = tags;
         }
         delete data.tags;
 
         const candiate = this.objectManager.filterNullish({
-            tags: tags,
             ...data,
         });
         Object.assign(room, candiate);
@@ -63,7 +63,7 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
         room: Room,
     ): Promise<MemberRole> {
         const role = await this.memberRoleRepository
-            .findOneByOrFail({ room, alias })
+            .findOneByOrFail({ roomID: room.id, alias })
             .catch(() => {
                 throw new NoMatchingRoleException(room.id, alias);
             });

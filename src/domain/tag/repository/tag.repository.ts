@@ -9,6 +9,11 @@ export class TagRepository extends Repository<Tag> {
     }
 
     async insertOrIgnore(tags: Tag[]): Promise<void> {
-        await this.upsert(tags, { conflictPaths: { name: true } });
+        await this.createQueryBuilder()
+            .insert()
+            .into(Tag)
+            .values(tags)
+            .orIgnore()
+            .execute();
     }
 }
