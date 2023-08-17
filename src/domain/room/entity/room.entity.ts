@@ -2,6 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
     ManyToMany,
     ManyToOne,
     OneToMany,
@@ -34,7 +35,7 @@ export class Room {
     @CreateDateColumn()
     createdAt: Date;
 
-    @ManyToOne(() => User, { lazy: true, nullable: false })
+    @ManyToOne(() => User, { nullable: false })
     owner: User;
 
     @OneToOne(() => MemberRole, {
@@ -62,6 +63,7 @@ export class Room {
     })
     threads: Thread[];
 
-    @ManyToMany(() => Tag, { lazy: true })
+    @ManyToMany(() => Tag)
+    @JoinTable()
     tags: Tag[];
 }

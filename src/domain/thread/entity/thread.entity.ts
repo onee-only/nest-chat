@@ -5,6 +5,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
     ManyToMany,
     ManyToOne,
     PrimaryGeneratedColumn,
@@ -22,7 +23,7 @@ export class Thread {
     })
     creator: User;
 
-    @ManyToOne(() => Room, { lazy: true })
+    @ManyToOne(() => Room)
     room: Room;
 
     @Column()
@@ -31,6 +32,7 @@ export class Thread {
     @CreateDateColumn()
     createdAt: string;
 
-    @ManyToMany(() => Tag, { lazy: true })
+    @ManyToMany(() => Tag)
+    @JoinTable()
     tags: Tag[];
 }
