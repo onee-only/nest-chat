@@ -88,8 +88,9 @@ export class MessageController {
         @Param('roomID', ParseIntPipe) roomID: number,
         @Param('threadID', ParseIntPipe) threadID: number,
         @GetUser() user: User,
-        @Query('enddate', ParseDatePipe) endDate: Date,
         @Query('limit', ParseIntPipe) limit: number,
+        @Query('enddate', new ParseDatePipe({ isRequired: true }))
+        endDate: Date,
     ): Promise<ListMessageResponse> {
         return await this.queryBus.execute(
             new ListMessageQuery(user, { roomID, threadID, endDate, limit }),

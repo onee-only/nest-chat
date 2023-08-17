@@ -39,7 +39,7 @@ import {
 } from '../command';
 import { RoomOrder, RoomOrderDir } from '../enum';
 import { ListRoomQuery, RetreiveRoomQuery } from '../query';
-import { ParseDatePipe } from 'src/global/pipes';
+import { ParseDatePipe, ParseOptionalIntPipe } from 'src/global/pipes';
 
 @ApiTags('rooms')
 @Controller('rooms')
@@ -93,11 +93,14 @@ export class RoomController {
         @Query('page', ParseIntPipe) page: number,
         @Query('order', new ParseEnumPipe(RoomOrder)) order: RoomOrder,
         @Query('dir', new ParseEnumPipe(RoomOrderDir)) dir: RoomOrderDir,
+
         @Query('query') query?: string,
-        @Query('size', ParseIntPipe) size?: number,
-        @Query('startdate', ParseDatePipe) startDate?: Date,
-        @Query('enddate', ParseDatePipe) endDate?: Date,
-        @Query('tags', new ParseArrayPipe()) tags?: string[],
+        @Query('size', ParseOptionalIntPipe) size?: number,
+        @Query('startdate', new ParseDatePipe({ isRequired: false }))
+        startDate?: Date,
+        @Query('enddate', new ParseDatePipe({ isRequired: false }))
+        endDate?: Date,
+        @Query('tags', new ParseArrayPipe({ optional: true })) tags?: string[],
     ): Promise<ListRoomResponse> {
         return await this.queryBus.execute(
             new ListRoomQuery(user, {
@@ -117,6 +120,7 @@ export class RoomController {
         summary: 'update a room',
         description: 'Updates a room',
     })
+    @ApiOkResponse()
     @ApiNotFoundResponse({ description: 'room not found or role not found' })
     @Patch(':id')
     @UseGuards(JwtAuthGuard)

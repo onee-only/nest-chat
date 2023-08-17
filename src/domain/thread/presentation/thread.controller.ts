@@ -77,10 +77,13 @@ export class ThreadController {
         @Query('page', ParseIntPipe) page: number,
         @Query('order', new ParseEnumPipe(ThreadOrder)) order: ThreadOrder,
         @Query('dir', new ParseEnumPipe(ThreadOrderDir)) dir: ThreadOrderDir,
+
         @Query('query') query?: string,
         @Query('size', ParseIntPipe) size?: number,
-        @Query('startdate', ParseDatePipe) startDate?: Date,
-        @Query('enddate', ParseDatePipe) endDate?: Date,
+        @Query('startdate', new ParseDatePipe({ isRequired: false }))
+        startDate?: Date,
+        @Query('enddate', new ParseDatePipe({ isRequired: false }))
+        endDate?: Date,
         @Query('tags', new ParseArrayPipe()) tags?: string[],
     ): Promise<ListThreadReponseDto> {
         return await this.queryBus.execute(
