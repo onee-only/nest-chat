@@ -55,38 +55,50 @@ export class RoomRepository extends Repository<Room> {
 
         const count = await qb.getCount();
 
-        const list = await qb
+        const results = await qb
             .select('room.*')
-            .addSelect('count(*)', 'count')
             .addSelect(
                 (subquery) =>
                     subquery
-                        .select(['user.isMember', 'members.memberCount'])
-                        .from(
-                            (subquery) =>
-                                subquery
-                                    .select('count(*) > 0', 'isMember')
-                                    .from(RoomMember, 'roomMember')
-                                    .where('roomMember.userId = :userID')
-                                    .andWhere('roomMember.roomId = room.id'),
-                            'user',
-                        )
-                        .addFrom(
-                            (subquery) =>
-                                subquery
-                                    .select('count(*)', 'memberCount')
-                                    .from(RoomMember, 'roomMember')
-                                    .where('roomMember.userId = :userID'),
-                            'members',
-                        )
+                        .select('count(*) > 0')
+                        .from(RoomMember, 'roomMember')
+                        .where('roomMember.userID = :userID')
+                        .andWhere('roomMember.roomId = room.id')
                         .setParameter('userID', user.id),
-                'member',
+                'isMember',
             )
-            .innerJoinAndSelect('room.owner', 'owner')
+            .addSelect(
+                (subquery) =>
+                    subquery
+                        .select('count(*)')
+                        .from(RoomMember, 'roomMember')
+                        .where('roomMember.roomId = room.id'),
+                'memberCount',
+            )
+            .addSelect(['owner.id', 'avatar.nickname', 'avatar.profileURL'])
+            .innerJoin('room.owner', 'owner')
+            .leftJoin('owner.avatar', 'avatar', 'owner.id = avatar.userID')
             .orderBy(order, orderDir)
             .offset(size * (page - 1))
             .limit(size)
-            .getRawMany<RoomListElement>();
+            .getRawMany();
+
+        const list = results.map(
+            (result): RoomListElement => ({
+                id: result.id,
+                name: result.name,
+                profileURL: result.name,
+                description: result.description,
+                createdAt: result.createdAt,
+                owner: {
+                    id: result.owner_id,
+                    nickname: result.avatar_nickname,
+                    profileURL: result.avatar_profileURL,
+                },
+                isMember: Boolean(result.isMember),
+                memberCount: result.memberCount,
+            }),
+        );
 
         return {
             list,
