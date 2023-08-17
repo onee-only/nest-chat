@@ -3,6 +3,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseArrayPipe,
     ParseEnumPipe,
@@ -15,6 +17,8 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
     ApiCreatedResponse,
+    ApiNoContentResponse,
+    ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
     ApiTags,
@@ -129,7 +133,10 @@ export class RoomController {
         summary: 'delete a room',
         description: 'Deletes a room',
     })
+    @ApiNoContentResponse()
+    @ApiNotFoundResponse()
     @Delete(':id')
+    @HttpCode(HttpStatus.NO_CONTENT)
     @UseGuards(JwtAuthGuard)
     async deleteRoom(
         @Param('id', ParseIntPipe) roomID: number,
@@ -145,6 +152,7 @@ export class RoomController {
         description: 'Finds a room',
     })
     @ApiOkResponse({ type: RetreiveRoomResponse })
+    @ApiNotFoundResponse()
     @Get(':id')
     @UseGuards(JwtAuthGuard)
     async retreiveRoom(

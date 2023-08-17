@@ -19,9 +19,9 @@ export class DeleteRoomHandler implements ICommandHandler<DeleteRoomCommand> {
                 throw new RoomNotFoundException(roomID);
             });
 
-        if (room.owner != user) {
+        if (room.owner.id != user.id) {
             throw new NoOwnerPermissionException();
         }
-        await this.roomRepsitory.delete(room);
+        await this.roomRepsitory.delete(room.id);
     }
 }
