@@ -41,16 +41,15 @@ export class PermissionChecker {
         user: User,
         action?: RoomPermission,
     ): Promise<boolean> {
-        const member = await this.roomMemberRepository.findOne({
-            relations: { role: true },
-            where: { room, user },
-        });
+        const member = await this.roomMemberRepository
+            .findOneOrFail({
+                relations: { role: true },
+                where: { roomID: room.id, userID: user.id },
+            })
+            .catch(() => {
+                throw new NotRoomMemberException(user.id, room.id);
+            });
 
-        if (member == null) {
-            throw new NotRoomMemberException(user.id, room.id);
-        }
-
-        if (action == null) return true;
-        return member.role.permission[action] == true;
+        return action == null ? true : member.role.permission[action] == true;
     }
 }

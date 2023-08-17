@@ -1,21 +1,38 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Room } from 'src/domain/room/entity';
 
-type Owner = {
-    readonly id: number;
-    readonly nickname: string;
-    readonly profileURL: string;
-};
+class Owner {
+    @ApiProperty()
+    public readonly id: number;
+
+    @ApiProperty()
+    public readonly nickname: string;
+
+    @ApiProperty()
+    public readonly profileURL: string;
+}
 
 export class RetreiveRoomResponse {
-    constructor(
-        public readonly name: string,
-        public readonly description: string,
-        public readonly profileURL: string,
-        public readonly isPublic: boolean,
-        public readonly createdAt: Date,
-        public readonly tags: string[],
-        public readonly owner: Owner,
-    ) {}
+    @ApiProperty()
+    public readonly name: string;
+
+    @ApiProperty()
+    public readonly description: string;
+
+    @ApiProperty()
+    public readonly profileURL: string;
+
+    @ApiProperty()
+    public readonly isPublic: boolean;
+
+    @ApiProperty()
+    public readonly createdAt: Date;
+
+    @ApiProperty()
+    public readonly tags: string[];
+
+    @ApiProperty()
+    public readonly owner: Owner;
 
     public static from(room: Room): RetreiveRoomResponse {
         const { name, description, profileURL, isPublic, createdAt } = room;
@@ -25,14 +42,18 @@ export class RetreiveRoomResponse {
 
         const tags = room.tags.map((tag) => tag.name);
 
-        return new RetreiveRoomResponse(
+        return {
             name,
             description,
             profileURL,
             isPublic,
             createdAt,
             tags,
-            { id: ownerID, ...avatar },
-        );
+            owner: {
+                id: ownerID,
+                nickname: avatar.nickname,
+                profileURL: avatar.profileURL,
+            },
+        };
     }
 }

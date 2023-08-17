@@ -30,5 +30,10 @@ export class Permission {
     @ApiProperty()
     @IsNotEmpty()
     @IsBoolean()
-    changeRole: boolean;
+    manageRole: boolean;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsBoolean()
+    manageTag: boolean;
 }

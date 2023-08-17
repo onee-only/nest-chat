@@ -30,17 +30,17 @@ export class CreateRoomHandler implements ICommandHandler<CreateRoomCommand> {
             permission: { ...rolePermission },
         });
 
+        room.defaultRole = defaultRole;
+        room.roles = [defaultRole];
+
+        const createdRoom = await this.roomRepository.save(room);
+
         const admin = this.roomMemberRepository.create({
-            room: room,
+            room: createdRoom,
             role: defaultRole,
             user: roomInput.owner,
         });
-
-        room.defaultRole = defaultRole;
-        room.roles.push(defaultRole);
-        room.members.push(admin);
-
-        await this.roomRepository.save(room);
+        await this.roomMemberRepository.save(admin);
 
         return CreateRoomResponse.from(room);
     }

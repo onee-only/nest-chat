@@ -1,15 +1,26 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Room } from 'src/domain/room/entity';
 
 export class CreateRoomResponse {
-    constructor(
-        public readonly roomID: number,
-        public readonly roomName: string,
-        public readonly profileURL: string,
-        public readonly isPublic: boolean,
-    ) {}
+    @ApiProperty()
+    public readonly roomID: number;
+
+    @ApiProperty()
+    public readonly roomName: string;
+
+    @ApiProperty()
+    public readonly profileURL: string;
+
+    @ApiProperty()
+    public readonly isPublic: boolean;
 
     public static from(room: Room): CreateRoomResponse {
         const { id, name, profileURL, isPublic } = room;
-        return new CreateRoomResponse(id, name, profileURL, isPublic);
+        return {
+            roomID: id,
+            roomName: name,
+            profileURL,
+            isPublic,
+        };
     }
 }
