@@ -37,7 +37,7 @@ export class MemberRole {
     @PrimaryColumn({ type: 'bigint', unsigned: true })
     roomID: number;
 
-    @ManyToOne(() => Room, (room) => room.roles)
+    @ManyToOne(() => Room, (room) => room.roles, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'roomID' })
     room: Room;
 

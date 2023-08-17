@@ -27,7 +27,7 @@ export class RoomMember {
 
     @ManyToOne(() => MemberRole, {
         nullable: false,
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
     })
     role: MemberRole;
 }

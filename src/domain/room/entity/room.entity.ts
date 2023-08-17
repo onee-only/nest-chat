@@ -45,21 +45,18 @@ export class Room {
     })
     defaultRole: MemberRole;
 
-    @OneToMany(() => MemberRole, (role) => role.room, {
-        cascade: true,
-        onDelete: 'CASCADE',
-    })
-    roles: MemberRole[];
-
     @OneToMany(() => RoomMember, (member) => member.room, {
         cascade: true,
-        onDelete: 'CASCADE',
     })
     members: RoomMember[];
 
+    @OneToMany(() => MemberRole, (role) => role.room, {
+        cascade: true,
+    })
+    roles: MemberRole[];
+
     @OneToMany(() => Thread, (thread) => thread.room, {
         cascade: true,
-        onDelete: 'CASCADE',
     })
     threads: Thread[];
 
