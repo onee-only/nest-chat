@@ -88,6 +88,7 @@ export class RoomController {
     })
     @ApiOkResponse({ type: ListRoomResponse })
     @Get()
+    @UseGuards(JwtAuthGuard)
     async listRoom(
         @GetUser() user: User,
         @Query('page', ParseIntPipe) page: number,
