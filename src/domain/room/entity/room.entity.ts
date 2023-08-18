@@ -36,13 +36,18 @@ export class Room {
     @CreateDateColumn()
     createdAt: Date;
 
+    @Column({ type: 'bigint', unsigned: true, nullable: false })
+    ownerID: number;
+
     @ManyToOne(() => User, { nullable: false })
+    @JoinColumn({ name: 'ownerID' })
     owner: User;
 
     @OneToOne(() => MemberRole, {
         cascade: true,
         nullable: true,
         onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
     })
     @JoinColumn()
     defaultRole: MemberRole;
