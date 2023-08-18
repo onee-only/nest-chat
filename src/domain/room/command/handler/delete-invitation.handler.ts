@@ -20,7 +20,7 @@ export class DeleteInvitationHandler
         const { token, roomID, user } = command;
 
         const room = await this.roomRepository
-            .findOneWithOwnerById(roomID)
+            .findOneByOrFail({ id: roomID })
             .catch(() => {
                 throw new RoomNotFoundException(roomID);
             });
@@ -34,7 +34,7 @@ export class DeleteInvitationHandler
                 throw new NoMatchingInvitationException(roomID, token);
             });
 
-        if (room.owner != user) {
+        if (room.ownerID != user.id) {
             throw new NoOwnerPermissionException();
         }
 

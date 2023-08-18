@@ -19,10 +19,11 @@ export class CreateRoleHandler implements ICommandHandler<CreateRoleCommand> {
     async execute(command: CreateRoleCommand): Promise<void> {
         const { alias, permission, roomID, user } = command;
 
-        const room = await this.roomRepository.findOneBy({ id: roomID });
-        if (room == null) {
-            throw new RoomNotFoundException(roomID);
-        }
+        const room = await this.roomRepository
+            .findOneByOrFail({ id: roomID })
+            .catch(() => {
+                throw new RoomNotFoundException(roomID);
+            });
 
         await this.permissionChecker.checkOrThrow({
             action: RoomPermission.MANAGE_ROLE,

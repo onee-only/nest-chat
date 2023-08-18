@@ -22,10 +22,11 @@ export class UpdateRoleHandler implements ICommandHandler<UpdateRoleCommand> {
     async execute(command: UpdateRoleCommand): Promise<void> {
         const { alias, permission, roomID, user, newAlias } = command;
 
-        const room = await this.roomRepository.findOneBy({ id: roomID });
-        if (room == null) {
-            throw new RoomNotFoundException(roomID);
-        }
+        const room = await this.roomRepository
+            .findOneByOrFail({ id: roomID })
+            .catch(() => {
+                throw new RoomNotFoundException(roomID);
+            });
 
         await this.permissionChecker.checkOrThrow({
             action: RoomPermission.MANAGE_ROLE,
@@ -33,23 +34,32 @@ export class UpdateRoleHandler implements ICommandHandler<UpdateRoleCommand> {
             user: user,
         });
 
-        const role = await this.memberRoleRepository.findOneBy({ room, alias });
-        if (role == null) {
-            throw new NoMatchingRoleException(roomID, alias);
-        }
+        const role = await this.memberRoleRepository
+            .findOneByOrFail({
+                roomID: roomID,
+                alias,
+            })
+            .catch(() => {
+                throw new NoMatchingRoleException(roomID, alias);
+            });
 
         const candiate = this.objectManager.filterNullish({
-            newAlias,
+            alias: newAlias,
             permission,
         });
-        Object.assign(role, candiate);
 
-        if (
-            await this.memberRoleRepository.duplicateAliasExists(room, newAlias)
-        ) {
+        const isDuplicate =
+            await this.memberRoleRepository.duplicateAliasExists(
+                room,
+                newAlias,
+            );
+        if (isDuplicate) {
             throw new DuplicateRoleAliasException(roomID, newAlias);
         }
 
-        await this.memberRoleRepository.save(role);
+        await this.memberRoleRepository.update(
+            { alias: role.alias, roomID: roomID },
+            candiate,
+        );
     }
 }

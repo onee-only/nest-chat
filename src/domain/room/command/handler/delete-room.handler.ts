@@ -14,12 +14,12 @@ export class DeleteRoomHandler implements ICommandHandler<DeleteRoomCommand> {
         const { roomID, user } = command;
 
         const room = await this.roomRepsitory
-            .findOneWithOwnerById(roomID)
+            .findOneByOrFail({ id: roomID })
             .catch(() => {
                 throw new RoomNotFoundException(roomID);
             });
 
-        if (room.owner.id != user.id) {
+        if (room.ownerID != user.id) {
             throw new NoOwnerPermissionException();
         }
         await this.roomRepsitory.delete(room.id);

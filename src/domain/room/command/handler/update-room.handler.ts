@@ -26,12 +26,12 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
         const { user, roomID, data } = command;
 
         const room = await this.roomRepsitory
-            .findOneWithOwnerById(roomID)
+            .findOneByOrFail({ id: roomID })
             .catch(() => {
                 throw new RoomNotFoundException(roomID);
             });
 
-        if (room.owner.id != user.id) {
+        if (room.ownerID != user.id) {
             throw new NoOwnerPermissionException();
         }
 
