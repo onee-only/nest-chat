@@ -65,7 +65,7 @@ export class JoinRoomHandler implements ICommandHandler<JoinRoomCommand> {
         room: Room,
         role: MemberRole,
     ): Promise<void> {
-        const member = await this.roomMemberRepository.create({
+        const member = this.roomMemberRepository.create({
             role,
             room,
             user,
