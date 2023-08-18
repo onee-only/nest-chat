@@ -1,20 +1,31 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Permission } from '../internal';
 
-export type RoleElement = {
-    readonly id: number;
-    readonly alias: string;
-    readonly permission: Permission;
-    readonly memberCount: number;
-    readonly isDefault: boolean;
-};
+export class RoleElement {
+    @ApiProperty()
+    public readonly id: number;
+
+    @ApiProperty()
+    public readonly alias: string;
+
+    @ApiProperty()
+    public readonly permission: Permission;
+
+    @ApiProperty()
+    public readonly memberCount: number;
+
+    @ApiProperty()
+    public readonly isDefault: boolean;
+}
 
 export class ListRoleResponse {
-    constructor(
-        public readonly roles: RoleElement[],
-        public readonly totalCount: number,
-    ) {}
+    @ApiProperty({ type: [RoleElement] })
+    public readonly roles: RoleElement[];
+
+    @ApiProperty()
+    public readonly totalCount: number;
 
     public static from(roles: RoleElement[]): ListRoleResponse {
-        return new ListRoleResponse(roles, roles.length);
+        return { roles: roles, totalCount: roles.length };
     }
 }
