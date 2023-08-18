@@ -8,6 +8,7 @@ import { PermissionChecker } from '../../util';
 import { RoomPermission } from '../../enum';
 import {
     NoMatchingRoleException,
+    RoleOccupiedException,
     RoomNotFoundException,
 } from '../../exception';
 import { DeleteRoleCommand } from '../delete-role.command';
@@ -24,10 +25,11 @@ export class DeleteRoleHandler implements ICommandHandler<DeleteRoleCommand> {
     async execute(command: DeleteRoleCommand): Promise<any> {
         const { roomID, user, alias } = command;
 
-        const room = await this.roomRepository.findOneBy({ id: roomID });
-        if (room == null) {
-            throw new RoomNotFoundException(roomID);
-        }
+        const room = await this.roomRepository
+            .findOneByOrFail({ id: roomID })
+            .catch(() => {
+                throw new RoomNotFoundException(roomID);
+            });
 
         await this.permissionChecker.checkOrThrow({
             action: RoomPermission.MANAGE_ROLE,
@@ -35,16 +37,14 @@ export class DeleteRoleHandler implements ICommandHandler<DeleteRoleCommand> {
             user: user,
         });
 
-        const role = await this.memberRoleRepository.findOneBy({
-            alias,
-            roomID,
-        });
-        if (role == null) {
-            throw new NoMatchingRoleException(roomID, alias);
-        }
+        const role = await this.memberRoleRepository
+            .findOneByOrFail({ alias, roomID })
+            .catch(() => {
+                throw new NoMatchingRoleException(roomID, alias);
+            });
 
         if (await this.roomMemberRepository.existsByRoomAndRole(room, role)) {
-            // throw
+            throw new RoleOccupiedException();
         }
 
         await this.memberRoleRepository.delete(role);
