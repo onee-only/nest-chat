@@ -9,7 +9,7 @@ export class RoomMemberRepository extends Repository<RoomMember> {
     }
 
     async existsByRoomAndRole(room: Room, role: MemberRole): Promise<boolean> {
-        return await this.exist({ where: { role, room } });
+        return await this.exist({ where: { role, roomID: room.id } });
     }
 
     async findWithAvatarByRoom(room: Room): Promise<RoomMember[]> {
