@@ -11,7 +11,12 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/global/guards';
 import { ListMemberResponse } from './dto/response';
 import { GetUser } from 'src/global/decorators';
@@ -32,6 +37,7 @@ export class RoomMemberController {
         description: 'Gives a list of room members',
     })
     @ApiOkResponse({ type: ListMemberResponse })
+    @ApiNotFoundResponse()
     @Get()
     @UseGuards(JwtAuthGuard)
     async listMember(

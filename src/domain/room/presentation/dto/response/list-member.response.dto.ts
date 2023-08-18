@@ -1,22 +1,35 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { RoomMember } from 'src/domain/room/entity';
 
-export type MemberElement = {
-    readonly role: {
-        readonly alias: string;
-    };
+class MemberRoleElement {
+    @ApiProperty()
+    public readonly alias: string;
+}
 
-    readonly user: {
-        readonly id: number;
-        readonly nickname: string;
-        readonly profileURL: string;
-    };
-};
+class UserElement {
+    @ApiProperty()
+    public readonly id: number;
+
+    @ApiProperty()
+    public readonly nickname: string;
+
+    @ApiProperty()
+    public readonly profileURL: string;
+}
+class MemberElement {
+    @ApiProperty()
+    public readonly role: MemberRoleElement;
+
+    @ApiProperty()
+    public readonly user: UserElement;
+}
 
 export class ListMemberResponse {
-    constructor(
-        public readonly members: MemberElement[],
-        public readonly totalCount: number,
-    ) {}
+    @ApiProperty({ type: [MemberElement] })
+    public readonly members: MemberElement[];
+
+    @ApiProperty()
+    public readonly totalCount: number;
 
     public static from(members: RoomMember[]): ListMemberResponse {
         const elements = members.map(
@@ -26,6 +39,6 @@ export class ListMemberResponse {
             }),
         );
 
-        return new ListMemberResponse(elements, elements.length);
+        return { members: elements, totalCount: elements.length };
     }
 }
