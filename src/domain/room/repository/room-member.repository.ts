@@ -22,7 +22,7 @@ export class RoomMemberRepository extends Repository<RoomMember> {
                     avatar: { nickname: true, profileURL: true },
                 },
             },
-            where: { room },
+            where: { roomID: room.id },
         });
     }
 
