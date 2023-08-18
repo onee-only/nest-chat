@@ -17,6 +17,7 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
     ApiCreatedResponse,
+    ApiForbiddenResponse,
     ApiNoContentResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
@@ -122,6 +123,7 @@ export class RoomController {
         description: 'Updates a room',
     })
     @ApiOkResponse()
+    @ApiForbiddenResponse()
     @ApiNotFoundResponse({ description: 'room not found or role not found' })
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
@@ -140,6 +142,7 @@ export class RoomController {
         description: 'Deletes a room',
     })
     @ApiNoContentResponse()
+    @ApiForbiddenResponse()
     @ApiNotFoundResponse()
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
@@ -158,6 +161,7 @@ export class RoomController {
         description: 'Finds a room',
     })
     @ApiOkResponse({ type: RetreiveRoomResponse })
+    @ApiForbiddenResponse()
     @ApiNotFoundResponse()
     @Get(':id')
     @UseGuards(JwtAuthGuard)

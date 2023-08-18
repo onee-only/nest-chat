@@ -3,6 +3,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseIntPipe,
     Patch,
@@ -10,7 +12,16 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+    ApiConflictResponse,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNoContentResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+} from '@nestjs/swagger';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
@@ -35,6 +46,10 @@ export class MemberRoleController {
         summary: 'create role',
         description: 'Creates a new role',
     })
+    @ApiCreatedResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
+    @ApiConflictResponse({ description: 'duplicate alias exists' })
     @Post()
     @UseGuards(JwtAuthGuard)
     async createRole(
@@ -49,10 +64,12 @@ export class MemberRoleController {
     }
 
     @ApiOperation({
-        summary: 'create role',
-        description: 'Creates a new role',
+        summary: 'list role',
+        description: 'Gives a list of role',
     })
     @ApiOkResponse({ type: ListRoleResponse })
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Get()
     @UseGuards(JwtAuthGuard)
     async listRole(
@@ -66,6 +83,10 @@ export class MemberRoleController {
         summary: 'update role',
         description: 'Updates a role',
     })
+    @ApiOkResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
+    @ApiConflictResponse({ description: 'duplicate alias exists' })
     @Patch(':alias')
     @UseGuards(JwtAuthGuard)
     async updateRole(
@@ -84,7 +105,12 @@ export class MemberRoleController {
         summary: 'delete role',
         description: 'Deletes a role',
     })
+    @ApiNoContentResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
+    @ApiConflictResponse()
     @Delete(':alias')
+    @HttpCode(HttpStatus.NO_CONTENT)
     @UseGuards(JwtAuthGuard)
     async deleteRole(
         @Param('roomID', ParseIntPipe) roomID: number,
