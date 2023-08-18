@@ -50,6 +50,8 @@ export class PermissionChecker {
                 throw new NotRoomMemberException(user.id, room.id);
             });
 
-        return action == null ? true : member.role.permission[action] == true;
+        if (room.ownerID === member.userID || action == null) return true;
+
+        return member.role.permission[action] == true;
     }
 }
