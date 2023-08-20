@@ -12,6 +12,10 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
+    ApiBadRequestResponse,
+    ApiConflictResponse,
+    ApiForbiddenResponse,
+    ApiNoContentResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
@@ -51,6 +55,11 @@ export class RoomMemberController {
         summary: 'join room',
         description: 'Join a room',
     })
+    @ApiOkResponse()
+    @ApiBadRequestResponse({ description: 'invitation is necessary' })
+    @ApiForbiddenResponse({ description: 'invitation is invalid' })
+    @ApiNotFoundResponse()
+    @ApiConflictResponse({ description: 'you have already joined' })
     @HttpCode(HttpStatus.OK)
     @Post()
     @UseGuards(JwtAuthGuard)
@@ -68,6 +77,12 @@ export class RoomMemberController {
         summary: 'kick member',
         description: 'Kicks the given member',
     })
+    @ApiNoContentResponse()
+    @ApiForbiddenResponse({
+        description: 'you are kicking the owner or yourself or no permission',
+    })
+    @ApiNotFoundResponse()
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Delete(':memberID')
     @UseGuards(JwtAuthGuard)
     async kickMember(
