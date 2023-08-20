@@ -1,22 +1,31 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { ListThreadElement } from '../internal';
 
-type ListInfo = {
-    readonly pageNum: number;
-    readonly pageSize: number;
-    readonly totalPages: number;
-    readonly totalThreads: number;
-};
+class ListInfo {
+    @ApiProperty()
+    public readonly pageNum: number;
+
+    @ApiProperty()
+    public readonly pageSize: number;
+
+    @ApiProperty()
+    public readonly totalPages: number;
+
+    @ApiProperty()
+    public readonly totalThreads: number;
+}
 
 export class ListThreadReponseDto {
-    constructor(
-        public readonly threads: ListThreadElement[],
-        public readonly pageInfo: ListInfo,
-    ) {}
+    @ApiProperty({ type: [ListThreadElement] })
+    public readonly threads: ListThreadElement[];
+
+    @ApiProperty()
+    public readonly pageInfo: ListInfo;
 
     public static from(
         threads: ListThreadElement[],
         pageInfo: ListInfo,
     ): ListThreadReponseDto {
-        return new ListThreadReponseDto(threads, pageInfo);
+        return { threads, pageInfo };
     }
 }

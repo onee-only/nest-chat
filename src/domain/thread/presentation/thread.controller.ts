@@ -15,11 +15,18 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+} from '@nestjs/swagger';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { ThreadOrder, ThreadOrderDir } from '../enum';
-import { ParseDatePipe } from 'src/global/pipes';
+import { ParseDatePipe, ParseOptionalIntPipe } from 'src/global/pipes';
 import {
     ListPinnedThreadQuery,
     ListThreadQuery,
@@ -51,6 +58,9 @@ export class ThreadController {
         summary: 'create thread',
         description: 'Creates a new thread',
     })
+    @ApiCreatedResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Post()
     @UseGuards(JwtAuthGuard)
     async createThread(
@@ -69,6 +79,8 @@ export class ThreadController {
         description: 'Gives a list of the threads',
     })
     @ApiOkResponse({ type: ListThreadReponseDto })
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Get()
     @UseGuards(JwtAuthGuard)
     async listThread(
@@ -79,12 +91,12 @@ export class ThreadController {
         @Query('dir', new ParseEnumPipe(ThreadOrderDir)) dir: ThreadOrderDir,
 
         @Query('query') query?: string,
-        @Query('size', ParseIntPipe) size?: number,
+        @Query('size', ParseOptionalIntPipe) size?: number,
         @Query('startdate', new ParseDatePipe({ isRequired: false }))
         startDate?: Date,
         @Query('enddate', new ParseDatePipe({ isRequired: false }))
         endDate?: Date,
-        @Query('tags', new ParseArrayPipe()) tags?: string[],
+        @Query('tags', new ParseArrayPipe({ optional: true })) tags?: string[],
     ): Promise<ListThreadReponseDto> {
         return await this.queryBus.execute(
             new ListThreadQuery(user, {
