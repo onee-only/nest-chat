@@ -2,6 +2,8 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { KickMemberCommand } from '../kick-member.command';
 import { RoomMemberRepository, RoomRepository } from '../../repository';
 import {
+    KickingOwnerException,
+    KickingSelfException,
     NoMatchingMemberException,
     RoomNotFoundException,
 } from '../../exception';
@@ -38,6 +40,17 @@ export class KickMemberHandler implements ICommandHandler<KickMemberCommand> {
                 throw new NoMatchingMemberException(roomID, memberID);
             });
 
-        await this.roomMemberRepository.remove(member);
+        if (member.userID === user.id) {
+            throw new KickingSelfException();
+        }
+
+        if (member.userID === room.ownerID) {
+            throw new KickingOwnerException();
+        }
+
+        await this.roomMemberRepository.delete({
+            userID: member.userID,
+            roomID: member.roomID,
+        });
     }
 }
