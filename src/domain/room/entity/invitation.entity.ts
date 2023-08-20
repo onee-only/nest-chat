@@ -1,11 +1,14 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Room } from './room.entity';
 import { MemberRole } from './member-role.entity';
 
 @Entity()
 export class Invitation {
-    @PrimaryColumn({ generated: 'uuid' })
+    @PrimaryColumn({ type: 'uuid' })
     token: string;
+
+    @Column({ type: 'bigint', unsigned: true })
+    roomID: number;
 
     @ManyToOne(() => Room, {
         cascade: true,
@@ -13,14 +16,14 @@ export class Invitation {
         nullable: false,
         onDelete: 'CASCADE',
     })
+    @JoinColumn({ name: 'roomID' })
     room: Room;
 
-    @OneToOne(() => MemberRole, {
+    @ManyToOne(() => MemberRole, {
         cascade: true,
-        eager: true,
-        nullable: true,
         onDelete: 'CASCADE',
     })
+    @JoinColumn()
     role: MemberRole;
 
     @Column()
