@@ -33,7 +33,7 @@ export class ListPinnedThreadHandler
         return ListThreadReponseDto.from(threadList, {
             pageNum: 1,
             pageSize: threadList.length,
-            totalPages: Math.ceil(count / threadList.length),
+            totalPages: Math.ceil(count / threadList.length) || 0,
             totalThreads: count,
         });
     }

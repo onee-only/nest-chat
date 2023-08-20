@@ -108,19 +108,21 @@ export class ThreadRepository extends Repository<Thread> {
     private async getThreadTags(ids: number[]): Promise<Map<number, string[]>> {
         const threadTags: Map<number, string[]> = new Map<number, string[]>();
 
-        const results = await this.dataSource
-            .createQueryBuilder()
-            .select(['threadID', 'tagName'])
-            .from('thread_tags', 'threadTags')
-            .where('threadID IN (:ids)', { ids })
-            .getRawMany();
+        if (ids.length > 0) {
+            const results = await this.dataSource
+                .createQueryBuilder()
+                .select(['threadID', 'tagName'])
+                .from('thread_tags', 'threadTags')
+                .where('threadID IN (:ids)', { ids })
+                .getRawMany();
 
-        results.forEach((result) => {
-            threadTags.set(result.threadID, [
-                ...(threadTags.get(result.threadID) || []),
-                result.tagName,
-            ]);
-        });
+            results.forEach((result) => {
+                threadTags.set(result.threadID, [
+                    ...(threadTags.get(result.threadID) || []),
+                    result.tagName,
+                ]);
+            });
+        }
 
         return threadTags;
     }
