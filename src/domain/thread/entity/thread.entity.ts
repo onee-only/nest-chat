@@ -5,6 +5,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
     JoinTable,
     ManyToMany,
     ManyToOne,
@@ -16,14 +17,21 @@ export class Thread {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;
 
+    @Column({ type: 'bigint', unsigned: true, nullable: true })
+    creatorID: number;
+
     @ManyToOne(() => User, {
-        eager: true,
         nullable: true,
         onDelete: 'SET NULL',
     })
+    @JoinColumn({ name: 'creatorID' })
     creator: User;
 
-    @ManyToOne(() => Room)
+    @Column({ type: 'bigint', unsigned: true })
+    roomID: number;
+
+    @ManyToOne(() => Room, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'roomID' })
     room: Room;
 
     @Column()
