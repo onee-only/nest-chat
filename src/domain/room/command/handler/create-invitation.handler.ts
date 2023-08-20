@@ -12,6 +12,7 @@ import {
     NoMatchingRoleException,
     RoomNotFoundException,
 } from '../../exception';
+import { v4 as generateUUID } from 'uuid';
 
 @CommandHandler(CreateInvitationCommand)
 export class CreateInvitationHandler
@@ -50,9 +51,10 @@ export class CreateInvitationHandler
         const expiresAt = Date.now() + duration;
 
         const candiate = this.invitationRepository.create({
-            role,
-            room,
-            expiresAt,
+            token: generateUUID(),
+            role: role,
+            room: room,
+            expiresAt: new Date(expiresAt),
         });
         const invitation = await this.invitationRepository.save(candiate);
 

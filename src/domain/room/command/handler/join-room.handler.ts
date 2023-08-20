@@ -51,7 +51,7 @@ export class JoinRoomHandler implements ICommandHandler<JoinRoomCommand> {
         const invitation = await this.invitationRepository
             .findOneOrFail({
                 relations: { role: true },
-                where: { token, room },
+                where: { token, roomID },
             })
             .catch(() => {
                 throw new InvalidInvitationTokenException(roomID, token);

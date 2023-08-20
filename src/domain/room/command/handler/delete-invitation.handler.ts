@@ -28,7 +28,7 @@ export class DeleteInvitationHandler
         const invitation = await this.invitationRepository
             .findOneByOrFail({
                 token,
-                room,
+                roomID,
             })
             .catch(() => {
                 throw new NoMatchingInvitationException(roomID, token);
