@@ -21,7 +21,7 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
 
     async execute(command: UpdateRoomCommand): Promise<void> {
         const {
-            data: { defaultRoleAlias, tags: tagNames },
+            data: { defaultRoleAlias },
         } = command;
         const { user, roomID, data } = command;
 
@@ -40,20 +40,22 @@ export class UpdateRoomHandler implements ICommandHandler<UpdateRoomCommand> {
             delete data.defaultRoleAlias;
         }
 
-        // should refactor it. update thread too.
-        const tags = tagNames.map((name) =>
-            this.tagRepository.create({ name }),
-        );
-        if (tagNames != null) {
+        if (data.tags != null) {
+            const tags = data.tags.map((name) =>
+                this.tagRepository.create({ name }),
+            );
+
             await this.tagRepository.insertOrIgnore(tags);
             room.tags = tags;
         }
         delete data.tags;
 
-        const candiate = this.objectManager.filterNullish({
-            ...data,
-        });
-        Object.assign(room, candiate);
+        Object.assign(
+            room,
+            this.objectManager.filterNullish({
+                ...data,
+            }),
+        );
 
         await this.roomRepsitory.save(room);
     }
