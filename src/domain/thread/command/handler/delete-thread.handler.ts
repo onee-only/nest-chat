@@ -8,7 +8,7 @@ import {
     NoMathcingThreadException,
 } from '../../exception';
 
-@CommandHandler(DeleteThreadHandler)
+@CommandHandler(DeleteThreadCommand)
 export class DeleteThreadHandler
     implements ICommandHandler<DeleteThreadCommand>
 {
@@ -27,18 +27,15 @@ export class DeleteThreadHandler
             });
 
         const thread = await this.threadRepository
-            .findOneOrFail({
-                relations: { creator: true },
-                where: { room: room, id: threadID },
-            })
+            .findOneByOrFail({ roomID: room.id, id: threadID })
             .catch(() => {
                 throw new NoMathcingThreadException(roomID, threadID);
             });
 
-        if (thread.creator != user) {
+        if (thread.creatorID != user.id) {
             throw new NoCreatorPermissionException(threadID);
         }
 
-        await this.threadRepository.delete(thread);
+        await this.threadRepository.delete(thread.id);
     }
 }
