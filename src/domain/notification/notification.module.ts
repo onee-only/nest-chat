@@ -6,9 +6,12 @@ import { RoomModule } from '../room/room.module';
 import { CommandHandlers } from './command/handler';
 import { NotifiactionPublisher } from './util/notification.publisher';
 import { QueryHandlers } from './query/handler';
+import { NotificationController } from './presentation/notification.controller';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Notification]), RoomModule],
+    imports: [CqrsModule, TypeOrmModule.forFeature([Notification]), RoomModule],
+    controllers: [NotificationController],
     providers: [
         // handlers
         ...CommandHandlers,
