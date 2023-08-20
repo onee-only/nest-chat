@@ -41,6 +41,7 @@ export class RoomMemberController {
         description: 'Gives a list of room members',
     })
     @ApiOkResponse({ type: ListMemberResponse })
+    @ApiForbiddenResponse()
     @ApiNotFoundResponse()
     @Get()
     @UseGuards(JwtAuthGuard)

@@ -1,13 +1,15 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Invitation } from 'src/domain/room/entity';
 
 export class CreateInvitationResponse {
-    constructor(
-        public readonly token: string,
-        public readonly expiresAt: Date,
-    ) {}
+    @ApiProperty()
+    public readonly token: string;
+
+    @ApiProperty()
+    public readonly expiresAt: Date;
 
     public static from(invitation: Invitation): CreateInvitationResponse {
         const { expiresAt, token } = invitation;
-        return new CreateInvitationResponse(token, expiresAt);
+        return { token, expiresAt };
     }
 }

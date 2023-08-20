@@ -3,14 +3,20 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseIntPipe,
+    ParseUUIDPipe,
     Post,
     UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
     ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNoContentResponse,
+    ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
     ApiTags,
@@ -39,6 +45,8 @@ export class InvitationController {
         description: 'Creates an invitation',
     })
     @ApiCreatedResponse({ type: CreateInvitationResponse })
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Post()
     @UseGuards(JwtAuthGuard)
     async createInvitation(
@@ -57,6 +65,8 @@ export class InvitationController {
         description: 'Gives a list of invitations',
     })
     @ApiOkResponse({ type: ListInvitationResponse })
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Get()
     @UseGuards(JwtAuthGuard)
     async listInvitation(
@@ -72,12 +82,16 @@ export class InvitationController {
         summary: 'delete invitation',
         description: 'Deletes an invitation',
     })
+    @ApiNoContentResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Delete(':token')
     @UseGuards(JwtAuthGuard)
     async deleteInvitation(
         @GetUser() user: User,
         @Param('roomID', ParseIntPipe) roomID: number,
-        @Param('token', ParseIntPipe) token: string,
+        @Param('token', ParseUUIDPipe) token: string,
     ): Promise<void> {
         return await this.commandBus.execute(
             new DeleteInvitationCommand(roomID, token, user),

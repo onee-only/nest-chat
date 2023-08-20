@@ -1,20 +1,31 @@
-export type ListInvitationElement = {
-    readonly token: string;
-    readonly expiresAt: Date;
-    readonly role: {
-        readonly alias: string;
-    };
-};
+import { ApiProperty } from '@nestjs/swagger';
+
+class InviationRoleElement {
+    @ApiProperty()
+    public readonly alias: string;
+}
+
+export class ListInvitationElement {
+    @ApiProperty()
+    public readonly token: string;
+
+    @ApiProperty()
+    public readonly expiresAt: Date;
+
+    @ApiProperty()
+    public readonly role: InviationRoleElement;
+}
 
 export class ListInvitationResponse {
-    constructor(
-        public readonly invitations: ListInvitationElement[],
-        public readonly totalCount: number,
-    ) {}
+    @ApiProperty({ type: [ListInvitationElement] })
+    public readonly invitations: ListInvitationElement[];
+
+    @ApiProperty()
+    public readonly totalCount: number;
 
     public static from(
         invitations: ListInvitationElement[],
     ): ListInvitationResponse {
-        return new ListInvitationResponse(invitations, invitations.length);
+        return { invitations, totalCount: invitations.length };
     }
 }
