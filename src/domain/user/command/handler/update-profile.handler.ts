@@ -18,8 +18,7 @@ export class UpdateProfileHandler
     ): Promise<GetMyProfileResponse> {
         const { user, data } = command;
 
-        const filtered = this.objectUtil.filterNullish(data);
-        Object.assign(user.avatar, filtered);
+        Object.assign(user.avatar, this.objectUtil.filterNullish(data));
 
         await this.userRepository.save(user);
 

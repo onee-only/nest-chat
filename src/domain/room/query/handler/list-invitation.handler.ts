@@ -28,7 +28,7 @@ export class ListInvitationHandler
                 throw new RoomNotFoundException(roomID);
             });
 
-        if (room.owner != user) {
+        if (room.ownerID != user.id) {
             throw new NoOwnerPermissionException();
         }
 
@@ -41,7 +41,7 @@ export class ListInvitationHandler
             (invitation): ListInvitationElement => ({
                 expiresAt: invitation.expiresAt,
                 token: invitation.token,
-                role: { ...invitation.role },
+                role: { alias: invitation.role.alias },
             }),
         );
 
