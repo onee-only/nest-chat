@@ -20,28 +20,24 @@ export class TogglePinHandler implements ICommandHandler<TogglePinCommand> {
         const { roomID, threadID, user } = command;
 
         const room = await this.roomRepository
-            .findOneOrFail({
-                relations: { owner: true },
-                where: { id: roomID },
-            })
+            .findOneByOrFail({ id: roomID })
             .catch(() => {
                 throw new RoomNotFoundException(roomID);
             });
 
         const thread = await this.threadRepository
             .findOneOrFail({
-                where: { room: room, id: threadID },
+                where: { roomID: room.id, id: threadID },
             })
             .catch(() => {
                 throw new NoMathcingThreadException(roomID, threadID);
             });
 
-        if (room.owner != user) {
+        if (room.ownerID != user.id) {
             throw new NoOwnerPermissionException();
         }
 
         const pinnedThread = this.pinnedThreadRepository.create({
-            thread,
             threadID: thread.id,
         });
         const exists = await this.pinnedThreadRepository.exist({
