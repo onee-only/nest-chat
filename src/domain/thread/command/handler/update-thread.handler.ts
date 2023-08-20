@@ -22,12 +22,7 @@ export class UpdateThreadHandler
     ) {}
 
     async execute(command: UpdateThreadCommand): Promise<void> {
-        const {
-            user,
-            roomID,
-            threadID,
-            data: { tags: tagNames, title },
-        } = command;
+        const { user, roomID, threadID, data } = command;
 
         const room = await this.roomRepository
             .findOneByOrFail({ id: roomID })
@@ -36,31 +31,31 @@ export class UpdateThreadHandler
             });
 
         const thread = await this.threadRepository
-            .findOneOrFail({
-                relations: { creator: true },
-                where: { room: room, id: threadID },
-            })
+            .findOneByOrFail({ roomID: room.id, id: threadID })
             .catch(() => {
                 throw new NoMathcingThreadException(roomID, threadID);
             });
 
-        if (thread.creator != user) {
+        if (thread.creatorID != user.id) {
             throw new NoCreatorPermissionException(threadID);
         }
 
-        const tags = tagNames.map((name) =>
-            this.tagRepository.create({ name }),
-        );
-        if (tagNames != null) {
+        if (data.tags != null) {
+            const tags = data.tags.map((name) =>
+                this.tagRepository.create({ name }),
+            );
+
             await this.tagRepository.insertOrIgnore(tags);
+
+            thread.tags = tags;
         }
 
-        const candiate = this.objectManager.filterNullish({
-            tags: tagNames ? tags : null,
-            title: title,
-        });
-
-        Object.assign(thread, candiate);
+        Object.assign(
+            thread,
+            this.objectManager.filterNullish({
+                title: data.title,
+            }),
+        );
 
         await this.threadRepository.save(thread);
     }
