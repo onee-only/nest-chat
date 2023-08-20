@@ -10,3 +10,5 @@ export * from './missing-token.exception';
 export * from './invalid-invitation-token.exception';
 export * from './no-matching-member.exception';
 export * from './role-occupied.exception';
+export * from './kicking-self.exception';
+export * from './kicking-owner.exception';
