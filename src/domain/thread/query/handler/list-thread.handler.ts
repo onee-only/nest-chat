@@ -34,7 +34,7 @@ export class ListThreadHandler implements IQueryHandler<ListThreadQuery> {
         return ListThreadReponseDto.from(threadList, {
             pageNum: options.page,
             pageSize: threadList.length,
-            totalPages: Math.ceil(count / threadList.length),
+            totalPages: Math.ceil(count / threadList.length) || 0,
             totalThreads: count,
         });
     }
