@@ -18,6 +18,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
     ApiCreatedResponse,
     ApiForbiddenResponse,
+    ApiNoContentResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
@@ -118,6 +119,8 @@ export class ThreadController {
         description: 'Gives a list of the pinned threads',
     })
     @ApiOkResponse({ type: ListThreadReponseDto })
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Get('pinned')
     @UseGuards(JwtAuthGuard)
     async listPinnedThread(
@@ -133,6 +136,10 @@ export class ThreadController {
         summary: 'delete thread',
         description: 'Deletes a thread',
     })
+    @ApiNoContentResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Delete(':threadID')
     @UseGuards(JwtAuthGuard)
     async deleteThread(
@@ -149,6 +156,9 @@ export class ThreadController {
         summary: 'update thread',
         description: 'Updates a thread',
     })
+    @ApiOkResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Patch(':threadID')
     @UseGuards(JwtAuthGuard)
     async updateThread(
@@ -167,6 +177,8 @@ export class ThreadController {
         description: 'Updates a thread',
     })
     @ApiOkResponse({ type: RetreiveSessionResponse })
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Get(':threadID/session')
     @UseGuards(JwtAuthGuard)
     async retreiveSession(
@@ -183,13 +195,15 @@ export class ThreadController {
         summary: 'toggle pin thread',
         description: 'Toggles a pin of a thread. if pinned, unpin',
     })
+    @ApiOkResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @HttpCode(HttpStatus.OK)
     @Post(':threadID/pin')
     @UseGuards(JwtAuthGuard)
     async togglepinThread(
         @Param('roomID', ParseIntPipe) roomID: number,
         @Param('threadID', ParseIntPipe) threadID: number,
-        @Body() request: UpdateThreadRequest,
         @GetUser() user: User,
     ): Promise<void> {
         return await this.commandBus.execute(
