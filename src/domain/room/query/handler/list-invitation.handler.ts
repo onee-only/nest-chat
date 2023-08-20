@@ -34,7 +34,7 @@ export class ListInvitationHandler
 
         const candidates = await this.invitationRepository.find({
             relations: { role: true },
-            where: { room },
+            where: { roomID },
         });
 
         const invitations = candidates.map(
