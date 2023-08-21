@@ -13,7 +13,7 @@ import { Message } from 'src/domain/message/entity';
 
 @Entity()
 export class Notification {
-    @PrimaryColumn({ generated: 'uuid' })
+    @PrimaryColumn({ type: 'uuid' })
     uuid: string;
 
     @ManyToOne(() => User, { onDelete: 'CASCADE' })

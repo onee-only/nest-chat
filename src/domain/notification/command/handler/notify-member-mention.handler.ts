@@ -7,6 +7,7 @@ import { User } from 'src/domain/user/entity';
 import { NotificationType } from '../../enum';
 import { Notification } from '../../entity';
 import { NotifiactionPublisher } from '../../util';
+import { v4 as generateUUID } from 'uuid';
 
 @CommandHandler(NotifyMemberMentionCommand)
 export class NotifyMemberMentionHandler
@@ -38,6 +39,7 @@ export class NotifyMemberMentionHandler
         user: User,
     ): Notification {
         return this.notificationRepository.create({
+            uuid: generateUUID(),
             type: NotificationType.MEMBER_MENTION,
             content: ``,
             message: message,

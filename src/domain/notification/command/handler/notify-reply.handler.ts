@@ -7,6 +7,7 @@ import { Message } from 'src/domain/message/entity';
 import { User } from 'src/domain/user/entity';
 import { Notification } from '../../entity';
 import { NotifiactionPublisher } from '../../util';
+import { v4 as generateUUID } from 'uuid';
 
 @CommandHandler(NotifyReplyCommand)
 export class NotifyReplyHandler implements ICommandHandler<NotifyReplyCommand> {
@@ -31,6 +32,7 @@ export class NotifyReplyHandler implements ICommandHandler<NotifyReplyCommand> {
         user: User,
     ): Notification {
         return this.notificationRepository.create({
+            uuid: generateUUID(),
             type: NotificationType.REPLY,
             content: ``,
             message: message,
