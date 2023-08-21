@@ -4,6 +4,7 @@ import {
     CreateDateColumn,
     Entity,
     Index,
+    JoinColumn,
     ManyToMany,
     ManyToOne,
     OneToMany,
@@ -16,13 +17,21 @@ import { Thread } from 'src/domain/thread/entity';
 
 @Entity()
 export class Message {
-    @PrimaryColumn({ generated: 'uuid' })
+    @PrimaryColumn({ type: 'uuid' })
     id: string;
 
+    @Column({ type: 'bigint', unsigned: true, nullable: true })
+    authorID: number;
+
     @ManyToOne(() => User, { onDelete: 'SET NULL' })
+    @JoinColumn({ name: 'authorID' })
     author: User;
 
+    @Column({ type: 'bigint', unsigned: true })
+    threadID: number;
+
     @ManyToOne(() => Thread, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'threadID' })
     thread: Thread;
 
     @ManyToOne(() => Message, { onDelete: 'SET NULL', nullable: true })
