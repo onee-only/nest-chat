@@ -27,6 +27,7 @@ import {
     RoleMentionedEvent,
 } from '../../event';
 import { ChatBroker } from 'src/domain/thread/util/chat';
+import { v4 as generateUUID } from 'uuid';
 
 @CommandHandler(CreateMessageCommand)
 export class CreateMessageHandler
@@ -85,6 +86,7 @@ export class CreateMessageHandler
         });
 
         const message = this.messageRepository.create({
+            id: generateUUID(),
             author: user,
             thread: thread,
             content: body,
@@ -125,7 +127,7 @@ export class CreateMessageHandler
                 mentionNames,
             );
         }
-        return null;
+        return [];
     }
 
     private async findMentionRoles(
@@ -138,7 +140,7 @@ export class CreateMessageHandler
                 mentionNames,
             );
         }
-        return null;
+        return [];
     }
 
     private async findReplyTo(
@@ -155,7 +157,7 @@ export class CreateMessageHandler
                     throw new NoMatchingMessageException(thread.id, replyTo);
                 });
         }
-        return null;
+        return undefined;
     }
 
     private createEmbedments(

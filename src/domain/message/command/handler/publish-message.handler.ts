@@ -15,8 +15,17 @@ export class PublishMessageHandler
 
         const msg: MessageInfo = {
             data: {
-                message: { ...message },
-                author: { ...author, ...author.avatar },
+                message: {
+                    id: message.id,
+                    content: message.content,
+                    createdAt: message.createdAt,
+                    updatedAt: message.updatedAt,
+                },
+                author: {
+                    id: author.id,
+                    nickname: author.avatar.nickname,
+                    profileURL: author.avatar.profileURL,
+                },
                 embedments: embedments.map((embedment) => ({
                     name: embedment.name,
                     url: embedment.url,
@@ -24,12 +33,21 @@ export class PublishMessageHandler
             },
         };
 
-        if (replyTo !== undefined) {
-            msg.data.replyTo = {
-                author: { ...replyTo.author, ...replyTo.author.avatar },
-                message: { ...replyTo },
-            };
-        }
+        msg.data.replyTo = replyTo
+            ? {
+                  author: {
+                      id: replyTo.author.id,
+                      nickname: replyTo.author.avatar.nickname,
+                      profileURL: replyTo.author.avatar.profileURL,
+                  },
+                  message: {
+                      content: replyTo.content,
+                      createdAt: replyTo.createdAt,
+                      id: replyTo.id,
+                      updatedAt: replyTo.updatedAt,
+                  },
+              }
+            : null;
 
         await this.chatBroker.publish(room.id, thread.id, msg);
     }
