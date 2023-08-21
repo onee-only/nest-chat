@@ -1,3 +1,4 @@
+import { MessageEvent } from '@nestjs/common';
 import { Subject } from 'rxjs';
 
 export type SocketData = {
@@ -8,7 +9,7 @@ export type SocketData = {
 
 export type Chat = {
     users: UserInfo[];
-    events: Subject<MessagePayload>;
+    events: Subject<MessageEvent>;
 };
 
 export type ChatInfo = {
