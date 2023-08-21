@@ -26,18 +26,13 @@ export class ListMessageHandler implements IQueryHandler<ListMessageQuery> {
         } = query;
 
         const room = await this.roomRepository
-            .findOneByOrFail({
-                id: roomID,
-            })
+            .findOneByOrFail({ id: roomID })
             .catch(() => {
                 throw new RoomNotFoundException(roomID);
             });
 
         const thread = await this.threadRepository
-            .findOneByOrFail({
-                id: threadID,
-                room,
-            })
+            .findOneByOrFail({ id: threadID, roomID })
             .catch(() => {
                 throw new NoMathcingThreadException(roomID, threadID);
             });
@@ -48,7 +43,7 @@ export class ListMessageHandler implements IQueryHandler<ListMessageQuery> {
         });
 
         const messages = await this.messageRepository.find({
-            where: { thread: thread, createdAt: LessThan(endDate) },
+            where: { threadID: thread.id, createdAt: LessThan(endDate) },
             relations: {
                 author: { avatar: true },
                 embedments: true,
