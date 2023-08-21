@@ -15,7 +15,14 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+} from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
@@ -56,6 +63,9 @@ export class MessageController {
         summary: 'create message',
         description: 'Creates a message',
     })
+    @ApiCreatedResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Post()
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FilesInterceptor('embedments'))
@@ -80,10 +90,11 @@ export class MessageController {
         summary: 'list messages',
         description: 'Gives a list of messages',
     })
-    @ApiOkResponse({
-        type: ListMessageResponse,
-    })
+    @ApiOkResponse({ type: ListMessageResponse })
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Get()
+    @UseGuards(JwtAuthGuard)
     async listMessage(
         @Param('roomID', ParseIntPipe) roomID: number,
         @Param('threadID', ParseIntPipe) threadID: number,
