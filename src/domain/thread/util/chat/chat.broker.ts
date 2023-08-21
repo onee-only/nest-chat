@@ -14,11 +14,13 @@ import { User } from 'src/domain/user/entity';
 import { ChatInfoManager } from './chat-info.manager';
 import { Chat, LeaveInfo, SocketData, TypingInfo, UserInfo } from './types';
 import { Observable, Subject } from 'rxjs';
+import { UserRepository } from 'src/domain/user/repository';
 
 @Injectable()
 export class ChatBroker {
     constructor(
         private readonly roomRepository: RoomRepository,
+        private readonly userRepository: UserRepository,
         private readonly threadRepository: ThreadRepository,
         private readonly chatRepository: ChatRepository,
 
@@ -28,10 +30,12 @@ export class ChatBroker {
 
     async join(
         socket: Socket,
-        user: User,
+        userID: number,
         roomID: number,
         threadID: number,
     ): Promise<void> {
+        const user = await this.userRepository.findOneBy({ id: userID });
+
         const room = await this.roomRepository
             .findOneByOrFail({ id: roomID })
             .catch(() => {
@@ -39,7 +43,7 @@ export class ChatBroker {
             });
 
         const thread = await this.threadRepository
-            .findOneByOrFail({ room, id: threadID })
+            .findOneByOrFail({ roomID: room.id, id: threadID })
             .catch(() => {
                 throw new WsNoMatchingThreadException(roomID, threadID);
             });
@@ -62,7 +66,7 @@ export class ChatBroker {
         let chat: Chat = await this.chatRepository.find(chatName);
         chat ??= { users: [], events: new Subject() };
 
-        if (chat.users.includes(userInfo)) {
+        if (chat.users.some((user) => user.id === userInfo.id)) {
             throw new WsAlreadyJoinedException(roomID, threadID);
         }
         chat.users.push(userInfo);
@@ -79,25 +83,36 @@ export class ChatBroker {
         const chatName = this.chatInfoManager.genChatName(roomID, threadID);
 
         const chat = await this.chatRepository.find(chatName);
-        chat.users = chat.users.filter((userInfo) => userInfo.id !== userID);
+        if (chat != null) {
+            chat.users = chat.users.filter(
+                (userInfo) => userInfo.id !== userID,
+            );
 
-        if (chat.users.length == 0) {
-            await this.chatRepository.delete(chatName);
-        } else {
-            await this.chatRepository.upsert(chatName, chat);
+            if (chat.users.length == 0) {
+                await this.chatRepository.delete(chatName);
+            } else {
+                await this.chatRepository.upsert(chatName, chat);
 
-            const leaveInfo: LeaveInfo = { id: userID };
-            socket.to(chatName).emit('off', leaveInfo);
+                const leaveInfo: LeaveInfo = { id: userID };
+                socket.to(chatName).emit('off', leaveInfo);
+            }
         }
+
         socket.leave(chatName);
+        socket.disconnect(true);
     }
 
     async broadcastTyping(socket: Socket): Promise<void> {
         const { roomID, threadID, userID }: SocketData = socket.data;
 
         const chatName = this.chatInfoManager.genChatName(roomID, threadID);
-        const typingInfo: TypingInfo = { id: userID };
+        const chat = await this.chatRepository.find(chatName);
 
+        if (chat == null || chat.users.every((user) => user.id !== userID)) {
+            return;
+        }
+
+        const typingInfo: TypingInfo = { id: userID };
         socket.to(chatName).emit('typing', typingInfo);
     }
 
@@ -137,10 +152,6 @@ export class ChatBroker {
         const chat = await this.chatRepository.find(chatName);
         if (chat === undefined) return false;
 
-        return chat.users.includes({
-            id: user.id,
-            nickname: user.avatar.nickname,
-            profileURL: user.avatar.profileURL,
-        });
+        return chat.users.some((member) => member.id === user.id);
     }
 }
