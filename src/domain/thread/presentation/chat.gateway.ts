@@ -89,7 +89,7 @@ export class ChatGateway
             );
             id = userID;
         } catch (_) {
-            socket.emit('your token is not valid');
+            socket.emit('error', 'your token is not valid');
             socket.disconnect(true);
             return;
         }
@@ -105,8 +105,6 @@ export class ChatGateway
             threadID: null,
         };
         socket.data = data;
-
-        socket.emit('hi tehre');
     }
 
     async handleDisconnect(@ConnectedSocket() socket: Socket) {
