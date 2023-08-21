@@ -79,7 +79,7 @@ export class MessageSaga {
     notifyReply(events$: Observable<any>): Observable<ICommand> {
         return events$.pipe(
             ofType(ReplyCreatedEvent),
-            filter(({ reply }: ReplyCreatedEvent) => reply != null),
+            filter(({ target }: ReplyCreatedEvent) => target != null),
             map(
                 ({ room, reply, target }: ReplyCreatedEvent) =>
                     new NotifyReplyCommand(room, target, reply),
