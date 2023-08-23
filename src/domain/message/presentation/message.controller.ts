@@ -3,6 +3,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     MessageEvent,
     Param,
     ParseIntPipe,
@@ -18,6 +20,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
     ApiCreatedResponse,
     ApiForbiddenResponse,
+    ApiNoContentResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
@@ -112,6 +115,9 @@ export class MessageController {
         summary: 'update message',
         description: 'Updates a message',
     })
+    @ApiOkResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
     @Patch(':messageID')
     @UseGuards(JwtAuthGuard)
     async updateMesage(
@@ -128,9 +134,13 @@ export class MessageController {
     }
 
     @ApiOperation({
-        summary: 'update message',
-        description: 'Updates a message',
+        summary: 'delete message',
+        description: 'Deletes a message',
     })
+    @ApiNoContentResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Delete(':messageID')
     @UseGuards(JwtAuthGuard)
     async deleteMessage(
