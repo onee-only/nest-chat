@@ -13,6 +13,6 @@ export class ClearNotificationHandler
     async execute(command: ClearNotificationsCommand): Promise<void> {
         const { user } = command;
 
-        await this.notificationRepository.delete({ recipient: user });
+        await this.notificationRepository.delete({ recipientID: user.id });
     }
 }

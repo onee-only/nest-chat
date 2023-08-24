@@ -3,6 +3,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
     ManyToOne,
     PrimaryColumn,
 } from 'typeorm';
@@ -16,7 +17,11 @@ export class Notification {
     @PrimaryColumn({ type: 'uuid' })
     uuid: string;
 
+    @Column({ type: 'bigint', unsigned: true })
+    recipientID: number;
+
     @ManyToOne(() => User, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'recipientID' })
     recipient: User;
 
     @ManyToOne(() => User, { onDelete: 'SET NULL' })

@@ -18,6 +18,7 @@ export class SubscribeNotificationHandler
         const { req, user } = query;
 
         const subject = await this.notificationPublisher.subscribe(user.id);
+
         req.on('close', () => {
             this.notificationPublisher.unsubscribe(user.id);
         });

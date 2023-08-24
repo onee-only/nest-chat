@@ -17,7 +17,7 @@ export class DeleteNotificationHandler
         const notificaiton = await this.notificationRepository
             .findOneByOrFail({
                 uuid: uuid,
-                recipient: user,
+                recipientID: user.id,
             })
             .catch(() => {
                 throw new NotificationNotFoundException(uuid);

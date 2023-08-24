@@ -17,7 +17,7 @@ export class ListNotificationHandler
         const { user } = query;
 
         const notifications = await this.notificationRepository.find({
-            where: { recipient: user },
+            where: { recipientID: user.id },
             relations: {
                 issuer: { avatar: true },
                 room: true,
