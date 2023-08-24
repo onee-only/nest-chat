@@ -54,7 +54,7 @@ export class Message {
     mentionRoles: MemberRole[];
 
     @OneToMany(() => Embedment, (embedment) => embedment.message, {
-        onDelete: 'CASCADE',
+        cascade: true,
     })
     embedments: Embedment[];
 }

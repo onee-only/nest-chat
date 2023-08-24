@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Message } from './message.entity';
 
 @Entity()
@@ -12,6 +12,10 @@ export class Embedment {
     @Column()
     url: string;
 
-    @ManyToOne(() => Message, { cascade: true, onDelete: 'CASCADE' })
+    @Column({ type: 'uuid' })
+    messageID: string;
+
+    @ManyToOne(() => Message, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'messageID' })
     message: Message;
 }
