@@ -124,7 +124,8 @@ export class ChatBroker {
     ): Promise<Observable<MessageEvent>> {
         const chatName = this.chatInfoManager.genChatName(roomID, threadID);
 
-        if (!this.isParticipating(user, roomID, threadID)) {
+        const allowed = await this.isParticipating(user, roomID, threadID);
+        if (!allowed) {
             throw new NotParticipatingException();
         }
 
