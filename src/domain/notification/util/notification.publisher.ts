@@ -25,20 +25,35 @@ export class NotifiactionPublisher {
 
     public publish(...notifications: Notification[]): void {
         notifications.forEach((notification) => {
-            const { recipient } = notification;
+            const { recipient, message, thread, room } = notification;
 
             const session = this.sessions.get(recipient.id);
-            if (session == null) {
-                return;
-            }
+            if (session == null) return;
 
             const payload: NotificationPayload = {
                 data: {
-                    ...notification,
+                    uuid: notification.uuid,
+                    content: notification.content,
+                    createdAt: notification.createdAt,
+                    room: {
+                        id: room.id,
+                        name: room.name,
+                        profileURL: room.profileURL,
+                    },
+                    thread: {
+                        id: thread.id,
+                        title: thread.title,
+                    },
                     message: {
-                        ...notification.message,
-                        author: { ...notification.message.author.avatar },
-                        embedmentsCount: notification.message.embedments.length,
+                        content: message.content,
+                        createdAt: message.createdAt,
+                        id: message.id,
+                        updatedAt: message.updatedAt,
+                        author: {
+                            nickname: message.author.avatar.nickname,
+                            profileURL: message.author.avatar.profileURL,
+                        },
+                        embedmentsCount: message.embedments.length,
                     },
                 },
                 type: notification.type,
