@@ -64,14 +64,14 @@ export class UpdateMessageHandler
 
         const message = await this.messageRepository
             .findOneByOrFail({
-                thread: thread,
+                threadID: thread.id,
                 id: messageID,
             })
             .catch(() => {
                 throw new NoMatchingMessageException(threadID, messageID);
             });
 
-        if (message.author != user) {
+        if (message.authorID != user.id) {
             throw new NotAuthorException();
         }
 

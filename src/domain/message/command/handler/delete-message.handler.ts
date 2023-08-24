@@ -66,18 +66,18 @@ export class DeleteMessageHandler
 
         const message = await this.messageRepository
             .findOneOrFail({
-                where: { thread: thread, id: messageID },
+                where: { threadID: thread.id, id: messageID },
                 relations: { embedments: true },
             })
             .catch(() => {
                 throw new NoMatchingMessageException(threadID, messageID);
             });
 
-        if (message.author != user) {
+        if (message.authorID != user.id) {
             throw new NotAuthorException();
         }
 
-        await this.messageRepository.delete(message);
+        await this.messageRepository.delete(message.id);
 
         this.storageManager.deleteFiles(
             message.embedments.map((embedment) => embedment.key),

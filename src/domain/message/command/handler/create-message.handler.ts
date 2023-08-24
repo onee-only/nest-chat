@@ -102,10 +102,7 @@ export class CreateMessageHandler
         );
         message.embedments = this.createEmbedments(message, results);
 
-        message.replyTo = message.replyTo = await this.findReplyTo(
-            replyTo,
-            thread,
-        );
+        message.replyTo = await this.findReplyTo(replyTo, thread);
 
         await this.messageRepository.save(message);
 
@@ -151,7 +148,7 @@ export class CreateMessageHandler
             return await this.messageRepository
                 .findOneOrFail({
                     relations: { author: { avatar: true } },
-                    where: { thread, id: replyTo },
+                    where: { threadID: thread.id, id: replyTo },
                 })
                 .catch(() => {
                     throw new NoMatchingMessageException(thread.id, replyTo);
