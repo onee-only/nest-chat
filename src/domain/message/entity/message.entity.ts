@@ -5,6 +5,7 @@ import {
     Entity,
     Index,
     JoinColumn,
+    JoinTable,
     ManyToMany,
     ManyToOne,
     OneToMany,
@@ -48,9 +49,11 @@ export class Message {
     updatedAt: Date;
 
     @ManyToMany(() => RoomMember, { cascade: true })
+    @JoinTable({ name: 'member_mentions' })
     mentionMembers: RoomMember[];
 
     @ManyToMany(() => MemberRole, { cascade: true })
+    @JoinTable({ name: 'role_mentions' })
     mentionRoles: MemberRole[];
 
     @OneToMany(() => Embedment, (embedment) => embedment.message, {
