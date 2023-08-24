@@ -41,7 +41,7 @@ export class NotifyMemberMentionHandler
         return this.notificationRepository.create({
             uuid: generateUUID(),
             type: NotificationType.MEMBER_MENTION,
-            content: ``,
+            content: `You are mentioned by ${message.author.avatar.nickname}`,
             message: message,
             thread: message.thread,
             room: room,

@@ -34,7 +34,7 @@ export class NotifyReplyHandler implements ICommandHandler<NotifyReplyCommand> {
         return this.notificationRepository.create({
             uuid: generateUUID(),
             type: NotificationType.REPLY,
-            content: ``,
+            content: `Your message is replied by ${message.author.avatar.nickname}`,
             message: message,
             thread: message.thread,
             room: room,

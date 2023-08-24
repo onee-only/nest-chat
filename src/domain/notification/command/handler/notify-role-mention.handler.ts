@@ -51,7 +51,7 @@ export class NotifyRoleMentionHandler
         return this.notificationRepository.create({
             uuid: generateUUID(),
             type: NotificationType.ROLE_MENTION,
-            content: ``,
+            content: `Your role is mentioned by ${message.author.avatar.nickname}`,
             message: message,
             thread: message.thread,
             room: room,
