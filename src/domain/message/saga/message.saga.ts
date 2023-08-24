@@ -9,7 +9,11 @@ import {
     ReplyCreatedEvent,
     RoleMentionedEvent,
 } from '../event';
-import { PublishMessageCommand, PublishUpdateCommand } from '../command';
+import {
+    PublishDeleteCommand,
+    PublishMessageCommand,
+    PublishUpdateCommand,
+} from '../command';
 import {
     NotifyMemberMentionCommand,
     NotifyReplyCommand,
@@ -46,7 +50,7 @@ export class MessageSaga {
             ofType(MessageDeletedEvent),
             map(
                 ({ room, thread, message }: MessageDeletedEvent) =>
-                    new PublishUpdateCommand(room, thread, message),
+                    new PublishDeleteCommand(room, thread, message),
             ),
         );
     }
