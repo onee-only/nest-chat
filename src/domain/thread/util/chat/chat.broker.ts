@@ -5,6 +5,7 @@ import { ThreadRepository } from '../../repository';
 import { ChatRepository } from './repository/chat.repository';
 import { PermissionChecker } from 'src/domain/room/util';
 import {
+    NotParticipatingException,
     WsAlreadyJoinedException,
     WsNoMatchingThreadException,
     WsNotRoomMemberException,
@@ -117,14 +118,17 @@ export class ChatBroker {
     }
 
     async subscribe(
+        user: User,
         roomID: number,
         threadID: number,
     ): Promise<Observable<MessageEvent>> {
         const chatName = this.chatInfoManager.genChatName(roomID, threadID);
-        const chat = await this.chatRepository.find(chatName);
-        if (chat === undefined) {
-            // do something
+
+        if (!this.isParticipating(user, roomID, threadID)) {
+            throw new NotParticipatingException();
         }
+
+        const chat = await this.chatRepository.find(chatName);
         return chat.events.asObservable();
     }
 
@@ -135,8 +139,9 @@ export class ChatBroker {
     ): Promise<void> {
         const chatName = this.chatInfoManager.genChatName(roomID, threadID);
         const chat = await this.chatRepository.find(chatName);
-        if (chat === undefined) {
-            // do something
+
+        if (chat == null) {
+            return;
         }
 
         chat.events.next(message);
@@ -150,7 +155,7 @@ export class ChatBroker {
         const chatName = this.chatInfoManager.genChatName(roomID, threadID);
 
         const chat = await this.chatRepository.find(chatName);
-        if (chat === undefined) return false;
+        if (chat == null) return false;
 
         return chat.users.some((member) => member.id === user.id);
     }

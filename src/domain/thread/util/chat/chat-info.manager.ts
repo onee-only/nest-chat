@@ -9,7 +9,7 @@ export class ChatInfoManager {
     async getChatInfo(roomID: number, threadID: number): Promise<ChatInfo> {
         const chatName = this.genChatName(roomID, threadID);
         const chat = await this.chatRepository.find(chatName);
-        if (chat === undefined) {
+        if (chat == null) {
             return {
                 users: [],
                 totalMembers: 0,

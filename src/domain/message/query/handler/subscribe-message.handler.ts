@@ -43,6 +43,6 @@ export class SubscribeMessageHandler
             user,
         });
 
-        return await this.chatBroker.subscribe(room.id, thread.id);
+        return await this.chatBroker.subscribe(user, room.id, thread.id);
     }
 }
