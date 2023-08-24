@@ -2,6 +2,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     MessageEvent,
     Param,
     ParseUUIDPipe,
@@ -10,7 +12,13 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+    ApiNoContentResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+} from '@nestjs/swagger';
 import { User } from 'src/domain/user/entity';
 import { GetUser } from 'src/global/decorators';
 import { JwtAuthGuard } from 'src/global/guards';
@@ -48,6 +56,8 @@ export class NotificationController {
         summary: 'delete notifications',
         description: 'Deletes all the notifications of requested user',
     })
+    @ApiNoContentResponse()
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Delete('')
     async clearNotification(@GetUser() user: User): Promise<void> {
         return await this.commandBus.execute(
@@ -59,6 +69,9 @@ export class NotificationController {
         summary: 'delete notification',
         description: 'Deletes the given notification of requested user',
     })
+    @ApiNoContentResponse()
+    @ApiNotFoundResponse()
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Delete(':uuid')
     async deleteNotification(
         @GetUser() user: User,

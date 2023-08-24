@@ -1,30 +1,67 @@
-export type NotificationDto = {
-    readonly uuid: string;
-    readonly content: string;
-    readonly createdAt: Date;
+import { ApiProperty } from '@nestjs/swagger';
+class NestedRoomDto {
+    @ApiProperty()
+    public readonly id: number;
 
-    readonly room: {
-        readonly id: number;
-        readonly name: string;
-        readonly profileURL: string;
-    };
+    @ApiProperty()
+    public readonly name: string;
 
-    readonly thread: {
-        readonly id: number;
-        readonly title: string;
-    };
+    @ApiProperty()
+    public readonly profileURL: string;
+}
 
-    readonly message: {
-        readonly id: string;
-        readonly content: string;
-        readonly createdAt: Date;
-        readonly updatedAt: Date;
+class NestedThreadDto {
+    @ApiProperty()
+    public readonly id: number;
 
-        readonly embedmentsCount: number;
+    @ApiProperty()
+    public readonly title: string;
+}
 
-        readonly author: {
-            readonly nickname: string;
-            readonly profileURL: string;
-        };
-    };
-};
+class NestedAuthorDto {
+    @ApiProperty()
+    public readonly nickname: string;
+
+    @ApiProperty()
+    public readonly profileURL: string;
+}
+
+class NestedMessagedto {
+    @ApiProperty()
+    public readonly id: string;
+
+    @ApiProperty()
+    public readonly content: string;
+
+    @ApiProperty()
+    public readonly createdAt: Date;
+
+    @ApiProperty()
+    public readonly updatedAt: Date;
+
+    @ApiProperty()
+    public readonly embedmentsCount: number;
+
+    @ApiProperty()
+    public readonly author: NestedAuthorDto;
+}
+
+export class NotificationDto {
+    @ApiProperty()
+    public readonly uuid: string;
+
+    @ApiProperty()
+    public readonly content: string;
+
+    @ApiProperty()
+    public readonly createdAt: Date;
+
+    @ApiProperty()
+    public readonly room: NestedRoomDto;
+
+    @ApiProperty()
+    public readonly thread: NestedThreadDto;
+
+    @ApiProperty()
+    public readonly message: NestedMessagedto;
+}
