@@ -66,6 +66,8 @@ export class StorageManager {
      * deletes files
      */
     async deleteFiles(keys: string[]): Promise<void> {
+        if (keys == null || keys.length === 0) return;
+
         await this.s3
             .deleteObjects({
                 Bucket: this.bucketName,
