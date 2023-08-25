@@ -8,3 +8,4 @@ export {
     ListInvitationElement,
 } from './list-invitation.response.dto';
 export * from './retreive-room.response.dto';
+export * from './list-my-room.response.dto';

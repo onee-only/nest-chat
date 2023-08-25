@@ -29,6 +29,7 @@ import { GetUser } from 'src/global/decorators';
 import { CreateRoomRequest, UpdateRoomRequest } from './dto/request';
 import {
     CreateRoomResponse,
+    ListMyRoomResponse,
     ListRoomResponse,
     RetreiveRoomResponse,
 } from './dto/response';
@@ -39,7 +40,7 @@ import {
     UpdateRoomCommand,
 } from '../command';
 import { RoomOrder, RoomOrderDir } from '../enum';
-import { ListRoomQuery, RetreiveRoomQuery } from '../query';
+import { ListMyRoomQuery, ListRoomQuery, RetreiveRoomQuery } from '../query';
 import { ParseDatePipe, ParseOptionalIntPipe } from 'src/global/pipes';
 
 @ApiTags('rooms')
@@ -116,6 +117,17 @@ export class RoomController {
                 orderDir: dir,
             }),
         );
+    }
+
+    @ApiOperation({
+        summary: 'list my rooms',
+        description:
+            'Gives a list of the rooms that you are currently participating',
+    })
+    @ApiOkResponse({ type: ListMyRoomResponse })
+    @Get('mine')
+    async listMyRoom(@GetUser() user: User): Promise<ListMyRoomResponse> {
+        return await this.queryBus.execute(new ListMyRoomQuery(user));
     }
 
     @ApiOperation({
