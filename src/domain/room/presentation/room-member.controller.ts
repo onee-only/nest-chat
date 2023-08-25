@@ -22,10 +22,10 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/global/guards';
-import { ListMemberResponse } from './dto/response';
+import { ListMemberResponse, RetreiveMemberResponse } from './dto/response';
 import { GetUser } from 'src/global/decorators';
 import { User } from 'src/domain/user/entity';
-import { ListMemberQuery } from '../query';
+import { ListMemberQuery, RetreiveMemberQuery } from '../query';
 import {
     JoinRoomCommand,
     KickMemberCommand,
@@ -93,6 +93,24 @@ export class RoomMemberController {
     ): Promise<void> {
         return await this.commandBus.execute(
             new LeaveRoomCommand(roomID, user),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'get member',
+        description: 'Retreives the member',
+    })
+    @ApiOkResponse({ type: RetreiveMemberResponse })
+    @ApiNotFoundResponse()
+    @Get(':memberID')
+    @UseGuards(JwtAuthGuard)
+    async retreiveMember(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @Param('memberID', ParseIntPipe) memberID: number,
+        @GetUser() user: User,
+    ): Promise<RetreiveMemberResponse> {
+        return await this.queryBus.execute(
+            new RetreiveMemberQuery(user, roomID, memberID),
         );
     }
 
