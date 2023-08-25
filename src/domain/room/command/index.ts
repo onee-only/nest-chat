@@ -8,3 +8,4 @@ export * from './create-invitation.command';
 export * from './delete-invitation.command';
 export * from './join-room.command';
 export * from './kick-member.command';
+export * from './leave-room.command';
