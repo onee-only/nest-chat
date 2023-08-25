@@ -4,8 +4,16 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/global/decorators';
 import { User } from '../entity';
 import { JwtAuthGuard } from 'src/global/guards';
-import { GetMiniProfileQuery, GetProfileQuery } from '../query';
-import { GetMeResponse, GetMyProfileResponse } from './dto/response';
+import {
+    GetMiniProfileQuery,
+    GetProfileQuery,
+    ListMyRoomQuery,
+} from '../query';
+import {
+    GetMeResponse,
+    GetMyProfileResponse,
+    ListMyRoomResponse,
+} from './dto/response';
 import { UpdateProfileRequest } from './dto/request';
 import { UpdateProfileCommand } from '../command';
 
@@ -51,5 +59,16 @@ export class MeController {
         return await this.commandBus.execute(
             new UpdateProfileCommand(user, { ...request }),
         );
+    }
+
+    @ApiOperation({
+        summary: 'list my rooms',
+        description:
+            'Gives a list of the rooms that you are currently participating',
+    })
+    @ApiOkResponse({ type: ListMyRoomResponse })
+    @Get('rooms')
+    async listMyRoom(@GetUser() user: User): Promise<ListMyRoomResponse> {
+        return await this.queryBus.execute(new ListMyRoomQuery(user));
     }
 }
