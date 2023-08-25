@@ -127,6 +127,7 @@ export class RoomController {
     })
     @ApiOkResponse({ type: ListMyRoomResponse })
     @Get('mine')
+    @UseGuards(JwtAuthGuard)
     async listMyRoom(@GetUser() user: User): Promise<ListMyRoomResponse> {
         return await this.queryBus.execute(new ListMyRoomQuery(user));
     }
@@ -140,6 +141,7 @@ export class RoomController {
     @ApiNotFoundResponse()
     @HttpCode(HttpStatus.OK)
     @Post(':id')
+    @UseGuards(JwtAuthGuard)
     async changeRoomOwner(
         @Param('id', ParseIntPipe) roomID: number,
         @Query('memberID', ParseIntPipe) memberID: number,
