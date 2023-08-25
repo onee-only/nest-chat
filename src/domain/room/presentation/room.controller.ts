@@ -35,6 +35,7 @@ import {
 } from './dto/response';
 import { JwtAuthGuard } from 'src/global/guards';
 import {
+    ChangeRoomOwnerCommand,
     CreateRoomCommand,
     DeleteRoomCommand,
     UpdateRoomCommand,
@@ -128,6 +129,25 @@ export class RoomController {
     @Get('mine')
     async listMyRoom(@GetUser() user: User): Promise<ListMyRoomResponse> {
         return await this.queryBus.execute(new ListMyRoomQuery(user));
+    }
+
+    @ApiOperation({
+        summary: 'change room owner',
+        description: 'Changes the room owner',
+    })
+    @ApiOkResponse()
+    @ApiForbiddenResponse()
+    @ApiNotFoundResponse()
+    @HttpCode(HttpStatus.OK)
+    @Post(':id')
+    async changeRoomOwner(
+        @Param('id', ParseIntPipe) roomID: number,
+        @Query('memberID', ParseIntPipe) memberID: number,
+        @GetUser() user: User,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new ChangeRoomOwnerCommand(user, roomID, memberID),
+        );
     }
 
     @ApiOperation({
