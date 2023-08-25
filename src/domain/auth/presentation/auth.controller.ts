@@ -3,6 +3,7 @@ import {
     Controller,
     HttpCode,
     HttpStatus,
+    Patch,
     Post,
     Query,
     UseGuards,
@@ -20,12 +21,21 @@ import {
     ApiUnauthorizedResponse,
     OmitType,
 } from '@nestjs/swagger';
-import { LoginRequest, SignupRequest } from './dto/request';
+import {
+    LoginRequest,
+    SignupRequest,
+    UpdatePasswordRequest,
+} from './dto/request';
 import { AccessTokenResponse, SignupResponse } from './dto/response';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { LogoutCommand, SignupCommand, VerifyEmailCommand } from '../command';
+import {
+    LogoutCommand,
+    SignupCommand,
+    UpdatePasswordCommand,
+    VerifyEmailCommand,
+} from '../command';
 import { LoginQuery, RefreshQuery } from '../query';
-import { RefreshAuthGuard } from 'src/global/guards';
+import { JwtAuthGuard, RefreshAuthGuard } from 'src/global/guards';
 import { GetRefresh, GetUser } from 'src/global/decorators';
 import { User } from 'src/domain/user/entity';
 import { SetCookieInterceptor } from 'src/global/interceptors/cookie';
@@ -110,5 +120,23 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     async verifyEmail(@Query('token') token: string): Promise<void> {
         return await this.commandBus.execute(new VerifyEmailCommand(token));
+    }
+
+    @ApiOperation({
+        summary: 'verify email',
+        description: 'verifies the code of this email',
+    })
+    @ApiOkResponse()
+    @ApiForbiddenResponse({ description: 'current password is invalid' })
+    @Patch('update-password')
+    @UseGuards(JwtAuthGuard)
+    async updatePassword(
+        @GetUser() user: User,
+        @Body() request: UpdatePasswordRequest,
+    ): Promise<void> {
+        const { currentPassword, newPassword } = request;
+        return await this.commandBus.execute(
+            new UpdatePasswordCommand(user, currentPassword, newPassword),
+        );
     }
 }
