@@ -12,3 +12,4 @@ export * from './no-matching-member.exception';
 export * from './role-occupied.exception';
 export * from './kicking-self.exception';
 export * from './kicking-owner.exception';
+export * from './leaving-as-owner.exception';
