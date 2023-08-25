@@ -85,7 +85,6 @@ export class RoomMemberController {
     @ApiOkResponse()
     @ApiForbiddenResponse({ description: 'you are the owner' })
     @ApiNotFoundResponse()
-    @ApiConflictResponse({ description: 'you are not a member of this room' })
     @Delete()
     @UseGuards(JwtAuthGuard)
     async leaveRoom(
