@@ -26,7 +26,11 @@ import { ListMemberResponse } from './dto/response';
 import { GetUser } from 'src/global/decorators';
 import { User } from 'src/domain/user/entity';
 import { ListMemberQuery } from '../query';
-import { JoinRoomCommand, KickMemberCommand } from '../command';
+import {
+    JoinRoomCommand,
+    KickMemberCommand,
+    LeaveRoomCommand,
+} from '../command';
 
 @ApiTags('room members')
 @Controller('rooms/:roomID/members')
@@ -71,6 +75,25 @@ export class RoomMemberController {
     ): Promise<void> {
         return await this.commandBus.execute(
             new JoinRoomCommand(roomID, user, token),
+        );
+    }
+
+    @ApiOperation({
+        summary: 'leave room',
+        description: 'Leaves a room',
+    })
+    @ApiOkResponse()
+    @ApiForbiddenResponse({ description: 'you are the owner' })
+    @ApiNotFoundResponse()
+    @ApiConflictResponse({ description: 'you are not a member of this room' })
+    @Delete()
+    @UseGuards(JwtAuthGuard)
+    async leaveRoom(
+        @Param('roomID', ParseIntPipe) roomID: number,
+        @GetUser() user: User,
+    ): Promise<void> {
+        return await this.commandBus.execute(
+            new LeaveRoomCommand(roomID, user),
         );
     }
 
