@@ -44,7 +44,7 @@ export class MemberRole {
     @OneToMany(() => RoomMember, (member) => member.role)
     members: RoomMember[];
 
-    @PrimaryColumn({ type: 'varchar2', length: 30 })
+    @PrimaryColumn({ type: 'varchar', length: 30 })
     alias: string;
 
     @Column(() => Permission)

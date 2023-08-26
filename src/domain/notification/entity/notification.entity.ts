@@ -33,7 +33,7 @@ export class Notification {
     @Column({ type: 'enum', enum: NotificationType })
     type: NotificationType;
 
-    @Column({ type: 'varchar2', length: 200 })
+    @Column({ type: 'varchar', length: 200 })
     content: string;
 
     @ManyToOne(() => Room, { onDelete: 'SET NULL' })

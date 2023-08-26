@@ -3,13 +3,13 @@ import { Message } from './message.entity';
 
 @Entity()
 export class Embedment {
-    @PrimaryColumn({ type: 'varchar2' })
+    @PrimaryColumn({ type: 'varchar' })
     key: string;
 
-    @Column({ type: 'varchar2', length: 200 })
+    @Column({ type: 'varchar', length: 200 })
     name: string;
 
-    @Column({ type: 'varchar2', length: 2048 })
+    @Column({ type: 'varchar', length: 2048 })
     url: string;
 
     @Column({ type: 'uuid' })

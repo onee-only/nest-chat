@@ -34,7 +34,7 @@ export class Thread {
     @JoinColumn({ name: 'roomID' })
     room: Room;
 
-    @Column({ type: 'varchar2', length: 80 })
+    @Column({ type: 'varchar', length: 80 })
     title: string;
 
     @CreateDateColumn()

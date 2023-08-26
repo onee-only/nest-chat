@@ -15,10 +15,10 @@ export class User {
     @CreateDateColumn({ type: 'datetime' })
     joinedAt: Date;
 
-    @Column({ type: 'varchar2', length: 254, unique: true })
+    @Column({ type: 'varchar', length: 254, unique: true })
     email: string;
 
-    @Column({ type: 'varchar2', length: 60 })
+    @Column({ type: 'varchar', length: 60 })
     password: string;
 
     @Column({ type: 'tinyint', default: false })

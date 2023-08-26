@@ -21,13 +21,13 @@ export class Room {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;
 
-    @Column({ type: 'varchar2', length: 100 })
+    @Column({ type: 'varchar', length: 100 })
     name: string;
 
-    @Column({ type: 'varchar2', length: 500 })
+    @Column({ type: 'varchar', length: 500 })
     description: string;
 
-    @Column({ type: 'varchar2', length: 2048 })
+    @Column({ type: 'varchar', length: 2048 })
     profileURL: string;
 
     @Column({ type: 'tinyint' })
