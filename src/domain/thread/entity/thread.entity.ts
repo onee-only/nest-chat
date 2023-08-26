@@ -37,7 +37,7 @@ export class Thread {
     @Column({ type: 'varchar', length: 80 })
     title: string;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'datetime' })
     createdAt: string;
 
     @ManyToMany(() => Tag)
