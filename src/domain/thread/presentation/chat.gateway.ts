@@ -21,6 +21,7 @@ import { ConfigService } from '@nestjs/config';
 
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
+    path: '/v1/chat',
     cors: {
         origin: '*',
         methods: '*',
