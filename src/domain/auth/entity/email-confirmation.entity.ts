@@ -7,9 +7,9 @@ export class EmailConfirmation {
     @JoinColumn({ name: 'userID' })
     user: User;
 
-    @PrimaryColumn()
+    @PrimaryColumn({ type: 'uuid' })
     token: string;
 
-    @Column()
+    @Column({ type: 'datetime' })
     expiration: Date;
 }

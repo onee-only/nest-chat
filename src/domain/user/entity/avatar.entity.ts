@@ -6,13 +6,13 @@ export class Avatar {
     @PrimaryColumn({ type: 'bigint', unsigned: true })
     userID: number;
 
-    @Column({ unique: true })
+    @Column({ type: 'varchar2', length: 30, unique: true })
     nickname: string;
 
-    @Column({ default: '' })
+    @Column({ type: 'varchar2', length: 300, default: '' })
     bio: string;
 
-    @Column({ default: '' })
+    @Column({ type: 'varchar2', length: 2048, default: '' })
     profileURL: string;
 
     @OneToOne(() => User, (user) => user.avatar)

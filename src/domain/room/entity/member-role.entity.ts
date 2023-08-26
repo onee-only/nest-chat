@@ -10,25 +10,25 @@ import { Room } from './room.entity';
 import { RoomMember } from './room-member.entity';
 
 export class Permission {
-    @Column()
+    @Column({ type: 'tinyint' })
     writeMessage: boolean;
 
-    @Column()
+    @Column({ type: 'tinyint' })
     deleteMessage: boolean;
 
-    @Column()
+    @Column({ type: 'tinyint' })
     inviteMember: boolean;
 
-    @Column()
+    @Column({ type: 'tinyint' })
     kickMember: boolean;
 
-    @Column()
+    @Column({ type: 'tinyint' })
     createThread: boolean;
 
-    @Column()
+    @Column({ type: 'tinyint' })
     manageRole: boolean;
 
-    @Column()
+    @Column({ type: 'tinyint' })
     manageTag: boolean;
 }
 
@@ -44,7 +44,7 @@ export class MemberRole {
     @OneToMany(() => RoomMember, (member) => member.role)
     members: RoomMember[];
 
-    @PrimaryColumn()
+    @PrimaryColumn({ type: 'varchar2', length: 30 })
     alias: string;
 
     @Column(() => Permission)

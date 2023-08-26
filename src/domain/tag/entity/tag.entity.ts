@@ -4,7 +4,7 @@ import { Entity, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Tag {
-    @PrimaryColumn()
+    @PrimaryColumn({ type: 'varchar2', length: 20 })
     name: string;
 
     @ManyToMany(() => Room, (room) => room.tags)

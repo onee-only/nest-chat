@@ -12,16 +12,16 @@ export class User {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'datetime' })
     joinedAt: Date;
 
-    @Column({ unique: true })
+    @Column({ type: 'varchar2', length: 254, unique: true })
     email: string;
 
-    @Column()
+    @Column({ type: 'varchar2', length: 60 })
     password: string;
 
-    @Column({ default: false })
+    @Column({ type: 'tinyint', default: false })
     isVerified: boolean;
 
     @OneToOne(() => Avatar, (avatar) => avatar.user, {

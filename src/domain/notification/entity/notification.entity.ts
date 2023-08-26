@@ -27,13 +27,13 @@ export class Notification {
     @ManyToOne(() => User, { onDelete: 'SET NULL' })
     issuer: User;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'datetime' })
     createdAt: Date;
 
     @Column({ type: 'enum', enum: NotificationType })
     type: NotificationType;
 
-    @Column()
+    @Column({ type: 'varchar2', length: 200 })
     content: string;
 
     @ManyToOne(() => Room, { onDelete: 'SET NULL' })

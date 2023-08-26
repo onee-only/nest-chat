@@ -21,19 +21,19 @@ export class Room {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;
 
-    @Column()
+    @Column({ type: 'varchar2', length: 100 })
     name: string;
 
-    @Column()
+    @Column({ type: 'varchar2', length: 500 })
     description: string;
 
-    @Column()
+    @Column({ type: 'varchar2', length: 2048 })
     profileURL: string;
 
-    @Column()
+    @Column({ type: 'tinyint' })
     isPublic: boolean;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'datetime' })
     createdAt: Date;
 
     @Column({ type: 'bigint', unsigned: true, nullable: false })

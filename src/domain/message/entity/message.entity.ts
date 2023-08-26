@@ -38,14 +38,14 @@ export class Message {
     @ManyToOne(() => Message, { onDelete: 'SET NULL', nullable: true })
     replyTo: Message;
 
-    @Column()
+    @Column({ type: 'text' })
     content: string;
 
     @Index()
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'datetime' })
     createdAt: Date;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ type: 'datetime' })
     updatedAt: Date;
 
     @ManyToMany(() => RoomMember, { cascade: true })
