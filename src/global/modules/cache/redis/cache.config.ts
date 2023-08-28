@@ -8,7 +8,10 @@ export const CacheValidationScheme = () =>
     Joi.object({
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
-        REDIS_PASS: Joi.string().required(),
+        REDIS_PASS:
+            process.env.NODE_ENV === 'production'
+                ? Joi.string().required()
+                : Joi.string(),
     });
 
 export const CacheConfig = registerAs(
